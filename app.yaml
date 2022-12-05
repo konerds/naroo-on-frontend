@@ -1,5 +1,5 @@
 # [SERVICE NAME]
-service: frontend
+service: naroo-on-frontend
 # [START runtime]
 runtime: nodejs12
 # [END runtime]
