@@ -1,0 +1,14 @@
+# [SERVICE NAME]
+service: frontend
+# [START runtime]
+runtime: nodejs12
+# [END runtime]
+# [START handlers]
+handlers:
+  - url: /(.*\..+)$
+    static_files: build/\1
+    upload: build/(.*\..+)$
+  - url: /.*
+    static_files: build/index.html
+    upload: build/index.html
+# [END handlers]
