@@ -118,14 +118,12 @@ const LectureCarousel: FC<LectureCarouselProps> = ({ token, setToken }) => {
     null,
     false,
   );
-  const { data: userLecturesData } =
-    token !== null && token !== ''
-      ? useGetSWR<ILectureInList[]>(
-          `${process.env.REACT_APP_BACK_URL}/lecture`,
-          token,
-          false,
-        )
-      : { data: undefined };
+  const { data: userLecturesData } = useGetSWR<ILectureInList[]>(
+    `${process.env.REACT_APP_BACK_URL}/lecture`,
+    token,
+    false,
+    token !== null && token !== '',
+  );
   return (
     <div className="xl:max-w-[1260px] lg:max-w-[966px] md:max-w-[788px] xs:w-full mx-auto pl-[54px] lg:pr-[27px] pr-[54px] mt-[122px] pb-[96px]">
       {token !== null && token !== '' && (

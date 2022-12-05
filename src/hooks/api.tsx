@@ -24,6 +24,7 @@ export function useGetSWR<T>(
   requestUrl: string,
   token: string | null,
   showError: boolean,
+  shouldFetch = true,
 ): DataResponse<T> {
   const fetcher = async (url: string) => {
     try {
@@ -48,7 +49,15 @@ export function useGetSWR<T>(
       throw error;
     }
   };
-  const { data, mutate, error } = useSWR<T>(requestUrl, fetcher);
+  const { data, mutate, error } = useSWR<T>(
+    shouldFetch ? requestUrl : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: false,
+      // revalidateOnReconnect: false
+    },
+  );
   return { data, mutate, error };
 }
 
