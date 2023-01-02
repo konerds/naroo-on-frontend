@@ -1,23 +1,16 @@
-import { FC, FormEvent, FormEventHandler, useState } from 'react';
+import * as React from 'react';
 import 'moment/locale/ko';
 import moment from 'moment';
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import { ILectureDetail } from '../../interfaces';
-import { MutatorCallback } from 'swr/dist/types';
 import { useInput } from '../../hooks';
+import { KeyedMutator } from 'swr';
+import { showError } from '../../hooks/api';
 
 interface LectureNoticeProps {
   token: string | null;
-  userType: string | null;
-  mutate: (
-    data?:
-      | ILectureDetail
-      | Promise<ILectureDetail>
-      | MutatorCallback<ILectureDetail>
-      | undefined,
-    shouldRevalidate?: boolean | undefined,
-  ) => Promise<ILectureDetail | undefined>;
+  userType?: string | null;
+  mutate: KeyedMutator<ILectureDetail>;
   lecture_id: string;
   array_index: number;
   id: string;
@@ -26,7 +19,7 @@ interface LectureNoticeProps {
   description: string;
 }
 
-const LectureNotice: FC<LectureNoticeProps> = ({
+const LectureNotice: React.FC<LectureNoticeProps> = ({
   token,
   userType,
   mutate,
@@ -37,13 +30,15 @@ const LectureNotice: FC<LectureNoticeProps> = ({
   title,
   description,
 }) => {
-  const [isShowDescription, setIsShowDescription] = useState<boolean>(false);
-  const [isShowEdit, setIsShowEdit] = useState<boolean>(false);
+  const [isShowDescription, setIsShowDescription] =
+    React.useState<boolean>(false);
+  const [isShowEdit, setIsShowEdit] = React.useState<boolean>(false);
   const [updateTitle, onChangeUpdateTitle, setUpdateTitle] = useInput(title);
   const [updateDescription, onChangeUpdateDescription, setUpdateDescription] =
     useInput(description);
   const [isLoadingClickDeleteNotice, setIsLoadingClickDeleteNotice] =
-    useState<boolean>(false);
+    React.useState<boolean>(false);
+  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
   const onClickDeleteNoticeHandler = async (noticeId: string) => {
     try {
       setIsLoadingClickDeleteNotice(true);
@@ -56,32 +51,17 @@ const LectureNotice: FC<LectureNoticeProps> = ({
         },
       );
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-        }, 500);
+        await mutate();
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingClickDeleteNotice(false);
-      }, 500);
+      setIsLoadingClickDeleteNotice(false);
     }
   };
-  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
-  const onSubmitUpdateNoticeHandler: FormEventHandler<HTMLFormElement> = async (
-    event: FormEvent<HTMLFormElement>,
-  ) => {
+  const onSubmitUpdateNoticeHandler = async () => {
     try {
       setIsLoadingSubmit(true);
-      event.preventDefault();
       const response = await axios.put(
         `${process.env.REACT_APP_BACK_URL}/lecture/admin/notice/modify/${lecture_id}?notice_id=${id}`,
         {
@@ -95,31 +75,25 @@ const LectureNotice: FC<LectureNoticeProps> = ({
         },
       );
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-          setIsShowEdit(false);
-        }, 500);
+        await mutate();
+        setIsShowEdit(false);
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmit(false);
-      }, 500);
+      setIsLoadingSubmit(false);
     }
   };
   return (
-    <form onSubmit={onSubmitUpdateNoticeHandler}>
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        onSubmitUpdateNoticeHandler();
+      }}
+    >
       <div
         className="min-h-[41px] max-h-[41px] bg-white flex"
-        onClick={(event) => {
+        onClick={() => {
           setIsShowEdit(false);
           setIsShowDescription(!isShowDescription);
         }}
@@ -185,15 +159,15 @@ const LectureNotice: FC<LectureNoticeProps> = ({
                   {isShowEdit ? (
                     <div className="w-full min-h-[41px] bg-white flex justify-center items-center">
                       <button
-                        className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
                         type="submit"
+                        className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
                         disabled={isLoadingSubmit}
                       >
                         완료
                       </button>
                       <button
-                        className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] ml-[10px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
                         type="button"
+                        className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] ml-[10px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
                         onClick={() => {
                           setIsShowEdit(false);
                         }}
@@ -205,8 +179,8 @@ const LectureNotice: FC<LectureNoticeProps> = ({
                   ) : (
                     <div className="w-full min-h-[41px] bg-white flex justify-center items-center">
                       <button
-                        className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
                         type="button"
+                        className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
                         onClick={(event) => {
                           event.preventDefault();
                           setIsShowEdit(true);
@@ -216,8 +190,8 @@ const LectureNotice: FC<LectureNoticeProps> = ({
                         수정
                       </button>
                       <button
-                        className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] ml-[10px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
                         type="button"
+                        className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] ml-[10px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
                         onClick={() => {
                           onClickDeleteNoticeHandler(id);
                         }}

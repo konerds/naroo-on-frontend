@@ -1,7 +1,7 @@
 # [SERVICE NAME]
 service: naroo-on-frontend
 # [START runtime]
-runtime: nodejs12
+runtime: nodejs18
 # [END runtime]
 # [START handlers]
 handlers:

@@ -1,25 +1,16 @@
-import { FC } from 'react';
-import { MutatorCallback } from 'swr/dist/types';
+import * as React from 'react';
+import { KeyedMutator } from 'swr';
 import { IResources } from '../../interfaces';
 import UpdateResourceField from './resource/UpdateResourceField';
 
 interface ResourceEditProps {
   token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
+  setToken: (v: string | null) => void;
   allResourcesData: IResources[] | undefined;
-  allResourcesMutate: (
-    data?:
-      | IResources[]
-      | Promise<IResources[]>
-      | MutatorCallback<IResources[]>
-      | undefined,
-    shouldRevalidate?: boolean | undefined,
-  ) => Promise<IResources[] | undefined>;
+  allResourcesMutate: KeyedMutator<IResources[]>;
 }
 
-const ResourceEdit: FC<ResourceEditProps> = ({
+const ResourceEdit: React.FC<ResourceEditProps> = ({
   token,
   setToken,
   allResourcesData,
@@ -28,7 +19,7 @@ const ResourceEdit: FC<ResourceEditProps> = ({
   let orgIndex = 0;
   return (
     <div className="mt-[30px]">
-      {allResourcesData &&
+      {!!allResourcesData &&
         allResourcesData.map((resource) => (
           <div key={resource.type + resource.content_id}>
             {resource ? (

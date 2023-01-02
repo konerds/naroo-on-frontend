@@ -1,14 +1,13 @@
 import Select from 'react-select';
 import { FC, useCallback, useState } from 'react';
-import { useGetSWR } from '../../hooks/api';
+import useSWR from 'swr';
 import UpdateStatus from './lecture/UpdateStatus';
 import { ILectureInListAdmin } from '../../interfaces';
+import { axiosGetfetcher } from '../../hooks/api';
 
 interface LecturePermissionProps {
   token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
+  setToken: (v: string | null) => void;
   studentOptions: { value: string; label: string }[] | [];
   lectureOptions: { value: string; label: string }[] | [];
 }
@@ -19,12 +18,17 @@ const LecturePermission: FC<LecturePermissionProps> = ({
   studentOptions,
   lectureOptions,
 }) => {
-  const { data: lectureStatusesData, mutate: lectureStatusesMutate } =
-    useGetSWR<ILectureInListAdmin[]>(
-      `${process.env.REACT_APP_BACK_URL}/lecture/admin/status`,
-      token,
-      true,
-    );
+  const { data: lectureStatusesData, mutate: lectureStatusesMutate } = useSWR<
+    ILectureInListAdmin[]
+  >(
+    !!token ? `${process.env.REACT_APP_BACK_URL}/lecture/admin/status` : null,
+    () =>
+      axiosGetfetcher(
+        `${process.env.REACT_APP_BACK_URL}/lecture/admin/status`,
+        token,
+      ),
+    { revalidateOnFocus: false, revalidateIfStale: false },
+  );
   const filters = [
     { value: 'lecture', label: '강의 별' },
     { value: 'student', label: '학생 별' },
@@ -42,7 +46,7 @@ const LecturePermission: FC<LecturePermissionProps> = ({
     label: string;
   }>();
   const onHandleFilterChange = useCallback(
-    (changedOption) => {
+    (changedOption: any) => {
       setSelectedFilter(changedOption);
       if (changedOption.value === 'lecture') {
         setStudentFilter({ value: '', label: '' });
@@ -53,13 +57,13 @@ const LecturePermission: FC<LecturePermissionProps> = ({
     [filters],
   );
   const onHandleLectureChange = useCallback(
-    (changedOption) => {
+    (changedOption: any) => {
       setLectureFilter(changedOption);
     },
     [lectureOptions],
   );
   const onHandleUserChange = useCallback(
-    (changedOption) => {
+    (changedOption: any) => {
       setStudentFilter(changedOption);
     },
     [studentOptions],

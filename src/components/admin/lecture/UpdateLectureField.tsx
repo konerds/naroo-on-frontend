@@ -3,26 +3,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { FC, FormEvent, useState } from 'react';
 import { toast } from 'react-toastify';
-import { MutatorCallback } from 'swr/dist/types';
+import { KeyedMutator } from 'swr';
 import { useInput } from '../../../hooks';
 import { ILectureInList } from '../../../interfaces';
 
 interface UpdateLectureFieldProps {
   token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
+  setToken: (v: string | null) => void;
   fieldType: string;
   lectureId: string;
   userField: string | null;
-  mutate: (
-    data?:
-      | ILectureInList[]
-      | Promise<ILectureInList[]>
-      | MutatorCallback<ILectureInList[]>
-      | undefined,
-    shouldRevalidate?: boolean | undefined,
-  ) => Promise<ILectureInList[] | undefined>;
+  mutate: KeyedMutator<ILectureInList[]>;
 }
 
 const UpdateLectureField: FC<UpdateLectureFieldProps> = ({

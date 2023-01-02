@@ -2,27 +2,19 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { FC, FormEvent, useCallback, useMemo, useState } from 'react';
-import { MutatorCallback } from 'swr/dist/types';
 import { ILectureInListAdmin } from '../../../interfaces';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
+import { KeyedMutator } from 'swr';
+import { showError } from '../../../hooks/api';
 
 interface UpdateStatusProps {
   token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
+  setToken: (v: string | null) => void;
   studentId: string;
   lectureId: string;
   status: string | null;
-  mutate: (
-    data?:
-      | ILectureInListAdmin[]
-      | Promise<ILectureInListAdmin[]>
-      | MutatorCallback<ILectureInListAdmin[]>
-      | undefined,
-    shouldRevalidate?: boolean | undefined,
-  ) => Promise<ILectureInListAdmin[] | undefined>;
+  mutate: KeyedMutator<ILectureInListAdmin[]>;
 }
 
 const UpdateStatus: FC<UpdateStatusProps> = ({
@@ -49,7 +41,7 @@ const UpdateStatus: FC<UpdateStatusProps> = ({
     setUpdateStatus(status);
   };
   const onHandleChange = useCallback(
-    (changedOption) => {
+    (changedOption: any) => {
       setUpdateStatus(changedOption.value);
     },
     [statusOptions],
@@ -78,24 +70,13 @@ const UpdateStatus: FC<UpdateStatusProps> = ({
       );
 
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-          setUpdateToggle(!updateToggle);
-        }, 500);
+        await mutate();
+        setUpdateToggle(!updateToggle);
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmit(false);
-      }, 500);
+      setIsLoadingSubmit(false);
     }
   };
   return (
@@ -109,7 +90,7 @@ const UpdateStatus: FC<UpdateStatusProps> = ({
             className="w-full disabled:opacity-50"
             options={statusOptions}
             onChange={onHandleChange}
-            disabled={isLoadingSubmit}
+            isDisabled={isLoadingSubmit}
           />
           <button
             className="mx-[10px] lg:w-[4vw] w-[8vw] box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[41px] lg:text-[14px] text-[1vw] font-semibold leading-[150%] bg-[#4DBFF0] text-white disabled:opacity-50"

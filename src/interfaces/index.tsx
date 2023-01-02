@@ -8,6 +8,16 @@ export interface IResources {
   content: string;
 }
 
+export interface IInfoMe {
+  userId: string;
+  role: string;
+  nickname: string;
+}
+
+export interface IUserVerify {
+  token: string | null;
+}
+
 export interface IUserEdit {
   id: string;
   email: string;

@@ -1,32 +1,23 @@
+import * as React from 'react';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import { FC, FormEvent, useCallback, useMemo, useState } from 'react';
 import Select from 'react-select';
-import { toast } from 'react-toastify';
-import { MutatorCallback } from 'swr/dist/types';
+import { KeyedMutator } from 'swr';
 import { ILectureInList, ITags } from '../../../interfaces';
 import UnregisterTagElement from './UnregisterTagElement';
+import { showError } from '../../../hooks/api';
 
 interface RegisterTagProps {
   token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
+  setToken: (v: string | null) => void;
   lectureId: string;
   allTags: ITags[] | undefined;
   tags: ITags[] | [];
-  mutate: (
-    data?:
-      | ILectureInList[]
-      | Promise<ILectureInList[]>
-      | MutatorCallback<ILectureInList[]>
-      | undefined,
-    shouldRevalidate?: boolean | undefined,
-  ) => Promise<ILectureInList[] | undefined>;
+  mutate: KeyedMutator<ILectureInList[]>;
 }
 
-const RegisterTag: FC<RegisterTagProps> = ({
+const RegisterTag: React.FC<RegisterTagProps> = ({
   token,
   setToken,
   lectureId,
@@ -34,19 +25,19 @@ const RegisterTag: FC<RegisterTagProps> = ({
   tags,
   mutate,
 }) => {
-  const [updateToggle, setUpdateToggle] = useState<boolean>(false);
-  const [registerTags, setRegisterTags] = useState<ITags[]>(tags);
-  const tagsOptions = useMemo(() => {
+  const [updateToggle, setUpdateToggle] = React.useState<boolean>(false);
+  const [registerTags, setRegisterTags] = React.useState<ITags[]>(tags);
+  const tagsOptions = React.useMemo(() => {
     const filteredTags = [];
-    if (allTags) {
+    if (!!allTags) {
       for (const tag of allTags) {
         filteredTags.push({ value: tag.id, label: tag.name });
       }
     }
     return filteredTags;
   }, [allTags]);
-  const onHandleTagsChange = useCallback(
-    (changedOption) => {
+  const onHandleTagsChange = React.useCallback(
+    (changedOption: any) => {
       const filteredTags = [];
       if (changedOption && changedOption.length > 0) {
         for (const tagOption of changedOption) {
@@ -61,10 +52,9 @@ const RegisterTag: FC<RegisterTagProps> = ({
     setUpdateToggle(!updateToggle);
     setRegisterTags(tags);
   };
-  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
-  const onSubmitRegisterTag = async (event: FormEvent<HTMLFormElement>) => {
+  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
+  const onSubmitRegisterTag = async () => {
     try {
-      event.preventDefault();
       setIsLoadingSubmit(true);
       const ids = [];
       for (const tag of registerTags) {
@@ -82,24 +72,13 @@ const RegisterTag: FC<RegisterTagProps> = ({
         },
       );
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-          setUpdateToggle(!updateToggle);
-        }, 500);
+        await mutate();
+        setUpdateToggle(!updateToggle);
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmit(false);
-      }, 500);
+      setIsLoadingSubmit(false);
     }
   };
   return (
@@ -107,7 +86,10 @@ const RegisterTag: FC<RegisterTagProps> = ({
       {updateToggle ? (
         <form
           className="flex items-center py-[10px]"
-          onSubmit={onSubmitRegisterTag}
+          onSubmit={(event) => {
+            event.preventDefault();
+            onSubmitRegisterTag();
+          }}
         >
           <label htmlFor="tag" className="min-w-max mr-[10px]">
             태그
@@ -117,7 +99,6 @@ const RegisterTag: FC<RegisterTagProps> = ({
               isMulti
               isClearable
               className="rounded-full w-full pl-[14px] pr-[14px] py-1 text-xs text-gray-200 bg-harp mr-1 disabled:opacity-50"
-              type="text"
               value={tagsOptions.map((tagOption) => {
                 for (const tag of registerTags) {
                   if (tagOption.value === tag.id) {
@@ -128,7 +109,7 @@ const RegisterTag: FC<RegisterTagProps> = ({
               options={tagsOptions}
               onChange={onHandleTagsChange}
               placeholder="태그를 추가하세요!"
-              disabled={isLoadingSubmit}
+              isDisabled={isLoadingSubmit}
             />
           </div>
           <input
@@ -151,9 +132,10 @@ const RegisterTag: FC<RegisterTagProps> = ({
             <>
               {tags &&
                 tags.length > 0 &&
-                tags.map((tag) => {
+                tags.map((tag, index) => {
                   return (
                     <UnregisterTagElement
+                      key={index}
                       token={token}
                       lectureId={lectureId}
                       tag={tag}

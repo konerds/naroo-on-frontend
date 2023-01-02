@@ -1,22 +1,13 @@
 import { FC } from 'react';
-import { MutatorCallback } from 'swr/dist/types';
+import { KeyedMutator } from 'swr';
 import { ILectureInList, ITags } from '../../interfaces';
 import LectureEditCard from './lecture/LectureEditCard';
 
 interface LecturesEditProps {
   token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
+  setToken: (v: string | null) => void;
   allLecturesData: ILectureInList[] | undefined;
-  allLecturesMutate: (
-    data?:
-      | ILectureInList[]
-      | Promise<ILectureInList[]>
-      | MutatorCallback<ILectureInList[]>
-      | undefined,
-    shouldRevalidate?: boolean | undefined,
-  ) => Promise<ILectureInList[] | undefined>;
+  allLecturesMutate: KeyedMutator<ILectureInList[]>;
   allTags: ITags[] | [];
 }
 

@@ -1,28 +1,20 @@
-import { FC, FormEvent } from 'react';
-import { useParams } from 'react-router';
-import { useHistory } from 'react-router-dom';
-import { useState } from 'react';
-import { useGetSWR } from '../hooks/api';
+import * as React from 'react';
+import { useNavigate, useParams } from 'react-router';
+import { axiosGetfetcher, showError } from '../hooks/api';
+import useSWR from 'swr';
 import Moment from 'react-moment';
 import 'moment/locale/ko';
 import axios from 'axios';
 import { useInput } from '../hooks';
-import { toast } from 'react-toastify';
-import { ILectureDetail } from '../interfaces';
+import { IInfoMe, ILectureDetail } from '../interfaces';
 import Skeleton from 'react-loading-skeleton';
 import LectureNotice from '../components/lecture/LectureNotice';
-import EditIcon from '../assets/images/Edit.svg';
-import CloseIcon from '../assets/images/Close.svg';
+import ImgEdit from '../assets/images/Edit.svg';
+import ImgClose from '../assets/images/Close.svg';
 import LectureQuestion from '../components/lecture/LectureQuestion';
+import TokenContext from '../store/TokenContext';
 
-interface LetcureDetailLayoutProps {
-  token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
-  userType: string | null;
-  userNickname: string | null;
-}
+interface IPropsPageLectureDetail {}
 
 export const CONST_LECTURE_DETAIL_MENU = {
   LECTURE_INTRODUCE: 'lecture_introduce',
@@ -33,34 +25,68 @@ export const CONST_LECTURE_DETAIL_MENU = {
 export type LECTURE_DETAIL_MENU =
   typeof CONST_LECTURE_DETAIL_MENU[keyof typeof CONST_LECTURE_DETAIL_MENU];
 
-const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
-  token,
-  setToken,
-  userType,
-  userNickname,
-}) => {
-  const history = useHistory();
+const PageLectureDetail: React.FC<IPropsPageLectureDetail> = ({}) => {
   const { id } = useParams<{ id: string }>();
-  const [selectedMenu, setSelectedMenu] = useState<LECTURE_DETAIL_MENU>(
+  const navigate = useNavigate();
+  const tokenCtx = React.useContext(TokenContext);
+  const { token } = tokenCtx;
+  const [selectedMenu, setSelectedMenu] = React.useState<LECTURE_DETAIL_MENU>(
     CONST_LECTURE_DETAIL_MENU.LECTURE_INTRODUCE,
   );
-  const informationLecture = token
-    ? useGetSWR<ILectureDetail>(
+  const [noticeTitle, onChangeNoticeTitle, setNoticeTitle] = useInput('');
+  const [noticeDescription, onChangeNoticeDescription, setNoticeDescription] =
+    useInput('');
+  const [isShowAddNotice, setIsShowAddNotice] = React.useState<boolean>(false);
+  const [isLoadingSubmitNotice, setIsLoadingSubmitNotice] =
+    React.useState<boolean>(false);
+  const [questionTitle, onChangeQuestionTitle, setQuestionTitle] = useInput('');
+  const [
+    questionDescription,
+    onChangeQuestionDescription,
+    setQuestionDescription,
+  ] = useInput('');
+  const [isShowAddQuestion, setIsShowAddQuestion] =
+    React.useState<boolean>(false);
+  const [isLoadingSubmitQuestion, setIsLoadingSubmitQuestion] =
+    React.useState<boolean>(false);
+  const { data: dataGetMe, error: errorGetMe } = useSWR<IInfoMe>(
+    !!token ? `${process.env.REACT_APP_BACK_URL}/user/me` : null,
+    () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/me`, token),
+    { revalidateOnFocus: false, revalidateIfStale: false },
+  );
+  const {
+    data: dataDetailLecture,
+    mutate: mutateDetailLecture,
+    error: errorDetailLecture,
+  } = !!dataGetMe && !!!errorGetMe
+    ? useSWR<ILectureDetail>(
         `${process.env.REACT_APP_BACK_URL}/lecture/${id}`,
-        token,
-        true,
+        () =>
+          axiosGetfetcher(
+            `${process.env.REACT_APP_BACK_URL}/lecture/${id}`,
+            token,
+          ),
+        { revalidateOnFocus: false, revalidateIfStale: false },
       )
-    : useGetSWR<ILectureDetail>(
+    : useSWR<ILectureDetail>(
         `${process.env.REACT_APP_BACK_URL}/lecture/guest/${id}`,
-        null,
-        true,
+        () =>
+          axiosGetfetcher(
+            `${process.env.REACT_APP_BACK_URL}/lecture/guest/${id}`,
+          ),
+        { revalidateOnFocus: false, revalidateIfStale: false },
       );
   const onPlayLectureHandler = async () => {
-    if (informationLecture && informationLecture.data) {
-      if (informationLecture.data.status === 'accept') {
-        history.push(`/lecture-play/${id}`);
-      } else if (!informationLecture.data.status) {
-        if (token !== '' && userType === 'student') {
+    if (!!dataDetailLecture) {
+      if (dataDetailLecture.status === 'accept') {
+        navigate(`/lecture-play/${id}`);
+      } else if (!!!dataDetailLecture.status) {
+        if (
+          !!token &&
+          !!dataGetMe &&
+          !!!errorGetMe &&
+          dataGetMe.role === 'student'
+        ) {
           try {
             const response = await axios.put(
               `${process.env.REACT_APP_BACK_URL}/lecture/${id}`,
@@ -72,35 +98,19 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
               },
             );
             if (response.status === 200) {
-              setTimeout(() => {
-                informationLecture.mutate();
-              }, 500);
+              await mutateDetailLecture();
             }
           } catch (error: any) {
-            const messages = error.response.data.message;
-            if (Array.isArray(messages)) {
-              messages.map((message) => {
-                toast.error(message);
-              });
-            } else {
-              toast.error(messages);
-            }
+            showError(error);
           }
         } else {
-          history.push('/signin');
+          navigate('/signin');
         }
       }
     }
   };
-  const [noticeTitle, onChangeNoticeTitle, setNoticeTitle] = useInput('');
-  const [noticeDescription, onChangeNoticeDescription, setNoticeDescription] =
-    useInput('');
-  const [isShowAddNotice, setIsShowAddNotice] = useState<boolean>(false);
-  const [isLoadingSubmitNotice, setIsLoadingSubmitNotice] =
-    useState<boolean>(false);
-  const onSubmitNoticeHandler = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitNoticeHandler = async () => {
     try {
-      event.preventDefault();
       setIsLoadingSubmitNotice(true);
       const response = await axios.put(
         `${process.env.REACT_APP_BACK_URL}/lecture/admin/notice/${id}`,
@@ -115,39 +125,18 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
         },
       );
       if (response.status === 200) {
-        setTimeout(() => {
-          informationLecture.mutate();
-          setNoticeTitle('');
-          setNoticeDescription('');
-        }, 500);
+        await mutateDetailLecture();
+        setNoticeTitle('');
+        setNoticeDescription('');
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmitNotice(false);
-      }, 500);
+      setIsLoadingSubmitNotice(false);
     }
   };
-  const [questionTitle, onChangeQuestionTitle, setQuestionTitle] = useInput('');
-  const [
-    questionDescription,
-    onChangeQuestionDescription,
-    setQuestionDescription,
-  ] = useInput('');
-  const [isShowAddQuestion, setIsShowAddQuestion] = useState<boolean>(false);
-  const [isLoadingSubmitQuestion, setIsLoadingSubmitQuestion] =
-    useState<boolean>(false);
-  const onSubmitQuestionHandler = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitQuestionHandler = async () => {
     try {
-      event.preventDefault();
       setIsLoadingSubmitQuestion(true);
       const response = await axios.post(
         `${process.env.REACT_APP_BACK_URL}/lecture/question/${id}`,
@@ -162,124 +151,125 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
         },
       );
       if (response.status === 201) {
-        setTimeout(() => {
-          informationLecture.mutate();
-          setQuestionTitle('');
-          setQuestionDescription('');
-        }, 500);
+        await mutateDetailLecture();
+        setQuestionTitle('');
+        setQuestionDescription('');
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmitQuestion(false);
-      }, 500);
+      setIsLoadingSubmitQuestion(false);
     }
   };
   return (
     <>
-      {informationLecture && informationLecture.data && (
+      {!!dataDetailLecture && !!!errorDetailLecture && (
         <>
           <div className="w-full bg-gradient-to-br from-[#8DC556] to-[#00A0E9]">
             <div className="hidden lg:flex w-full xl:max-w-[1152px] lg:max-w-[864px] md:max-w-[680px] sm:max-w-[500px] xs:max-w-[400px] xl:min-h-[506px] xl:max-h-[506px] lg:min-h-[431.79px] lg:max-h-[431.79px] mx-auto items-center justify-center">
               <img
                 className="xl:mr-[150px] lg:mr-[128px] xl:min-w-[346px] xl:max-w-[346px] xl:min-h-[346px] xl:max-h-[346px] lg:min-w-[295.25px] lg:max-w-[295.25px] lg:min-h-[295.25px] lg:max-h-[295.25px] object-fill rounded-[4px] lecture-detail-thumbnail-container"
                 src={
-                  informationLecture.data.thumbnail
-                    ? informationLecture.data.thumbnail
+                  !!dataDetailLecture.thumbnail
+                    ? dataDetailLecture.thumbnail
                     : ''
                 }
               />
               <div className="xl:min-w-[644px] xl:max-w-[644px] lg:min-w-[549.55px] lg:max-w-[549.55px] xl:min-h-[346px] xl:max-h-[346px] lg:min-h-[295.25px] lg:max-h-[295.25px] flex flex-col justify-between">
                 <div className="w-full max-h-[96px] overflow-hidden text-white text-[32px] leading-[150%] font-semibold">
-                  {informationLecture.data.title &&
-                    informationLecture.data.title}
+                  {!!dataDetailLecture.title && dataDetailLecture.title}
                 </div>
                 <div className="flex wrap items-center w-full min-h-[209.5px] max-h-[209.5px]">
                   <div className="block w-full">
                     <div className="mb-[30px] w-full flex justify-between items-center text-white text-[16px] leading-[150%] font-semibold">
                       <div>
-                        {informationLecture.data.teacher_nickname
-                          ? informationLecture.data.teacher_nickname
+                        {!!dataDetailLecture.teacher_nickname
+                          ? dataDetailLecture.teacher_nickname
                           : ''}
                       </div>
                       <div className="text-[16px] text-white leading-[150%] font-semibold">
                         현재{' '}
-                        {informationLecture.data.users
-                          ? informationLecture.data.users
+                        {!!dataDetailLecture.users
+                          ? dataDetailLecture.users
                           : 0}
                         명이 수강하고 있어요!
                       </div>
                     </div>
                     <div className="w-full max-h-[96px] overflow-hidden text-[16px] text-white leading-[24px] font-semibold">
-                      {informationLecture.data.description
-                        ? informationLecture.data.description
+                      {!!dataDetailLecture.description
+                        ? dataDetailLecture.description
                         : ''}
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center justify-between w-full min-h-[41px] max-h-[41px]">
-                  {(userType === 'student' || !token) && (
+                  {((!!dataGetMe &&
+                    !!!errorGetMe &&
+                    dataGetMe.role === 'student') ||
+                    !!!token) && (
                     <button
+                      type="button"
                       onClick={onPlayLectureHandler}
                       className={`rounded-[4px] xl:min-w-[132px] xl:max-w-[132px] lg:min-w-[112.64px] lg:max-w-[112.64px] min-h-[41px] max-h-[41px] text-[#4DBFF0] text-[14px] font-semibold leading-[150%] bg-white ${
-                        informationLecture.data.status === 'apply' ||
-                        informationLecture.data.status === 'reject' ||
-                        informationLecture.data.status === 'expired'
+                        dataDetailLecture.status === 'apply' ||
+                        dataDetailLecture.status === 'reject' ||
+                        dataDetailLecture.status === 'expired'
                           ? 'disabled:opacity-50'
                           : ''
                       }`}
                       disabled={
-                        informationLecture.data.status === 'apply' ||
-                        informationLecture.data.status === 'reject' ||
-                        informationLecture.data.status === 'expired'
+                        dataDetailLecture.status === 'apply' ||
+                        dataDetailLecture.status === 'reject' ||
+                        dataDetailLecture.status === 'expired'
                           ? true
                           : false
                       }
                     >
-                      {informationLecture.data.status === 'expired' ? (
+                      {dataDetailLecture.status === 'expired' ? (
                         '수강 만료'
                       ) : (
                         <>
-                          {token &&
-                            !informationLecture.data.status &&
-                            '수강 신청'}
-                          {informationLecture.data.status === 'apply' &&
-                            '승인 대기'}
-                          {informationLecture.data.status === 'reject' &&
-                            '승인 거부'}
-                          {!token &&
-                            !informationLecture.data.status &&
-                            '로그인 필요'}
-                          {informationLecture.data.status === 'accept' &&
-                            '학습 하기'}
+                          {!!token ? (
+                            <>
+                              {!!dataDetailLecture.status ? (
+                                <>
+                                  {{
+                                    apply: '수강 신청',
+                                    reject: '승인 거부',
+                                    accept: '학습 하기',
+                                  }}
+                                  [dataDetailLecture.status]
+                                </>
+                              ) : (
+                                <>
+                                  {!!token &&
+                                    !!!dataDetailLecture.status &&
+                                    '수강 신청'}
+                                </>
+                              )}
+                            </>
+                          ) : (
+                            <>{!!!dataDetailLecture.status && '로그인 필요'}</>
+                          )}
                         </>
                       )}
                     </button>
                   )}
                   <div className="text-[14px] leading-[150%] text-white font-semibold">
-                    {informationLecture.data.expired && (
+                    {!!dataDetailLecture.expired && (
                       <>
-                        {new Date(
-                          informationLecture.data.expired,
-                        ).toISOString() >= new Date().toISOString() ? (
+                        {new Date(dataDetailLecture.expired).toISOString() >=
+                        new Date().toISOString() ? (
                           <Moment
-                            date={new Date(informationLecture.data.expired)}
+                            date={new Date(dataDetailLecture.expired)}
                             durationFromNow
                             filter={(date) => {
                               return date.replace('-', '');
                             }}
-                            format="마감까지 DD일 HH시간 mm분 남았어요!"
+                            format="마감까지 DD일 HH시간 mm분 남았어요"
                           />
                         ) : (
-                          '수강 기간이 만료된 강의입니다!'
+                          '수강 기간이 만료된 강의입니다'
                         )}
                       </>
                     )}
@@ -291,50 +281,62 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
               <img
                 className="mx-auto rounded-[4px] lecture-detail-thumbnail-container object-fill"
                 src={
-                  informationLecture.data.thumbnail
-                    ? informationLecture.data.thumbnail
-                    : ''
+                  dataDetailLecture.thumbnail ? dataDetailLecture.thumbnail : ''
                 }
               />
               <div className="flex mx-auto justify-between items-center min-h-[96px] max-h-[96px] mt-[1vh]">
                 <div className="flex-1 overflow-hidden max-w-max max-h-[75px] text-white text-[18px] leading-[150%] font-semibold">
-                  {informationLecture.data.title &&
-                    informationLecture.data.title}
+                  {dataDetailLecture.title && dataDetailLecture.title}
                 </div>
-                {(userType === 'student' || !token) && (
+                {((!!token &&
+                  !!dataGetMe &&
+                  !!!errorGetMe &&
+                  dataGetMe.role === 'student') ||
+                  !!!token) && (
                   <button
+                    type="button"
                     onClick={onPlayLectureHandler}
-                    className={`flex-1 rounded-[4px] max-w-[176px] h-[54px] text-[#4DBFF0] text-[14px] font-semibold leading-[150%] bg-white ${
-                      informationLecture.data.status === 'apply' ||
-                      informationLecture.data.status === 'reject' ||
-                      informationLecture.data.status === 'expired'
+                    className={`flex-1 rounded-[4px] max-w-[176px] h-[54px] font-semibold leading-[150%] text-[#4DBFF0] text-[14px] bg-white ${
+                      dataDetailLecture.status === 'apply' ||
+                      dataDetailLecture.status === 'reject' ||
+                      dataDetailLecture.status === 'expired'
                         ? 'disabled:opacity-50'
                         : ''
                     }`}
                     disabled={
-                      informationLecture.data.status === 'apply' ||
-                      informationLecture.data.status === 'reject' ||
-                      informationLecture.data.status === 'expired'
+                      dataDetailLecture.status === 'apply' ||
+                      dataDetailLecture.status === 'reject' ||
+                      dataDetailLecture.status === 'expired'
                         ? true
                         : false
                     }
                   >
-                    {informationLecture.data.status === 'expired' ? (
+                    {dataDetailLecture.status === 'expired' ? (
                       '수강 만료'
                     ) : (
                       <>
-                        {token &&
-                          !informationLecture.data.status &&
-                          '수강 신청'}
-                        {informationLecture.data.status === 'apply' &&
-                          '승인 대기'}
-                        {informationLecture.data.status === 'reject' &&
-                          '승인 거부'}
-                        {!token &&
-                          !informationLecture.data.status &&
-                          '로그인 필요'}
-                        {informationLecture.data.status === 'accept' &&
-                          '학습 하기'}
+                        {!!token ? (
+                          <>
+                            {!!dataDetailLecture.status ? (
+                              <>
+                                {{
+                                  apply: '수강 신청',
+                                  reject: '승인 거부',
+                                  accept: '학습 하기',
+                                }}
+                                [dataDetailLecture.status]
+                              </>
+                            ) : (
+                              <>
+                                {!!token &&
+                                  !!!dataDetailLecture.status &&
+                                  '수강 신청'}
+                              </>
+                            )}
+                          </>
+                        ) : (
+                          <>{!!!dataDetailLecture.status && '로그인 필요'}</>
+                        )}
                       </>
                     )}
                   </button>
@@ -345,6 +347,7 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
           <div className="w-full mt-[40.25px] h-[44px] flex justify-center items-center">
             <div className="flex-1 h-[44px] border-b-[1px] border-[#8DC556]"></div>
             <button
+              type="button"
               className={`flex-none w-[120px] h-[44px] text-[16px] leading-[22px] font-medium border-[#8DC556] ${
                 selectedMenu === CONST_LECTURE_DETAIL_MENU.LECTURE_INTRODUCE
                   ? 'text-[#8DC556] border-t-[1px] border-l-[1px] border-r-[1px]'
@@ -357,6 +360,7 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
               강의 소개
             </button>
             <button
+              type="button"
               className={`flex-none w-[120px] h-[44px] text-[16px] leading-[22px] font-medium border-[#8DC556] ${
                 selectedMenu === CONST_LECTURE_DETAIL_MENU.LECTURE_NOTICE
                   ? 'text-[#8DC556] border-t-[1px] border-l-[1px] border-r-[1px]'
@@ -369,6 +373,7 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
               공지사항
             </button>
             <button
+              type="button"
               className={`flex-none w-[120px] h-[44px] text-[16px] leading-[22px] font-medium border-[#8DC556] ${
                 selectedMenu === CONST_LECTURE_DETAIL_MENU.LECTURE_QNA
                   ? 'text-[#8DC556] border-t-[1px] border-l-[1px] border-r-[1px]'
@@ -385,10 +390,10 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
           <div className="mx-auto xl:max-w-[1152px] lg:max-w-[864px] md:max-w-[680px] sm:max-w-[500px] xs:max-w-[400px]">
             {selectedMenu === CONST_LECTURE_DETAIL_MENU.LECTURE_INTRODUCE && (
               <div className="min-h-[300px] pt-[50px] pb-[60px] mx-auto flex flex-wrap justify-center">
-                {informationLecture.data.images &&
-                  Array.isArray(informationLecture.data.images) &&
-                  informationLecture.data.images.length > 0 &&
-                  informationLecture.data.images.map((url) => {
+                {!!dataDetailLecture.images &&
+                  Array.isArray(dataDetailLecture.images) &&
+                  dataDetailLecture.images.length > 0 &&
+                  dataDetailLecture.images.map((url) => {
                     return (
                       <img
                         key={url}
@@ -402,12 +407,17 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
             {selectedMenu === CONST_LECTURE_DETAIL_MENU.LECTURE_NOTICE && (
               <div className="min-h-[478px] py-[80px] mx-auto">
                 {token &&
-                  informationLecture.data &&
-                  userType === 'admin' &&
+                  !!dataGetMe &&
+                  !!!errorGetMe &&
+                  dataGetMe.role === 'admin' &&
+                  !!dataDetailLecture &&
                   isShowAddNotice && (
                     <form
                       className="min-h-[491px] max-h-[491px] mb-[60px] xl:px-[98px] lg:px-[50px] md:px-[30px] sm:px-[14px] xs:px-[10px] py-[68px] box-border border-[1px] rounded-[8px] border-[#DCDEE2] w-full"
-                      onSubmit={onSubmitNoticeHandler}
+                      onSubmit={(event) => {
+                        event.preventDefault();
+                        onSubmitNoticeHandler();
+                      }}
                     >
                       <div className="mb-[28px] text-[#17233D] font-semibold text-[20px] leading-[150%]">
                         공지사항 등록
@@ -446,10 +456,13 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
                       <div className="text-[#17233D] font-semibold text-[20px] leading-[150%]">
                         공지사항
                       </div>
-                      {token &&
-                      informationLecture.data &&
-                      userType === 'admin' ? (
+                      {!!token &&
+                      !!dataGetMe &&
+                      !!!errorGetMe &&
+                      dataGetMe.role === 'admin' &&
+                      !!dataDetailLecture ? (
                         <button
+                          type="button"
                           className="flex px-[10px] py-[4px] border-[1px] border-[#EBEEEF] rounded-[4px] bg-[#F9F9FA] disabled:opacity-50"
                           onClick={(event) => {
                             setIsShowAddNotice(!isShowAddNotice);
@@ -463,7 +476,7 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
                               </span>
                               <img
                                 className="w-[16px] h-[16px] m-auto object-fit"
-                                src={CloseIcon}
+                                src={ImgClose}
                               />
                             </>
                           ) : (
@@ -473,7 +486,7 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
                               </span>
                               <img
                                 className="w-[16px] h-[16px] m-auto object-fit"
-                                src={EditIcon}
+                                src={ImgEdit}
                               />
                             </>
                           )}
@@ -500,9 +513,10 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
                           </div>
                         </div>
                       </div>
-                      {informationLecture.data.notices &&
-                      informationLecture.data.notices.length > 0 ? (
-                        informationLecture.data.notices
+                      {!!dataDetailLecture &&
+                      !!dataDetailLecture.notices &&
+                      dataDetailLecture.notices.length > 0 ? (
+                        !!dataDetailLecture.notices
                           .sort((a: any, b: any) => {
                             return (
                               new Date(b.created_at).getTime() -
@@ -510,31 +524,29 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
                             );
                           })
                           .map((notice, index) => {
-                            return informationLecture.data ? (
+                            return (
                               <LectureNotice
                                 key={notice.id}
                                 token={token}
-                                userType={userType}
-                                mutate={informationLecture.mutate}
-                                lecture_id={informationLecture.data.id}
+                                userType={dataGetMe?.role}
+                                mutate={mutateDetailLecture}
+                                lecture_id={dataDetailLecture.id}
                                 array_index={
-                                  informationLecture.data.notices.length - index
+                                  dataDetailLecture.notices.length - index
                                 }
                                 id={notice.id}
                                 created_at={notice.created_at}
                                 title={notice.title}
                                 description={notice.description}
                               />
-                            ) : (
-                              <></>
                             );
                           })
                       ) : (
                         <div className="flex items-center justify-center min-h-[41px] text-[14px] leading-[150%] font-medium text-[#515A6E]">
-                          {!informationLecture.data.notices ||
-                          informationLecture.data.notices.length === 0
-                            ? '공지사항이 존재하지 않습니다!'
-                            : '잘못된 접근입니다!'}
+                          {!!!dataDetailLecture.notices ||
+                          dataDetailLecture.notices.length === 0
+                            ? '공지사항이 존재하지 않습니다'
+                            : '잘못된 접근입니다'}
                         </div>
                       )}
                     </div>
@@ -544,13 +556,18 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
             )}
             {selectedMenu === CONST_LECTURE_DETAIL_MENU.LECTURE_QNA && (
               <div className="min-h-[478px] py-[80px] mx-auto">
-                {token &&
-                  informationLecture.data &&
-                  userType === 'student' &&
+                {!!token &&
+                  !!dataGetMe &&
+                  !!!errorGetMe &&
+                  dataGetMe.role === 'student' &&
+                  !!dataDetailLecture &&
                   isShowAddQuestion && (
                     <form
                       className="min-h-[491px] max-h-[491px] mb-[60px] xl:px-[98px] lg:px-[50px] md:px-[30px] sm:px-[14px] xs:px-[10px] py-[68px] box-border border-[1px] rounded-[8px] border-[#DCDEE2] w-full"
-                      onSubmit={onSubmitQuestionHandler}
+                      onSubmit={(event) => {
+                        event.preventDefault();
+                        onSubmitQuestionHandler();
+                      }}
                     >
                       <div className="mb-[28px] text-[#17233D] font-semibold text-[20px] leading-[150%]">
                         문의사항 등록
@@ -589,10 +606,14 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
                       <div className="text-[#17233D] font-semibold text-[20px] leading-[150%]">
                         문의사항
                       </div>
-                      {token && userType === 'student' ? (
+                      {!!token &&
+                      !!dataGetMe &&
+                      !!!errorGetMe &&
+                      dataGetMe.role === 'student' ? (
                         <button
+                          type="button"
                           className="flex px-[10px] py-[4px] border-[1px] border-[#EBEEEF] rounded-[4px] bg-[#F9F9FA] disabled:opacity-50"
-                          onClick={(event) => {
+                          onClick={() => {
                             setIsShowAddQuestion(!isShowAddQuestion);
                           }}
                           disabled={isLoadingSubmitQuestion}
@@ -604,7 +625,7 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
                               </span>
                               <img
                                 className="w-[16px] h-[16px] m-auto object-fit"
-                                src={CloseIcon}
+                                src={ImgClose}
                               />
                             </>
                           ) : (
@@ -614,7 +635,7 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
                               </span>
                               <img
                                 className="w-[16px] h-[16px] m-auto object-fit"
-                                src={EditIcon}
+                                src={ImgEdit}
                               />
                             </>
                           )}
@@ -641,9 +662,9 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
                           </div>
                         </div>
                       </div>
-                      {informationLecture.data.qnas &&
-                      informationLecture.data.qnas.length > 0 ? (
-                        informationLecture.data.qnas
+                      {!!dataDetailLecture.qnas &&
+                      dataDetailLecture.qnas.length > 0 ? (
+                        dataDetailLecture.qnas
                           .sort((a: any, b: any) => {
                             return (
                               new Date(b.question_created_at).getTime() -
@@ -651,15 +672,15 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
                             );
                           })
                           .map((qna, index) => {
-                            return informationLecture.data ? (
+                            return dataDetailLecture ? (
                               <LectureQuestion
                                 key={qna.question_id}
                                 token={token}
-                                userType={userType}
-                                mutate={informationLecture.mutate}
-                                lecture_id={informationLecture.data.id}
+                                userType={dataGetMe?.role}
+                                mutate={mutateDetailLecture}
+                                lecture_id={dataDetailLecture.id}
                                 array_index={
-                                  informationLecture.data.qnas.length - index
+                                  dataDetailLecture.qnas.length - index
                                 }
                                 question_id={qna.question_id}
                                 question_created_at={qna.question_created_at}
@@ -669,7 +690,7 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
                                 answer_created_at={qna.answer_created_at}
                                 answer_title={qna.answer_title}
                                 answer_description={qna.answer_description}
-                                userNickname={userNickname}
+                                userNickname={dataGetMe?.nickname}
                                 creator_nickname={qna.creator_nickname}
                               />
                             ) : (
@@ -680,10 +701,10 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
                         <div className="flex items-center justify-center min-h-[41px] text-[14px] leading-[150%] font-medium text-[#515A6E]">
                           {!token
                             ? '문의사항은 로그인 후 조회할 수 있습니다!'
-                            : !informationLecture.data.qnas ||
-                              informationLecture.data.qnas.length === 0
-                            ? '문의사항이 존재하지 않습니다!'
-                            : '잘못된 접근입니다!'}
+                            : !!!dataDetailLecture.qnas ||
+                              dataDetailLecture.qnas.length === 0
+                            ? '문의사항이 존재하지 않습니다'
+                            : '잘못된 접근입니다'}
                         </div>
                       )}
                     </div>
@@ -694,11 +715,11 @@ const LetcureDetailLayout: FC<LetcureDetailLayoutProps> = ({
           </div>
         </>
       )}
-      {(!informationLecture || !informationLecture.data) && (
+      {!(!!dataDetailLecture && !!!errorDetailLecture) && (
         <Skeleton className="w-full h-screen" />
       )}
     </>
   );
 };
 
-export default LetcureDetailLayout;
+export default PageLectureDetail;

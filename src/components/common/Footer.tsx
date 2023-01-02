@@ -5,24 +5,30 @@ import {
   faPhoneAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FC } from 'react';
-import { useGetSWR } from '../../hooks/api';
+import * as React from 'react';
+import useSWRImmutable from 'swr/immutable';
+import { axiosGetfetcher } from '../../hooks/api';
 import { IResourceContent } from '../../interfaces';
 
-const Footer: FC = () => {
-  const { data: footerLogo } = useGetSWR<IResourceContent[]>(
+const ComponentFooter: React.FC = () => {
+  const { data: dataFooterLogo, error: errorFooterLogo } = useSWRImmutable<
+    IResourceContent[]
+  >(
     `${process.env.REACT_APP_BACK_URL}/resource/footer_logo`,
-    null,
-    false,
+    () =>
+      axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/resource/footer_logo`),
+    { revalidateOnFocus: false, revalidateIfStale: false },
   );
   return (
     <div className="flex flex-wrap justify-center w-full h-[128px] bg-[#696969]">
       <div className="w-full h-[128px] xl:max-w-[1152px] lg:max-w-[864px] md:max-w-[680px] sm:max-w-[504px] xs:max-w-[400px] flex justify-center items-center">
         <div className="xl:w-[250px] lg:w-[250px] md:w-[220px] sm:w-[210px] xs:w-[150px]">
-          {footerLogo && footerLogo.length > 0 ? (
+          {!!dataFooterLogo &&
+          !!!errorFooterLogo &&
+          dataFooterLogo.length > 0 ? (
             <img
               className="sm:w-[170px] xs:w-[100px]"
-              src={footerLogo[0].content}
+              src={dataFooterLogo[0].content}
             />
           ) : (
             ''
@@ -64,4 +70,4 @@ const Footer: FC = () => {
   );
 };
 
-export default Footer;
+export default ComponentFooter;

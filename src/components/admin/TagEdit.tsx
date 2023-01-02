@@ -1,23 +1,19 @@
 import axios from 'axios';
 import { isArray } from 'lodash';
-import { FormEvent, useState } from 'react';
+import * as React from 'react';
 import { FC } from 'react';
 import { toast } from 'react-toastify';
-import { MutatorCallback } from 'swr/dist/types';
+import { KeyedMutator } from 'swr';
 import { useInput } from '../../hooks';
+import { showError } from '../../hooks/api';
 import { ITags } from '../../interfaces';
 import UpdateTag from './tag/UpdateTag';
 
 interface TagEditProps {
   token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
+  setToken: (v: string | null) => void;
   tagsData: ITags[] | undefined;
-  tagsMutate: (
-    data?: ITags[] | Promise<ITags[]> | MutatorCallback<ITags[]> | undefined,
-    shouldRevalidate?: boolean | undefined,
-  ) => Promise<ITags[] | undefined>;
+  tagsMutate: KeyedMutator<ITags[]>;
 }
 
 const TagEdit: FC<TagEditProps> = ({
@@ -27,15 +23,13 @@ const TagEdit: FC<TagEditProps> = ({
   tagsMutate,
 }) => {
   const [tagName, onChangeTagName, setTagName] = useInput('');
-  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
-  const onSubmitAddHandler = async (event: FormEvent<HTMLFormElement>) => {
+  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
+  const onSubmitAddHandler = async () => {
     try {
-      event.preventDefault();
       setIsLoadingSubmit(true);
       if (!tagName) {
         return;
       }
-
       const response = await axios.post(
         `${process.env.REACT_APP_BACK_URL}/lecture/admin/tag/create`,
         {
@@ -47,32 +41,25 @@ const TagEdit: FC<TagEditProps> = ({
           },
         },
       );
-
       if (response.status === 201) {
-        setTimeout(() => {
-          tagsMutate();
-          setTagName('');
-        }, 500);
+        await tagsMutate();
+        setTagName('');
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmit(false);
-      }, 500);
+      setIsLoadingSubmit(false);
     }
   };
-
   return (
     <>
-      <form className="mt-[47px] w-full" onSubmit={onSubmitAddHandler}>
+      <form
+        className="mt-[47px] w-full"
+        onSubmit={(event) => {
+          event.preventDefault();
+          onSubmitAddHandler();
+        }}
+      >
         <div className="mt-[67px] mb-[29px]">
           <div>
             <label className="text-[16px] leading-[22px]" htmlFor="email">

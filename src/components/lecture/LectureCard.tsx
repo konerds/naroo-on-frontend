@@ -1,5 +1,5 @@
 import { isArray } from 'lodash';
-import { FC, useState } from 'react';
+import * as React from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { Link } from 'react-router-dom';
 import Slider, { Settings } from 'react-slick';
@@ -7,7 +7,7 @@ import { ITags } from '../../interfaces';
 import Tag from '../common/Tag';
 import PlayIcon from '../../assets/images/Play.svg';
 
-interface LectureCardProps {
+interface IPropsComponentLectureCard {
   id: string;
   title: string;
   thumbnail: string;
@@ -17,7 +17,7 @@ interface LectureCardProps {
   tags: ITags[] | [] | null;
 }
 
-const LectureCard: FC<LectureCardProps> = ({
+const ComponentLectureCard: React.FC<IPropsComponentLectureCard> = ({
   id,
   title,
   thumbnail,
@@ -36,7 +36,7 @@ const LectureCard: FC<LectureCardProps> = ({
     pauseOnHover: true,
     variableWidth: true,
   };
-  const [isBackdropShow, setIsBackdropShow] = useState<boolean>(false);
+  const [isBackdropShow, setIsBackdropShow] = React.useState<boolean>(false);
   return (
     <div
       className={`w-full lg:w-[261px] min-h-[444px] max-h-[444px] mx-0 rounded-[8px] ${
@@ -96,29 +96,33 @@ const LectureCard: FC<LectureCardProps> = ({
         <div className="w-full px-[20px] font-medium text-[12px] leading-[150%] text-[#808695]">
           {teacherNickname}
         </div>
-        {tags && isArray(tags) && tags.length > 0 ? (
-          <div
-            onMouseDown={(event) => {
-              event.stopPropagation();
-            }}
-          >
-            <Slider
-              className="flex w-full md:max-w-[261px] px-[20px] mb-[16px]"
-              {...settings}
-            >
-              {tags.map((tag) => {
-                return (
-                  <div className="max-w-max py-[5px]" key={tag.id}>
-                    <Tag name={tag.name} />
-                  </div>
-                );
-              })}
-            </Slider>
-          </div>
-        ) : tags && isArray(tags) && tags.length === 0 ? (
-          <div className="w-full h-[34px] px-[20px] text-xs text-gray-200">
-            태그가 존재하지 않습니다!
-          </div>
+        {!!tags && isArray(tags) ? (
+          <>
+            {tags.length > 0 ? (
+              <div
+                onMouseDown={(event) => {
+                  event.stopPropagation();
+                }}
+              >
+                <Slider
+                  className="flex w-full md:max-w-[261px] px-[20px] mb-[16px]"
+                  {...settings}
+                >
+                  {tags.map((tag) => {
+                    return (
+                      <div className="max-w-max py-[5px]" key={tag.id}>
+                        <Tag name={tag.name} />
+                      </div>
+                    );
+                  })}
+                </Slider>
+              </div>
+            ) : (
+              <div className="w-full h-[34px] px-[20px] text-xs text-gray-200">
+                태그가 존재하지 않습니다
+              </div>
+            )}
+          </>
         ) : (
           <Skeleton className="w-full h-[34px]" />
         )}
@@ -127,4 +131,4 @@ const LectureCard: FC<LectureCardProps> = ({
   );
 };
 
-export default LectureCard;
+export default ComponentLectureCard;

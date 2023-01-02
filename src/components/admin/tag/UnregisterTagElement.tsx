@@ -4,21 +4,14 @@ import { FC, useState } from 'react';
 import { ILectureInList, ITags } from '../../../interfaces';
 import Tag from '../../common/Tag';
 import axios from 'axios';
-import { MutatorCallback } from 'swr/dist/types';
 import { toast } from 'react-toastify';
+import { KeyedMutator } from 'swr';
 
 interface UnregisterTagElementProps {
   token: string | null;
   lectureId: string;
   tag: ITags;
-  mutate: (
-    data?:
-      | ILectureInList[]
-      | Promise<ILectureInList[]>
-      | MutatorCallback<ILectureInList[]>
-      | undefined,
-    shouldRevalidate?: boolean | undefined,
-  ) => Promise<ILectureInList[] | undefined>;
+  mutate: KeyedMutator<ILectureInList[]>;
 }
 
 const UnregisterTagElement: FC<UnregisterTagElementProps> = ({

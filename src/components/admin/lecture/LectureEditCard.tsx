@@ -1,5 +1,4 @@
 import { FC, FormEvent, useCallback, useMemo, useState } from 'react';
-import { MutatorCallback } from 'swr/dist/types';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -16,6 +15,8 @@ import { toast } from 'react-toastify';
 import { useInput } from '../../../hooks';
 import UpdateImageField from './UpdateImageField';
 import moment from 'moment';
+import { KeyedMutator } from 'swr';
+import { showError } from '../../../hooks/api';
 
 interface LectureEditCardProps {
   id: string;
@@ -30,18 +31,9 @@ interface LectureEditCardProps {
   videoTitle: string;
   videoUrl: string;
   token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
+  setToken: (v: string | null) => void;
   allTags: ITags[] | [];
-  mutate: (
-    data?:
-      | ILectureInList[]
-      | Promise<ILectureInList[]>
-      | MutatorCallback<ILectureInList[]>
-      | undefined,
-    shouldRevalidate?: boolean | undefined,
-  ) => Promise<ILectureInList[] | undefined>;
+  mutate: KeyedMutator<ILectureInList[]>;
 }
 
 const LectureEditCard: FC<LectureEditCardProps> = ({
@@ -108,9 +100,8 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
   };
   const [isLoadingSubmitUpdateExpired, setIsLoadingSubmitUpdateExpired] =
     useState<boolean>(false);
-  const onSubmitUpdateExpired = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitUpdateExpired = async () => {
     try {
-      event.preventDefault();
       setIsLoadingSubmitUpdateExpired(true);
       const response = await axios.put(
         `${process.env.REACT_APP_BACK_URL}/lecture/admin/${id}`,
@@ -125,24 +116,13 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
       );
 
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-          setUpdateExpiredToggle(!updateExpiredToggle);
-        }, 500);
+        await mutate();
+        setUpdateExpiredToggle(!updateExpiredToggle);
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmitUpdateExpired(false);
-      }, 500);
+      setIsLoadingSubmitUpdateExpired(false);
     }
   };
   const [updateTeacherToggle, setUpdateTeacherToggle] =
@@ -155,9 +135,8 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
     useInput(teacherNickname);
   const [isLoadingSubmitUpdateTeacher, setIsLoadingSubmitUpdateTeacher] =
     useState<boolean>(false);
-  const onSubmitUpdateTeacher = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitUpdateTeacher = async () => {
     try {
-      event.preventDefault();
       setIsLoadingSubmitUpdateTeacher(true);
       const response = await axios.put(
         `${process.env.REACT_APP_BACK_URL}/lecture/admin/${id}`,
@@ -170,26 +149,14 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
           },
         },
       );
-
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-          setUpdateTeacherToggle(!updateTeacherToggle);
-        }, 500);
+        await mutate();
+        setUpdateTeacherToggle(!updateTeacherToggle);
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmitUpdateTeacher(false);
-      }, 500);
+      setIsLoadingSubmitUpdateTeacher(false);
     }
   };
   return (
@@ -247,7 +214,7 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
         ) : (
           <div className="flex items-center py-[10px]">
             <div className="flex rounded-full text-gray-200 bg-harp w-full items-center p-[10px] text-xs mr-[10px]">
-              {!expired && <div>강의 만료 일시가 설정되어 있지 않습니다!</div>}
+              {!expired && <div>강의 만료 일시가 설정되어 있지 않습니다</div>}
               {expired && moment(expired).format('YYYY-MM-DD HH:mm:ss')}
             </div>
             <FontAwesomeIcon
@@ -326,6 +293,7 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
           images.map((image, index) => {
             return (
               <UpdateImageField
+                key={index}
                 token={token}
                 setToken={setToken}
                 fieldType="img_description"

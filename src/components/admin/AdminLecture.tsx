@@ -1,9 +1,14 @@
-import { useRef } from 'react';
-import { useState } from 'react';
-import { FC } from 'react';
-import { MutatorCallback } from 'swr/dist/types';
-import { DataResponse, useGetSWR } from '../../hooks/api';
-import { ILectureInList, IResources, IUserEdit, ITags } from '../../interfaces';
+import * as React from 'react';
+import useSWR from 'swr';
+import { axiosGetfetcher } from '../../hooks/api';
+import {
+  ILectureInList,
+  IResources,
+  IUserEdit,
+  ITags,
+  IInfoMe,
+} from '../../interfaces';
+import TokenContext from '../../store/TokenContext';
 import LectureAdd from './LectureAdd';
 import LectureEdit from './LectureEdit';
 import LecturePermission from './LecturePermission';
@@ -11,18 +16,7 @@ import ResourceEdit from './ResourceEdit';
 import TagEdit from './TagEdit';
 import UserEdit from './UserEdit';
 
-interface AdminLectureProps {
-  token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
-  users: DataResponse<IUserEdit[]>;
-  tagsData: ITags[] | undefined;
-  tagsMutate: (
-    data?: ITags[] | Promise<ITags[]> | MutatorCallback<ITags[]> | undefined,
-    shouldRevalidate?: boolean | undefined,
-  ) => Promise<ITags[] | undefined>;
-}
+interface IPropsComponentAdminLecture {}
 
 export const CONST_ADMIN_MENU = {
   LECTURE_ADD: 'lecture_add',
@@ -35,24 +29,55 @@ export const CONST_ADMIN_MENU = {
 
 export type ADMIN_MENU = typeof CONST_ADMIN_MENU[keyof typeof CONST_ADMIN_MENU];
 
-const AdminLecture: FC<AdminLectureProps> = ({
-  token,
-  setToken,
-  users,
-  tagsData,
-  tagsMutate,
-}) => {
-  const { data: allLecturesData, mutate: allLecturesMutate } = useGetSWR<
+const ComponentAdminLecture: React.FC<IPropsComponentAdminLecture> = ({}) => {
+  const tokenCtx = React.useContext(TokenContext);
+  const { token, setToken } = tokenCtx;
+  const { data: dataGetMe, error: errorGetMe } = useSWR<IInfoMe>(
+    !!token ? `${process.env.REACT_APP_BACK_URL}/user/me` : null,
+    () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/me`, token),
+    { revalidateOnFocus: false, revalidateIfStale: false },
+  );
+  const { data: dataUsers, mutate: mutateUsers } = useSWR<IUserEdit[]>(
+    !!token && !!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin'
+      ? `${process.env.REACT_APP_BACK_URL}/user/admin/user`
+      : null,
+    () =>
+      axiosGetfetcher(
+        `${process.env.REACT_APP_BACK_URL}/user/admin/user`,
+        token,
+      ),
+    { revalidateOnFocus: false, revalidateIfStale: false },
+  );
+  const { data: tagsData, mutate: tagsMutate } = useSWR<ITags[]>(
+    !!token && !!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin'
+      ? `${process.env.REACT_APP_BACK_URL}/lecture/admin/tag`
+      : null,
+    () =>
+      axiosGetfetcher(
+        `${process.env.REACT_APP_BACK_URL}/lecture/admin/tag`,
+        token,
+      ),
+    { revalidateOnFocus: false, revalidateIfStale: false },
+  );
+  const { data: allLecturesData, mutate: allLecturesMutate } = useSWR<
     ILectureInList[]
-  >(`${process.env.REACT_APP_BACK_URL}/lecture/all`, null, true);
-  const { data: allResourcesData, mutate: allResourcesMutate } = useGetSWR<
+  >(
+    `${process.env.REACT_APP_BACK_URL}/lecture/all`,
+    () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/lecture/all`),
+    { revalidateOnFocus: false, revalidateIfStale: false },
+  );
+  const { data: allResourcesData, mutate: allResourcesMutate } = useSWR<
     IResources[]
-  >(`${process.env.REACT_APP_BACK_URL}/resource`, token, true);
-  const [selectedMenu, setSelectedMenu] = useState<ADMIN_MENU>(
+  >(
+    `${process.env.REACT_APP_BACK_URL}/resource`,
+    () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/resource`, token),
+    { revalidateOnFocus: false, revalidateIfStale: false },
+  );
+  const [selectedMenu, setSelectedMenu] = React.useState<ADMIN_MENU>(
     CONST_ADMIN_MENU.LECTURE_ADD,
   );
-  const [isVisibleMenu, setIsVisibleMenu] = useState<boolean>(false);
-  const menuElementRef = useRef<HTMLDivElement | null>(null);
+  const [isVisibleMenu, setIsVisibleMenu] = React.useState<boolean>(false);
+  const menuElementRef = React.useRef<HTMLDivElement | null>(null);
   return (
     <div className="mx-auto mt-[2vh] pb-[96px]">
       <div className="text-4xl font-semibold text-center text-gray-400 mb-[4vh] 2xl:max-w-[900px] xl:max-w-[750px] lg:max-w-[600px] md:max-w-[500px] sm:max-w-[400px] xs:max-w-[350px] mx-auto">
@@ -248,9 +273,9 @@ const AdminLecture: FC<AdminLectureProps> = ({
             token={token}
             setToken={setToken}
             studentOptions={
-              users.data
-                ? users.data.length > 0
-                  ? users.data
+              dataUsers
+                ? dataUsers.length > 0
+                  ? dataUsers
                       .filter((user) => {
                         return user.role !== 'admin';
                       })
@@ -280,7 +305,12 @@ const AdminLecture: FC<AdminLectureProps> = ({
       )}
       {selectedMenu === CONST_ADMIN_MENU.STUDENT_EDIT && (
         <div className="max-w-[90%] overflow-w-hidden mx-auto">
-          <UserEdit token={token} setToken={setToken} users={users} />
+          <UserEdit
+            token={token}
+            setToken={setToken}
+            dataUsers={dataUsers}
+            mutateUsers={mutateUsers}
+          />
         </div>
       )}
       {selectedMenu === CONST_ADMIN_MENU.TAG_EDIT && (
@@ -307,4 +337,4 @@ const AdminLecture: FC<AdminLectureProps> = ({
   );
 };
 
-export default AdminLecture;
+export default ComponentAdminLecture;

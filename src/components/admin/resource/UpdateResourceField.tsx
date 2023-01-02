@@ -3,25 +3,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { FC, FormEvent, useState } from 'react';
 import { toast } from 'react-toastify';
-import { MutatorCallback } from 'swr/dist/types';
+import { KeyedMutator } from 'swr';
 import { IResources } from '../../../interfaces';
 
 interface UpdateResourceFieldProps {
   token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
+  setToken: (v: string | null) => void;
   type: string;
   content_id: string;
   content: string | null;
-  mutate: (
-    data?:
-      | IResources[]
-      | Promise<IResources[]>
-      | MutatorCallback<IResources[]>
-      | undefined,
-    shouldRevalidate?: boolean | undefined,
-  ) => Promise<IResources[] | undefined>;
+  mutate: KeyedMutator<IResources[]>;
   resourceIndex: number | null;
 }
 

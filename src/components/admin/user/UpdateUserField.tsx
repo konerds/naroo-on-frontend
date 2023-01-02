@@ -1,46 +1,29 @@
 import axios from 'axios';
-import { FC, FormEvent, FormEventHandler, useState } from 'react';
+import { FC, FormEvent, FormEventHandler, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
-import { MutatorCallback } from 'swr/dist/types';
 import { useInput } from '../../../hooks';
 import { IUserEdit } from '../../../interfaces';
-import EditIcon from '../../../assets/images/Edit.svg';
+import { ReactComponent as ImgEdit } from '../../../assets/images/Edit.svg';
+import TokenContext from '../../../store/TokenContext';
 
 interface UpdateUserFieldProps {
-  token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
   fieldType: string;
   id: string;
   userField: string | null;
-  mutate:
-    | ((
-        data?:
-          | IUserEdit[]
-          | Promise<IUserEdit[]>
-          | MutatorCallback<IUserEdit[]>
-          | undefined,
-        shouldRevalidate?: boolean | undefined,
-      ) => Promise<IUserEdit[] | undefined>)
-    | ((
-        data?:
-          | IUserEdit
-          | Promise<IUserEdit>
-          | MutatorCallback<IUserEdit>
-          | undefined,
-        shouldRevalidate?: boolean | undefined,
-      ) => Promise<IUserEdit | undefined>);
+  mutate: (
+    data?: any,
+    shouldRevalidate?: boolean | undefined,
+  ) => Promise<IUserEdit | IUserEdit[] | undefined>;
 }
 
 const UpdateUserField: FC<UpdateUserFieldProps> = ({
-  token,
-  setToken,
   fieldType,
   id,
   userField,
   mutate,
 }) => {
+  const tokenCtx = useContext(TokenContext);
+  const { token } = tokenCtx;
   const [updateToggle, setUpdateToggle] = useState<boolean>(false);
   const [updateFieldName, onChangeUpdateFieldName, setUpdateFieldName] =
     useInput('');
@@ -143,10 +126,16 @@ const UpdateUserField: FC<UpdateUserFieldProps> = ({
                 '보안을 위해 기존 비밀번호 확인은 불가능하며, 새로운 비밀번호를 설정하는 것은 가능합니다!'}
             </div>
           </div>
-          <img
-            src={EditIcon}
-            className="w-[14px] h-[14px] ml-[20px]"
+          {/* <img
+            src={ImgEdit}
+            className="w-[14px] h-[14px] ml-[20px] cursor-pointer hover:text-black"
             onClick={onClickUpdateToggle}
+          /> */}
+          <ImgEdit
+            className="ml-[20px] cursor-pointer fill-[black] hover:fill-[#4DBFF0]"
+            onClick={onClickUpdateToggle}
+            width={14}
+            height={14}
           />
         </div>
       )}

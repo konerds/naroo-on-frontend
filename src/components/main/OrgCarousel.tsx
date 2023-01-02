@@ -1,16 +1,17 @@
 import { isArray } from 'lodash';
-import { FC } from 'react';
+import * as React from 'react';
 import Skeleton from 'react-loading-skeleton';
 import Slider, { CustomArrowProps, Settings } from 'react-slick';
-import { useGetSWR } from '../../hooks/api';
+import useSWRImmutable from 'swr/immutable';
 import { IResourceContent } from '../../interfaces';
-import PrevArrow from '../../assets/images/PrevArrow.svg';
-import NextArrow from '../../assets/images/NextArrow.svg';
+import ImgPrevArrow from '../../assets/images/PrevArrow.svg';
+import ImgNextArrow from '../../assets/images/NextArrow.svg';
+import { axiosGetfetcher } from '../../hooks/api';
 
-function LectureCardPrevArrow(props: CustomArrowProps) {
+const ComponentPrevArrow = (props: CustomArrowProps) => {
   return (
     <img
-      src={PrevArrow}
+      src={ImgPrevArrow}
       className={props.className}
       style={{
         ...props.style,
@@ -23,12 +24,12 @@ function LectureCardPrevArrow(props: CustomArrowProps) {
       onClick={props.onClick}
     />
   );
-}
+};
 
-function LectureCardNextArrow(props: CustomArrowProps) {
+const ComponentNextArrow = (props: CustomArrowProps) => {
   return (
     <img
-      src={NextArrow}
+      src={ImgNextArrow}
       className={props.className}
       style={{
         ...props.style,
@@ -41,9 +42,9 @@ function LectureCardNextArrow(props: CustomArrowProps) {
       onClick={props.onClick}
     />
   );
-}
+};
 
-const OrgCarousel: FC = () => {
+const OrgCarousel: React.FC = () => {
   const settings: Settings | Readonly<Settings> = {
     arrows: true,
     dots: false,
@@ -82,22 +83,27 @@ const OrgCarousel: FC = () => {
         },
       },
     ],
-    prevArrow: <LectureCardPrevArrow />,
-    nextArrow: <LectureCardNextArrow />,
+    prevArrow: <ComponentPrevArrow />,
+    nextArrow: <ComponentNextArrow />,
   };
-  const { data } = useGetSWR<IResourceContent[]>(
+  const { data: dataResourceContent } = useSWRImmutable<IResourceContent[]>(
     `${process.env.REACT_APP_BACK_URL}/resource/org_carousel`,
-    null,
-    false,
+    () =>
+      axiosGetfetcher(
+        `${process.env.REACT_APP_BACK_URL}/resource/org_carousel`,
+      ),
+    { revalidateOnFocus: false, revalidateIfStale: false },
   );
   return (
     <div className="xl:max-w-[1152px] lg:max-w-[864px] md:max-w-[680px] sm:max-w-[500px] xs:max-w-[400px] mx-auto mt-[122px] pt-[36px] pb-[32px]">
       <div className="text-center text-[#515A6E] leading-[150%] sm:text-[24px] text-[19px] font-semibold mb-[28px]">
-        이미 다양한 기관들이 나루온과 함께하고 있어요.
+        이미 다양한 기관들이 나루온과 함께하고 있어요
       </div>
-      {data && isArray(data) && data.length > 0 ? (
+      {!!dataResourceContent &&
+      isArray(dataResourceContent) &&
+      dataResourceContent.length > 0 ? (
         <Slider {...settings} className="bg-white">
-          {data.map((element, index) => {
+          {dataResourceContent.map((element, index) => {
             return (
               <img
                 key={index}

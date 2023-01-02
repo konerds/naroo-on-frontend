@@ -1,23 +1,20 @@
-import { FC } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import EllipsisVector from '../../../assets/images/EllipsisVector.png';
+import * as React from 'react';
+import { Link } from 'react-router-dom';
+import ImgEllipsisVector from '../../../assets/images/EllipsisVector.png';
 
-interface EllipsisProps {
-  token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
+interface IPropsComponentEllipsisProps {
   logoutHandler: () => void;
 }
 
-const Ellipsis: FC<EllipsisProps> = ({ token, setToken, logoutHandler }) => {
-  const history = useHistory();
+const ComponentEllipsis: React.FC<IPropsComponentEllipsisProps> = ({
+  logoutHandler,
+}) => {
   return (
     <div className="absolute md:right-[-46px] right-[-6px] top-[-6px]">
       <div
         className="min-w-[210px] max-w-[210px] min-h-[128px] max-h-[128px] px-[12px] pt-[21px] pb-[11px]"
         style={{
-          backgroundImage: `url(${EllipsisVector})`,
+          backgroundImage: `url(${ImgEllipsisVector})`,
         }}
       >
         <Link to="/myinfo">
@@ -42,4 +39,4 @@ const Ellipsis: FC<EllipsisProps> = ({ token, setToken, logoutHandler }) => {
   );
 };
 
-export default Ellipsis;
+export default ComponentEllipsis;

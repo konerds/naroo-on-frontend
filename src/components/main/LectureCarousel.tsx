@@ -1,24 +1,21 @@
 import { isArray } from 'lodash';
-import { FC } from 'react';
+import * as React from 'react';
 import Skeleton from 'react-loading-skeleton';
 import Slider, { CustomArrowProps, Settings } from 'react-slick';
-import { useGetSWR } from '../../hooks/api';
-import { ILectureInList } from '../../interfaces';
-import LectureCard from '../lecture/LectureCard';
-import PrevArrow from '../../assets/images/PrevArrow.svg';
-import NextArrow from '../../assets/images/NextArrow.svg';
+import useSWR from 'swr';
+import { IInfoMe, ILectureInList } from '../../interfaces';
+import ComponentLectureCard from '../lecture/LectureCard';
+import ImgPrevArrow from '../../assets/images/PrevArrow.svg';
+import ImgNextArrow from '../../assets/images/NextArrow.svg';
+import TokenContext from '../../store/TokenContext';
+import { axiosGetfetcher } from '../../hooks/api';
 
-interface LectureCarouselProps {
-  token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
-}
+interface IPropsComponentLectureCarousel {}
 
-function LectureCardPrevArrow(props: CustomArrowProps) {
+const ComponentPrevArrow = (props: CustomArrowProps) => {
   return (
     <img
-      src={PrevArrow}
+      src={ImgPrevArrow}
       className={props.className}
       style={{
         ...props.style,
@@ -31,12 +28,12 @@ function LectureCardPrevArrow(props: CustomArrowProps) {
       onClick={props.onClick}
     />
   );
-}
+};
 
-function LectureCardNextArrow(props: CustomArrowProps) {
+const ComponentNextArrow = (props: CustomArrowProps) => {
   return (
     <img
-      src={NextArrow}
+      src={ImgNextArrow}
       className={props.className}
       style={{
         ...props.style,
@@ -49,12 +46,12 @@ function LectureCardNextArrow(props: CustomArrowProps) {
       onClick={props.onClick}
     />
   );
-}
+};
 
-function LectureCardSmallNextArrow(props: CustomArrowProps) {
+const ComponentSmallNextArrow = (props: CustomArrowProps) => {
   return (
     <img
-      src={NextArrow}
+      src={ImgNextArrow}
       className={props.className}
       style={{
         ...props.style,
@@ -67,9 +64,11 @@ function LectureCardSmallNextArrow(props: CustomArrowProps) {
       onClick={props.onClick}
     />
   );
-}
+};
 
-const LectureCarousel: FC<LectureCarouselProps> = ({ token, setToken }) => {
+const ComponentLectureCarousel: React.FC<
+  IPropsComponentLectureCarousel
+> = ({}) => {
   const settings: Settings | Readonly<Settings> = {
     arrows: true,
     dots: false,
@@ -98,7 +97,7 @@ const LectureCarousel: FC<LectureCarouselProps> = ({ token, setToken }) => {
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
-          nextArrow: <LectureCardSmallNextArrow />,
+          nextArrow: <ComponentSmallNextArrow />,
         },
       },
       {
@@ -106,62 +105,80 @@ const LectureCarousel: FC<LectureCarouselProps> = ({ token, setToken }) => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          nextArrow: <LectureCardSmallNextArrow />,
+          nextArrow: <ComponentSmallNextArrow />,
         },
       },
     ],
-    prevArrow: <LectureCardPrevArrow />,
-    nextArrow: <LectureCardNextArrow />,
+    prevArrow: <ComponentPrevArrow />,
+    nextArrow: <ComponentNextArrow />,
   };
-  const { data: allLecturesData } = useGetSWR<ILectureInList[]>(
+  const tokenCtx = React.useContext(TokenContext);
+  const { token } = tokenCtx;
+  const { data: dataAllLectures, error: errorAllLectures } = useSWR<
+    ILectureInList[]
+  >(
     `${process.env.REACT_APP_BACK_URL}/lecture/all`,
-    null,
-    false,
+    () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/lecture/all`),
+    { revalidateOnFocus: false, revalidateIfStale: false },
   );
-  const { data: userLecturesData } = useGetSWR<ILectureInList[]>(
-    `${process.env.REACT_APP_BACK_URL}/lecture`,
-    token,
-    false,
-    token !== null && token !== '',
+  const { data: dataGetMe, error: errorGetMe } = useSWR<IInfoMe>(
+    !!token ? `${process.env.REACT_APP_BACK_URL}/user/me` : null,
+    () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/me`, token),
+    { revalidateOnFocus: false, revalidateIfStale: false },
+  );
+  const { data: dataUserLectures, error: errorUserLectures } = useSWR<
+    ILectureInList[]
+  >(
+    !!token && !!dataGetMe && !!!errorGetMe
+      ? `${process.env.REACT_APP_BACK_URL}/lecture`
+      : null,
+    () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/lecture`, token),
+    { revalidateOnFocus: false, revalidateIfStale: false },
   );
   return (
     <div className="xl:max-w-[1260px] lg:max-w-[966px] md:max-w-[788px] xs:w-full mx-auto pl-[54px] lg:pr-[27px] pr-[54px] mt-[122px] pb-[96px]">
-      {token !== null && token !== '' && (
+      {!!token && !!dataGetMe && !!!errorGetMe && (
         <>
           <div className="text-2xl font-semibold text-gray-400">
             내가 신청한 강좌
-            {userLecturesData && userLecturesData.length >= 0
-              ? ` (${userLecturesData.length})`
+            {!!dataUserLectures &&
+            !!!errorUserLectures &&
+            dataUserLectures.length >= 0
+              ? ` (${dataUserLectures.length})`
               : ''}
           </div>
           <div className="mt-2 text-gray-300 mb-7">
             내가 신청한 강좌를 복습해보세요
           </div>
-          {userLecturesData &&
-          isArray(userLecturesData) &&
-          userLecturesData.length > 0 ? (
-            <div className="">
-              <Slider {...settings}>
-                {userLecturesData.map((lecture, index) => {
-                  return (
-                    <LectureCard
-                      key={lecture.id}
-                      id={lecture.id}
-                      title={lecture.title}
-                      thumbnail={lecture.thumbnail}
-                      teacherNickname={lecture.teacher_nickname}
-                      status={lecture.status}
-                      expired={lecture.expired}
-                      tags={lecture.tags}
-                    />
-                  );
-                })}
-              </Slider>
-            </div>
-          ) : isArray(userLecturesData) && userLecturesData.length === 0 ? (
-            <div className="flex w-full h-[300px] justify-center items-center">
-              신청한 강좌가 존재하지 않습니다!
-            </div>
+          {!!dataUserLectures &&
+          !!!errorUserLectures &&
+          isArray(dataUserLectures) ? (
+            <>
+              {dataUserLectures.length > 0 ? (
+                <div className="">
+                  <Slider {...settings}>
+                    {dataUserLectures.map((lecture, index) => {
+                      return (
+                        <ComponentLectureCard
+                          key={lecture.id}
+                          id={lecture.id}
+                          title={lecture.title}
+                          thumbnail={lecture.thumbnail}
+                          teacherNickname={lecture.teacher_nickname}
+                          status={lecture.status}
+                          expired={lecture.expired}
+                          tags={lecture.tags}
+                        />
+                      );
+                    })}
+                  </Slider>
+                </div>
+              ) : (
+                <div className="flex w-full h-[300px] justify-center items-center">
+                  신청한 강좌가 존재하지 않습니다
+                </div>
+              )}
+            </>
           ) : (
             <Skeleton className="w-full h-[300px]" />
           )}
@@ -169,40 +186,40 @@ const LectureCarousel: FC<LectureCarouselProps> = ({ token, setToken }) => {
       )}
       <div className="mt-[122px] text-2xl font-semibold text-gray-400">
         모든 강좌
-        {allLecturesData && allLecturesData.length >= 0
-          ? ` (${allLecturesData.length})`
+        {!!dataAllLectures && !!!errorAllLectures && dataAllLectures.length >= 0
+          ? ` (${dataAllLectures.length})`
           : ''}
       </div>
       <div className="mt-2 text-gray-300 mb-7">
         완료 혹은 진행중인 전체 강좌를 살펴보세요
       </div>
-      {allLecturesData &&
-      isArray(allLecturesData) &&
-      allLecturesData.length > 0 ? (
-        <div className="">
-          <Slider {...settings}>
-            {allLecturesData.map((lecture, index) => {
-              return (
-                <LectureCard
-                  key={lecture.id}
-                  id={lecture.id}
-                  title={lecture.title}
-                  thumbnail={lecture.thumbnail}
-                  teacherNickname={lecture.teacher_nickname}
-                  status={null}
-                  expired={lecture.expired}
-                  tags={lecture.tags}
-                />
-              );
-            })}
-          </Slider>
-        </div>
-      ) : allLecturesData &&
-        isArray(allLecturesData) &&
-        allLecturesData.length === 0 ? (
-        <div className="flex w-full h-[300px] justify-center items-center">
-          강좌가 존재하지 않습니다!
-        </div>
+      {!!dataAllLectures && !!!errorAllLectures && isArray(dataAllLectures) ? (
+        <>
+          {dataAllLectures.length > 0 ? (
+            <div className="">
+              <Slider {...settings}>
+                {dataAllLectures.map((lecture, index) => {
+                  return (
+                    <ComponentLectureCard
+                      key={lecture.id}
+                      id={lecture.id}
+                      title={lecture.title}
+                      thumbnail={lecture.thumbnail}
+                      teacherNickname={lecture.teacher_nickname}
+                      status={null}
+                      expired={lecture.expired}
+                      tags={lecture.tags}
+                    />
+                  );
+                })}
+              </Slider>
+            </div>
+          ) : (
+            <div className="flex w-full h-[300px] justify-center items-center">
+              강좌가 존재하지 않습니다
+            </div>
+          )}
+        </>
       ) : (
         <Skeleton className="w-full h-[300px]" />
       )}
@@ -210,4 +227,4 @@ const LectureCarousel: FC<LectureCarouselProps> = ({ token, setToken }) => {
   );
 };
 
-export default LectureCarousel;
+export default ComponentLectureCarousel;

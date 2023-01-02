@@ -1,50 +1,43 @@
+import * as React from 'react';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import { FC, FormEvent, useState } from 'react';
-import { toast } from 'react-toastify';
-import { MutatorCallback } from 'swr/dist/types';
+import { KeyedMutator } from 'swr';
 import { useInput } from '../../../hooks';
+import { showError } from '../../../hooks/api';
 import { ITags } from '../../../interfaces';
 import Tag from '../../common/Tag';
 
 interface UpdateTagProps {
   token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
+  setToken: (v: string | null) => void;
   id: string;
   name: string;
-  mutate: (
-    data?: ITags[] | Promise<ITags[]> | MutatorCallback<ITags[]> | undefined,
-    shouldRevalidate?: boolean | undefined,
-  ) => Promise<ITags[] | undefined>;
+  mutate: KeyedMutator<ITags[]>;
 }
 
-const UpdateTag: FC<UpdateTagProps> = ({
+const UpdateTag: React.FC<UpdateTagProps> = ({
   token,
   setToken,
   id,
   name,
   mutate,
 }) => {
-  const [updateToggle, setUpdateToggle] = useState<boolean>(false);
+  const [updateToggle, setUpdateToggle] = React.useState<boolean>(false);
   const [updateTagName, onChangeUpdateTagName, setUpdateTagName] = useInput('');
   const onClickUpdateToggle = () => {
     setUpdateToggle(!updateToggle);
     setUpdateTagName(name);
   };
-  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
-  const onSubmitUpdateTag = async (event: FormEvent<HTMLFormElement>) => {
+  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
+  const onSubmitUpdateTag = async () => {
     try {
-      event.preventDefault();
       setIsLoadingSubmit(true);
       if (!updateTagName || updateTagName === name) {
         setUpdateToggle(!updateToggle);
         setUpdateTagName(name);
         return;
       }
-
       const response = await axios.put(
         `${process.env.REACT_APP_BACK_URL}/lecture/admin/tag/${id}`,
         {
@@ -56,29 +49,18 @@ const UpdateTag: FC<UpdateTagProps> = ({
           },
         },
       );
-
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-          setUpdateToggle(!updateToggle);
-        }, 500);
+        await mutate();
+        setUpdateToggle(!updateToggle);
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmit(false);
-      }, 500);
+      setIsLoadingSubmit(false);
     }
   };
-  const [isLoadingDeleteTag, setIsLoadingDeleteTag] = useState<boolean>(false);
+  const [isLoadingDeleteTag, setIsLoadingDeleteTag] =
+    React.useState<boolean>(false);
   const onClickDeleteTag = async () => {
     try {
       setIsLoadingDeleteTag(true);
@@ -91,23 +73,12 @@ const UpdateTag: FC<UpdateTagProps> = ({
         },
       );
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-        }, 500);
+        await mutate();
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingDeleteTag(false);
-      }, 500);
+      setIsLoadingDeleteTag(false);
     }
   };
   return (
@@ -115,7 +86,10 @@ const UpdateTag: FC<UpdateTagProps> = ({
       {updateToggle ? (
         <form
           className="flex flex-wrap items-center py-[10px] mx-[20px]"
-          onSubmit={onSubmitUpdateTag}
+          onSubmit={(event) => {
+            event.preventDefault();
+            onSubmitUpdateTag();
+          }}
         >
           <input
             className="h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[14px] leading-[150%] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white px-[20px] disabled:opacity-50"

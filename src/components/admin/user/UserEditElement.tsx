@@ -2,25 +2,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { FC, useState } from 'react';
-import { toast } from 'react-toastify';
-import { MutatorCallback } from 'swr/dist/types';
 import { IUserEdit } from '../../../interfaces';
 import UpdateUserField from './UpdateUserField';
+import { KeyedMutator } from 'swr';
+import { showError } from '../../../hooks/api';
 
 interface UserEditElementProps {
-  token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
+  token: string;
+  setToken: (v: string | null) => void;
   user: IUserEdit;
-  mutate: (
-    data?:
-      | IUserEdit[]
-      | Promise<IUserEdit[]>
-      | MutatorCallback<IUserEdit[]>
-      | undefined,
-    shouldRevalidate?: boolean | undefined,
-  ) => Promise<IUserEdit[] | undefined>;
+  mutate: KeyedMutator<IUserEdit[]>;
 }
 
 const UserEditElement: FC<UserEditElementProps> = ({
@@ -43,23 +34,12 @@ const UserEditElement: FC<UserEditElementProps> = ({
         },
       );
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-        }, 500);
+        await mutate();
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingDeleteUser(false);
-      }, 500);
+      setIsLoadingDeleteUser(false);
     }
   };
   return (
@@ -75,8 +55,6 @@ const UserEditElement: FC<UserEditElementProps> = ({
           <div>
             {user.email && (
               <UpdateUserField
-                token={token}
-                setToken={setToken}
                 fieldType="email"
                 id={user.id}
                 userField={user.email}
@@ -85,8 +63,6 @@ const UserEditElement: FC<UserEditElementProps> = ({
             )}
             {user.nickname && (
               <UpdateUserField
-                token={token}
-                setToken={setToken}
                 fieldType="nickname"
                 id={user.id}
                 userField={user.nickname}
@@ -94,8 +70,6 @@ const UserEditElement: FC<UserEditElementProps> = ({
               />
             )}
             <UpdateUserField
-              token={token}
-              setToken={setToken}
               fieldType="password"
               id={user.id}
               userField={null}
@@ -103,8 +77,6 @@ const UserEditElement: FC<UserEditElementProps> = ({
             />
             {user.phone && (
               <UpdateUserField
-                token={token}
-                setToken={setToken}
                 fieldType="phone"
                 id={user.id}
                 userField={user.phone}

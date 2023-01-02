@@ -1,37 +1,29 @@
-import { FC, FormEvent, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useInput } from '../hooks';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
+import TokenContext from '../store/TokenContext';
+import { showError } from '../hooks/api';
 
-interface SignupLayoutProps {
-  token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
-}
+interface IPropsPageSignup {}
 
-const SignupLayout: FC<SignupLayoutProps> = ({ token, setToken }) => {
-  const history = useHistory();
-  useEffect(() => {
-    setToken('');
-    localStorage.setItem('token', '');
-  }, []);
+const PageSignup: React.FC<IPropsPageSignup> = () => {
+  const navigate = useNavigate();
+  const tokenCtx = React.useContext(TokenContext);
+  const { setToken } = tokenCtx;
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [passwordCheck, onChangePasswordCheck] = useInput('');
   const [nickname, onChangeNickname] = useInput('');
   const [phone, onChangePhone] = useInput('');
-  const [isAgreeEmail, setIsAgreeEmail] = useState<boolean>(false);
-  const onSubmitHandler = async (event: FormEvent<HTMLFormElement>) => {
+  const [isAgreeEmail, setIsAgreeEmail] = React.useState<boolean>(false);
+  const handlerOnSubmit = async () => {
     try {
-      event.preventDefault();
-
       if (password !== passwordCheck) {
-        toast.error('패스워드가 일치하지 않습니다!');
+        toast('패스워드가 일치하지 않습니다', { type: 'error' });
       }
-
       const response = await axios.post(
         `${process.env.REACT_APP_BACK_URL}/user/signup`,
         {
@@ -42,26 +34,28 @@ const SignupLayout: FC<SignupLayoutProps> = ({ token, setToken }) => {
           isAgreeEmail: isAgreeEmail ? 'true' : 'false',
         },
       );
-
       if (response.status === 201) {
-        toast.success('발송된 메일을 통해 이메일 인증을 완료해주세요!');
-        history.replace('/');
+        toast('발송된 메일을 통해 이메일 인증을 완료해주세요', {
+          type: 'success',
+        });
+        navigate('/', { replace: true });
       }
     } catch (error: any) {
-      const messages = error.response?.data?.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     }
   };
+  useEffect(() => {
+    setToken('');
+  }, []);
   return (
     <div className="min-h-[73vh] w-full flex justify-center items-center">
       <div className="xl:min-w-[554px] xl:max-w-[554px] lg:min-w-[472.75px] lg:max-w-[472.75px] md:min-w-[354.56px] md:max-w-[354.56px] sm:min-w-[295.47px] sm:max-w-[295.47px] xs:min-w-[295.47px] xs:max-w-[295.47px] box-border rounded-[8px] border-[1px] border-[#DCDEE2] mx-auto my-[120px] py-[30px] xl:px-[98px] lg:px-[83.63px] md:px-[62.72px] sm:px-[52.27px] xs:px-[52.27px]">
-        <form onSubmit={onSubmitHandler}>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            handlerOnSubmit();
+          }}
+        >
           <div className="text-[24px] leading-[150%] font-semibold">
             회원가입
           </div>
@@ -136,4 +130,4 @@ const SignupLayout: FC<SignupLayoutProps> = ({ token, setToken }) => {
   );
 };
 
-export default SignupLayout;
+export default PageSignup;

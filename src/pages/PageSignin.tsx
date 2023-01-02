@@ -1,39 +1,21 @@
-import { FC } from 'react';
+import * as React from 'react';
 import axios from 'axios';
-import { FormEvent } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useInput } from '../hooks';
-import { useEffect } from 'react';
+import TokenContext from '../store/TokenContext';
+import { showError } from '../hooks/api';
 import { toast } from 'react-toastify';
 
-interface SigninLayoutProps {
-  token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
-  rememberToken: string | null;
-  setRememberToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
-}
+interface IPropsPageSignin {}
 
-const SigninLayout: FC<SigninLayoutProps> = ({
-  token,
-  setToken,
-  rememberToken,
-  setRememberToken,
-}) => {
-  const history = useHistory();
-  useEffect(() => {
-    setToken('');
-    localStorage.setItem('token', '');
-  }, []);
+const PageSignin: React.FC<IPropsPageSignin> = ({}) => {
+  const navigate = useNavigate();
+  const tokenCtx = React.useContext(TokenContext);
+  const { token, setToken, isRememberToken, setIsRememberToken } = tokenCtx;
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
-  const onSubmitHandler = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitHandler = async () => {
     try {
-      event.preventDefault();
-
       const response = await axios.post(
         `${process.env.REACT_APP_BACK_URL}/user/signin`,
         {
@@ -42,25 +24,30 @@ const SigninLayout: FC<SigninLayoutProps> = ({
         },
       );
       if (response.status === 201) {
+        toast('나루온에 오신 것을 환영합니다', { type: 'success' });
         setToken(response.data.token);
-        localStorage.setItem('token', response.data.token);
-        history.replace('/');
       }
     } catch (error: any) {
-      const messages = error.response?.data?.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     }
   };
+  React.useEffect(() => {
+    if (!!token) {
+      navigate('/', { replace: true });
+    }
+  }, [token]);
+  React.useEffect(() => {
+    setToken('');
+  }, []);
   return (
     <div className="min-h-[73vh] w-full flex justify-center items-center">
       <div className="xl:min-w-[554px] xl:max-w-[554px] lg:min-w-[472.75px] lg:max-w-[472.75px] md:min-w-[354.56px] md:max-w-[354.56px] sm:min-w-[295.47px] sm:max-w-[295.47px] xs:min-w-[295.47px] xs:max-w-[295.47px] box-border rounded-[8px] border-[1px] border-[#DCDEE2] mx-auto my-[120px] py-[30px] xl:px-[98px] lg:px-[83.63px] md:px-[62.72px] sm:px-[52.27px] xs:px-[52.27px]">
-        <form onSubmit={onSubmitHandler}>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            onSubmitHandler();
+          }}
+        >
           <div className="text-[24px] leading-[150%] text-[#17233D] font-semibold">
             로그인
           </div>
@@ -86,9 +73,9 @@ const SigninLayout: FC<SigninLayoutProps> = ({
             <input
               className="mr-[5px]"
               type="checkbox"
-              checked={rememberToken === 'true' ? true : false}
+              checked={isRememberToken === 'true' ? true : false}
               onChange={(event) =>
-                setRememberToken(event.target.checked ? 'true' : 'false')
+                setIsRememberToken(event.target.checked ? 'true' : 'false')
               }
             />
             자동 로그인
@@ -113,4 +100,4 @@ const SigninLayout: FC<SigninLayoutProps> = ({
   );
 };
 
-export default SigninLayout;
+export default PageSignin;

@@ -11,24 +11,16 @@ import {
 import { ILectureInList } from '../../interfaces';
 import { ADMIN_MENU, CONST_ADMIN_MENU } from './AdminLecture';
 import { toast } from 'react-toastify';
-import { MutatorCallback } from 'swr/dist/types';
 import Slider from 'react-slick';
+import { KeyedMutator } from 'swr';
+import { showError } from '../../hooks/api';
 
 interface LectureAddProps {
   token: string | null;
-  setToken: (
-    value: string | ((val: string | null) => string | null) | null,
-  ) => void;
+  setToken: (v: string | null) => void;
   setSelectedMenu: React.Dispatch<React.SetStateAction<ADMIN_MENU>>;
   allLecturesData: ILectureInList[] | undefined;
-  allLecturesMutate: (
-    data?:
-      | ILectureInList[]
-      | Promise<ILectureInList[]>
-      | MutatorCallback<ILectureInList[]>
-      | undefined,
-    shouldRevalidate?: boolean | undefined,
-  ) => Promise<ILectureInList[] | undefined>;
+  allLecturesMutate: KeyedMutator<ILectureInList[]>;
 }
 
 const LectureAdd: FC<LectureAddProps> = ({
@@ -61,13 +53,13 @@ const LectureAdd: FC<LectureAddProps> = ({
     }[]
   >([]);
   const onHandleImagesChange = useCallback(
-    (changedOptions) => {
+    (changedOptions: any) => {
       setLectureImageOptions(changedOptions);
     },
     [lectureImageOptions],
   );
   const onHandleImagesCreate = useCallback(
-    (changedOptions) => {
+    (changedOptions: any) => {
       setLectureImageOptions([
         ...lectureImageOptions,
         { value: changedOptions, label: changedOptions },
@@ -128,24 +120,13 @@ const LectureAdd: FC<LectureAddProps> = ({
         },
       );
       if (response.status === 201) {
-        setTimeout(() => {
-          allLecturesMutate();
-          setSelectedMenu(CONST_ADMIN_MENU.LECTURE_EDIT);
-        }, 500);
+        await allLecturesMutate();
+        setSelectedMenu(CONST_ADMIN_MENU.LECTURE_EDIT);
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmit(false);
-      }, 500);
+      setIsLoadingSubmit(false);
     }
   };
   return (
@@ -265,7 +246,7 @@ const LectureAdd: FC<LectureAddProps> = ({
           noOptionsMessage={() => null}
           placeholder="강의 소개 이미지 URL을 추가하세요!"
           className="disabled:opacity-50"
-          disabled={isLoadingSubmit}
+          isDisabled={isLoadingSubmit}
         />
       </div>
       <div className="mb-[29px]">
@@ -295,7 +276,7 @@ const LectureAdd: FC<LectureAddProps> = ({
       <button
         type="submit"
         disabled={isLoadingSubmit}
-        className="w-full h-[51px] text-[24px] font-semibold leading-[33px] bg-[#4DBFF0] text-white mb-[12px] disabled:opacity-50"
+        className="w-full h-[51px] text-[24px] font-semibold leading-[33px] bg-[#4DBFF0] text-white mb-[12px] disabled:opacity-50 disabled:cursor-not-allowed"
       >
         강의 추가
       </button>

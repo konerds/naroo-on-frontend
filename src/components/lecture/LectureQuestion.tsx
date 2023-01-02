@@ -1,25 +1,18 @@
-import { FC, FormEvent, FormEventHandler, useState } from 'react';
+import * as React from 'react';
 import 'moment/locale/ko';
 import moment from 'moment';
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import { ILectureDetail } from '../../interfaces';
-import { MutatorCallback } from 'swr/dist/types';
 import { useInput } from '../../hooks';
-import EditIcon from '../../assets/images/Edit.svg';
-import CloseIcon from '../../assets/images/Close.svg';
+import ImgEdit from '../../assets/images/Edit.svg';
+import ImgClose from '../../assets/images/Close.svg';
+import { showError } from '../../hooks/api';
+import { KeyedMutator } from 'swr';
 
 interface LectureQuestionProps {
   token: string | null;
-  userType: string | null;
-  mutate: (
-    data?:
-      | ILectureDetail
-      | Promise<ILectureDetail>
-      | MutatorCallback<ILectureDetail>
-      | undefined,
-    shouldRevalidate?: boolean | undefined,
-  ) => Promise<ILectureDetail | undefined>;
+  userType?: string | null;
+  mutate: KeyedMutator<ILectureDetail>;
   lecture_id: string;
   array_index: number;
   question_id: string;
@@ -30,11 +23,11 @@ interface LectureQuestionProps {
   answer_created_at: string;
   answer_title: string;
   answer_description: string;
-  userNickname: string | null;
+  userNickname?: string | null;
   creator_nickname: string;
 }
 
-const LectureQuestion: FC<LectureQuestionProps> = ({
+const LectureQuestion: React.FC<LectureQuestionProps> = ({
   token,
   userType,
   mutate,
@@ -52,8 +45,9 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
   creator_nickname,
 }) => {
   const [isShowQuestionDescription, setIsShowQuestionDescription] =
-    useState<boolean>(false);
-  const [isShowQuestionEdit, setIsShowQuestionEdit] = useState<boolean>(false);
+    React.useState<boolean>(false);
+  const [isShowQuestionEdit, setIsShowQuestionEdit] =
+    React.useState<boolean>(false);
   const [
     updateQuestionTitle,
     onChangeUpdateQuestionTitle,
@@ -65,7 +59,7 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
     setUpdateQuestionDescription,
   ] = useInput(question_description);
   const [isLoadingClickDeleteQuestion, setIsLoadingClickDeleteQuestion] =
-    useState<boolean>(false);
+    React.useState<boolean>(false);
   const onClickDeleteQuestionHandler = async () => {
     try {
       setIsLoadingClickDeleteQuestion(true);
@@ -78,65 +72,45 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
         },
       );
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-        }, 500);
+        await mutate();
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingClickDeleteQuestion(false);
-      }, 500);
+      setIsLoadingClickDeleteQuestion(false);
     }
   };
   const [isLoadingSubmitUpdateQuestion, setIsLoadingSubmitUpdateQuestion] =
-    useState<boolean>(false);
-  const onSubmitUpdateQuestionHandler: FormEventHandler<HTMLFormElement> =
-    async (event: FormEvent<HTMLFormElement>) => {
-      try {
-        event.preventDefault();
-        setIsLoadingSubmitUpdateQuestion(true);
-        const response = await axios.put(
-          `${process.env.REACT_APP_BACK_URL}/lecture/question/modify/${lecture_id}?question_id=${question_id}`,
-          {
-            title: updateQuestionTitle,
-            description: updateQuestionDescription,
+    React.useState<boolean>(false);
+  const onSubmitUpdateQuestionHandler = async () => {
+    try {
+      setIsLoadingSubmitUpdateQuestion(true);
+      const response = await axios.put(
+        `${process.env.REACT_APP_BACK_URL}/lecture/question/modify/${lecture_id}?question_id=${question_id}`,
+        {
+          title: updateQuestionTitle,
+          description: updateQuestionDescription,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-        if (response.status === 200) {
-          setTimeout(() => {
-            mutate();
-            setIsShowQuestionEdit(false);
-          }, 500);
-        }
-      } catch (error: any) {
-        const messages = error.response.data.message;
-        if (Array.isArray(messages)) {
-          messages.map((message) => {
-            toast.error(message);
-          });
-        } else {
-          toast.error(messages);
-        }
-      } finally {
+        },
+      );
+      if (response.status === 200) {
         setTimeout(() => {
-          setIsLoadingSubmitUpdateQuestion(false);
+          mutate();
+          setIsShowQuestionEdit(false);
         }, 500);
       }
-    };
+    } catch (error: any) {
+      showError(error);
+    } finally {
+      setTimeout(() => {
+        setIsLoadingSubmitUpdateQuestion(false);
+      }, 500);
+    }
+  };
   const [newAnswerTitle, onChangeNewAnswerTitle, setNewAnswerTitle] =
     useInput('');
   const [
@@ -152,14 +126,14 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
     setUpdateAnswerDescription,
   ] = useInput(answer_description);
   const [isShowAnswerDescription, setIsShowAnswerDescription] =
-    useState<boolean>(false);
-  const [isShowAnswerEdit, setIsShowAnswerEdit] = useState<boolean>(false);
-  const [isShowAddAnswer, setIsShowAddAnswer] = useState<boolean>(false);
+    React.useState<boolean>(false);
+  const [isShowAnswerEdit, setIsShowAnswerEdit] =
+    React.useState<boolean>(false);
+  const [isShowAddAnswer, setIsShowAddAnswer] = React.useState<boolean>(false);
   const [isLoadingSubmitAnswer, setIsLoadingSubmitAnswer] =
-    useState<boolean>(false);
-  const onSubmitAnswerHandler = async (event: FormEvent<HTMLFormElement>) => {
+    React.useState<boolean>(false);
+  const onSubmitAnswerHandler = async () => {
     try {
-      event.preventDefault();
       setIsLoadingSubmitAnswer(true);
       const response = await axios.post(
         `${process.env.REACT_APP_BACK_URL}/lecture/admin/answer`,
@@ -175,31 +149,20 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
         },
       );
       if (response.status === 201) {
-        setTimeout(() => {
-          mutate();
-          setNewAnswerTitle('');
-          setNewAnswerDescription('');
-          setUpdateAnswerTitle(updateAnswerTitle);
-          setUpdateAnswerDescription(updateAnswerDescription);
-        }, 500);
+        await mutate();
+        setNewAnswerTitle('');
+        setNewAnswerDescription('');
+        setUpdateAnswerTitle(updateAnswerTitle);
+        setUpdateAnswerDescription(updateAnswerDescription);
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmitAnswer(false);
-      }, 500);
+      setIsLoadingSubmitAnswer(false);
     }
   };
   const [isLoadingClickDeleteAnswer, setIsLoadingClickDeleteAnswer] =
-    useState<boolean>(false);
+    React.useState<boolean>(false);
   const onClickDeleteAnswerHandler = async () => {
     try {
       setIsLoadingClickDeleteAnswer(true);
@@ -212,32 +175,18 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
         },
       );
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-        }, 500);
+        await mutate();
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingClickDeleteAnswer(false);
-      }, 500);
+      setIsLoadingClickDeleteAnswer(false);
     }
   };
   const [isLoadingSubmitUpdateAnswer, setIsLoadingSubmitUpdateAnswer] =
-    useState<boolean>(false);
-  const onSubmitUpdateAnswerHandler: FormEventHandler<HTMLFormElement> = async (
-    event: FormEvent<HTMLFormElement>,
-  ) => {
+    React.useState<boolean>(false);
+  const onSubmitUpdateAnswerHandler = async () => {
     try {
-      event.preventDefault();
       setIsLoadingSubmitUpdateAnswer(true);
       const response = await axios.put(
         `${process.env.REACT_APP_BACK_URL}/lecture/admin/answer/modify/${question_id}?answer_id=${answer_id}`,
@@ -252,32 +201,26 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
         },
       );
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-          setIsShowAnswerEdit(false);
-        }, 500);
+        await mutate();
+        setIsShowAnswerEdit(false);
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmitUpdateAnswer(false);
-      }, 500);
+      setIsLoadingSubmitUpdateAnswer(false);
     }
   };
   return (
     <>
-      <form onSubmit={onSubmitUpdateQuestionHandler}>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          onSubmitUpdateQuestionHandler();
+        }}
+      >
         <div
           className="min-h-[41px] max-h-[41px] bg-white flex"
-          onClick={(event) => {
+          onClick={() => {
             setIsShowQuestionEdit(false);
             setIsShowQuestionDescription(!isShowQuestionDescription);
           }}
@@ -351,15 +294,15 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
                       {isShowQuestionEdit ? (
                         <div className="w-full min-h-[41px] bg-white flex xl:justify-center justify-start items-center">
                           <button
-                            className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
                             type="submit"
+                            className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
                             disabled={isLoadingSubmitUpdateQuestion}
                           >
                             완료
                           </button>
                           <button
-                            className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] xl:ml-[10px] ml-[1px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
                             type="button"
+                            className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] xl:ml-[10px] ml-[1px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
                             onClick={() => {
                               setIsShowQuestionEdit(false);
                             }}
@@ -372,8 +315,8 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
                         <>
                           <div className="w-full min-h-[41px] bg-white flex xl:justify-center justify-start items-center">
                             <button
-                              className="flex-none rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
                               type="button"
+                              className="flex-none rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
                               onClick={(event) => {
                                 event.preventDefault();
                                 setIsShowQuestionEdit(true);
@@ -383,8 +326,8 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
                               수정
                             </button>
                             <button
-                              className="flex-none rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] xl:ml-[10px] ml-[1px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
                               type="button"
+                              className="flex-none rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] xl:ml-[10px] ml-[1px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
                               onClick={() => {
                                 onClickDeleteQuestionHandler();
                               }}
@@ -399,8 +342,8 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
                   )}
                 {userType === 'admin' && !answer_id ? (
                   <button
-                    className="absolute flex justify-center items-center xl:left-[133px] left-[90px] bottom-[6px] rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] min-w-max max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
                     type="button"
+                    className="absolute flex justify-center items-center xl:left-[133px] left-[90px] bottom-[6px] rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] min-w-max max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
                     onClick={(event) => {
                       event.preventDefault();
                       setIsShowAddAnswer(!isShowAddAnswer);
@@ -414,7 +357,7 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
                         </span>
                         <img
                           className="w-[16px] h-[16px] m-auto object-fit"
-                          src={CloseIcon}
+                          src={ImgClose}
                         />
                       </>
                     ) : (
@@ -424,7 +367,7 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
                         </span>
                         <img
                           className="w-[16px] h-[16px] m-auto object-fit"
-                          src={EditIcon}
+                          src={ImgEdit}
                         />
                       </>
                     )}
@@ -439,11 +382,16 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
           <></>
         )}
       </form>
-      {answer_id && (
-        <form onSubmit={onSubmitUpdateAnswerHandler}>
+      {!!answer_id && (
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            onSubmitUpdateAnswerHandler();
+          }}
+        >
           <div
             className="min-h-[41px] max-h-[41px] bg-white flex"
-            onClick={(event) => {
+            onClick={() => {
               setIsShowAnswerEdit(false);
               setIsShowAnswerDescription(!isShowAnswerDescription);
             }}
@@ -506,20 +454,20 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
                   </div>
                 )}
                 <div className="flex-none min-w-[126px] max-w-[126px] flex justify-center items-start">
-                  {token && userType === 'admin' && (
+                  {!!token && userType === 'admin' && (
                     <>
                       {isShowAnswerEdit ? (
                         <div className="w-full min-h-[41px] bg-white flex justify-center items-center">
                           <button
-                            className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
                             type="submit"
+                            className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
                             disabled={isLoadingSubmitUpdateAnswer}
                           >
                             완료
                           </button>
                           <button
-                            className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] ml-[10px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
                             type="button"
+                            className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] ml-[10px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
                             onClick={() => {
                               setIsShowAnswerEdit(false);
                             }}
@@ -532,8 +480,8 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
                         <>
                           <div className="w-full min-h-[41px] bg-white flex justify-center items-center">
                             <button
-                              className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
                               type="button"
+                              className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
                               onClick={(event) => {
                                 event.preventDefault();
                                 setIsShowAnswerEdit(true);
@@ -543,8 +491,8 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
                               수정
                             </button>
                             <button
-                              className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] ml-[10px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
                               type="button"
+                              className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] ml-[10px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
                               onClick={() => {
                                 onClickDeleteAnswerHandler();
                               }}
@@ -565,10 +513,13 @@ const LectureQuestion: FC<LectureQuestionProps> = ({
           )}
         </form>
       )}
-      {token && userType === 'admin' && !answer_id && isShowAddAnswer && (
+      {!!token && userType === 'admin' && !answer_id && isShowAddAnswer && (
         <form
           className="min-h-[491px] max-h-[491px] px-[98px] py-[68px] box-border border-[1px] rounded-[8px] border-[#DCDEE2] w-full"
-          onSubmit={onSubmitAnswerHandler}
+          onSubmit={(event) => {
+            event.preventDefault();
+            onSubmitAnswerHandler();
+          }}
         >
           <div className="mb-[28px] text-[#17233D] font-semibold text-[20px] leading-[150%]">
             응답사항 등록
