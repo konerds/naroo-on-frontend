@@ -233,12 +233,13 @@ const PageLectureDetail: React.FC<IPropsPageLectureDetail> = ({}) => {
                             <>
                               {!!dataDetailLecture.status ? (
                                 <>
-                                  {{
-                                    apply: '수강 신청',
-                                    reject: '승인 거부',
-                                    accept: '학습 하기',
-                                  }}
-                                  [dataDetailLecture.status]
+                                  {
+                                    {
+                                      apply: '수강 신청',
+                                      reject: '승인 거부',
+                                      accept: '학습 하기',
+                                    }[dataDetailLecture.status]
+                                  }
                                 </>
                               ) : (
                                 <>
@@ -319,12 +320,13 @@ const PageLectureDetail: React.FC<IPropsPageLectureDetail> = ({}) => {
                           <>
                             {!!dataDetailLecture.status ? (
                               <>
-                                {{
-                                  apply: '수강 신청',
-                                  reject: '승인 거부',
-                                  accept: '학습 하기',
-                                }}
-                                [dataDetailLecture.status]
+                                {
+                                  {
+                                    apply: '수강 신청',
+                                    reject: '승인 거부',
+                                    accept: '학습 하기',
+                                  }[dataDetailLecture.status]
+                                }
                               </>
                             ) : (
                               <>
