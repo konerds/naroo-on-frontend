@@ -55,7 +55,7 @@ const PageMain: React.FC = () => {
     }
   }, [dataVerify?.token, errorVerify]);
   return (
-    <div className="max-w-full min-h-screen mx-auto bg-white font-noto">
+    <div className="pt-[100px] max-w-full min-h-screen mx-auto bg-white font-noto">
       {!(!!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin') && (
         <>
           {!!infoBanner && isArray(infoBanner) && infoBanner.length > 0 ? (
@@ -64,7 +64,7 @@ const PageMain: React.FC = () => {
               src={infoBanner[0].content}
             />
           ) : (
-            <Skeleton className="w-full h-[380px]" />
+            <Skeleton className="w-full max-h-[380px]" />
           )}
           <ComponentCarouselLecture />
           <div className="min-h-[200px] bg-[#F8F8F9]">

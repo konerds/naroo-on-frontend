@@ -5,54 +5,172 @@ import ComponentFormUpdateResource from './resource/ComponentFormUpdateResource'
 
 interface IPropsComponentContainerEditResource {
   token: string | null;
-  allResourcesData: IResources[] | undefined;
+  logoHeaderResourcesData: IResources[];
+  logoFooterResourcesData: IResources[];
+  carouselLectureResourcesData: IResources[];
+  carouselOrgResourcesData: IResources[];
   allResourcesMutate: KeyedMutator<IResources[]>;
 }
 
 const ComponentContainerEditResource: React.FC<
   IPropsComponentContainerEditResource
-> = ({ token, allResourcesData, allResourcesMutate }) => {
-  let orgIndex = 0;
+> = ({
+  token,
+  logoHeaderResourcesData,
+  logoFooterResourcesData,
+  carouselLectureResourcesData,
+  carouselOrgResourcesData,
+  allResourcesMutate,
+}) => {
+  console.log(carouselLectureResourcesData);
   return (
     <div className="mt-[30px]">
-      {!!allResourcesData &&
-        allResourcesData.map((resource, index) => (
-          <div key={index}>
-            {!!resource ? (
+      {logoHeaderResourcesData.length > 0 ? (
+        <>
+          {logoHeaderResourcesData.map((resource, index) => {
+            return (
               <>
-                {+resource.content_id === 0 && (
-                  <div className="mt-[20px]">
-                    {resource.type === 'header_logo'
-                      ? 'Header 로고 : '
-                      : resource.type === 'footer_logo'
-                      ? 'Footer 로고 : '
-                      : resource.type === 'info_banner'
-                      ? '서비스 소개 배너 : '
-                      : resource.type === 'org_carousel'
-                      ? `기관 슬라이더 이미지 : `
-                      : ''}
-                  </div>
-                )}
+                <div key={index}>
+                  {+index === 0 && (
+                    <div className="mt-[20px]">헤더 로고 이미지</div>
+                  )}
+                </div>
                 <div className="border-2 rounded">
                   {!!resource.content && (
                     <ComponentFormUpdateResource
+                      index={index}
                       token={token}
                       type={resource.type}
                       content_id={resource.content_id}
                       content={resource.content}
                       mutate={allResourcesMutate}
-                      resourceIndex={
-                        resource.type === 'org_carousel' ? orgIndex++ : null
-                      }
                     />
                   )}
                 </div>
               </>
-            ) : (
-              <div>리소스가 존재하지 않습니다</div>
-            )}
+            );
+          })}
+        </>
+      ) : (
+        <></>
+      )}
+      {logoFooterResourcesData.length > 0 ? (
+        <>
+          {logoFooterResourcesData.map((resource, index) => {
+            return (
+              <>
+                <div key={index}>
+                  {+index === 0 && (
+                    <div className="mt-[20px]">푸터 로고 이미지</div>
+                  )}
+                </div>
+                <div className="border-2 rounded">
+                  {!!resource.content && (
+                    <ComponentFormUpdateResource
+                      index={index}
+                      token={token}
+                      type={resource.type}
+                      content_id={resource.content_id}
+                      content={resource.content}
+                      mutate={allResourcesMutate}
+                    />
+                  )}
+                </div>
+              </>
+            );
+          })}
+        </>
+      ) : (
+        <></>
+      )}
+      {carouselLectureResourcesData.length > 0 ? (
+        <>
+          {carouselLectureResourcesData.map((resource, index) => {
+            return (
+              <>
+                <div key={index}>
+                  {+index === 0 && (
+                    <div className="mt-[20px]">
+                      상단 서비스 소개 배너 이미지
+                    </div>
+                  )}
+                </div>
+                <div className="border-2 rounded">
+                  {!!resource.content && (
+                    <ComponentFormUpdateResource
+                      index={index}
+                      token={token}
+                      type={resource.type}
+                      content_id={resource.content_id}
+                      content={resource.content}
+                      mutate={allResourcesMutate}
+                    />
+                  )}
+                </div>
+              </>
+            );
+          })}
+        </>
+      ) : (
+        <>
+          <div>
+            <div className="mt-[20px]">상단 서비스 소개 배너 이미지</div>
           </div>
-        ))}
+          <div className="border-2 rounded">
+            <ComponentFormUpdateResource
+              index={0}
+              token={token}
+              type="info_banner"
+              content_id="0"
+              content={''}
+              mutate={allResourcesMutate}
+            />
+          </div>
+        </>
+      )}
+      {carouselOrgResourcesData.length > 0 ? (
+        <>
+          {carouselOrgResourcesData.map((resource, index) => {
+            return (
+              <>
+                <div key={index}>
+                  {+index === 0 && (
+                    <div className="mt-[20px]">하단 기관 슬라이더 이미지</div>
+                  )}
+                </div>
+                <div className="border-2 rounded">
+                  {!!resource.content && (
+                    <ComponentFormUpdateResource
+                      index={index}
+                      token={token}
+                      type={resource.type}
+                      content_id={resource.content_id}
+                      content={resource.content}
+                      mutate={allResourcesMutate}
+                    />
+                  )}
+                </div>
+              </>
+            );
+          })}
+        </>
+      ) : (
+        <>
+          <div>
+            <div className="mt-[20px]">하단 기관 슬라이더 이미지</div>
+          </div>
+          <div className="border-2 rounded">
+            <ComponentFormUpdateResource
+              index={0}
+              token={token}
+              type="org_carousel"
+              content_id="0"
+              content={''}
+              mutate={allResourcesMutate}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };

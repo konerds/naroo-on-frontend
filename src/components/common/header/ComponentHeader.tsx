@@ -172,28 +172,36 @@ const ComponentHeader: React.FC = () => {
                 />
               )}
             </Link>
+            {!(
+              !!token &&
+              !!dataGetMe &&
+              !!!errorGetMe &&
+              !!dataGetMe.nickname &&
+              dataGetMe.role === 'admin'
+            ) && (
+              <button
+                type="button"
+                className={`rounded-[1px] min-w-max ${
+                  !!!token
+                    ? 'sm:mx-[112px] xs:mx-[63px]'
+                    : !!token &&
+                      !!dataGetMe &&
+                      !!!errorGetMe &&
+                      dataGetMe.role === 'student'
+                    ? 'sm:mx-[165px] xs:mx-[115px]'
+                    : ''
+                }`}
+                onClick={() => setIsVisibleMenu(!isVisibleMenu)}
+              >
+                메뉴
+              </button>
+            )}
             {!!token &&
               !!dataGetMe &&
               !!!errorGetMe &&
               !!dataGetMe.nickname &&
               dataGetMe.role === 'student' && (
                 <>
-                  <button
-                    type="button"
-                    className={`rounded-[1px] min-w-max ${
-                      !!!token
-                        ? 'sm:mx-[112px] xs:mx-[63px]'
-                        : !!token &&
-                          !!dataGetMe &&
-                          !!!errorGetMe &&
-                          dataGetMe.role === 'student'
-                        ? 'sm:mx-[165px] xs:mx-[115px]'
-                        : ''
-                    }`}
-                    onClick={() => setIsVisibleMenu(!isVisibleMenu)}
-                  >
-                    메뉴
-                  </button>
                   <button
                     ref={refElementEllipsis}
                     className="rounded-full w-[40px] h-[40px] flex items-center justify-center bg-[#8dc556] leading-[150%] text-white font-semibold"
@@ -211,7 +219,7 @@ const ComponentHeader: React.FC = () => {
                   )}
                 </>
               )}
-            {(token === '' || !token) && (
+            {(!!!token || (!!token && !!!dataGetMe && !!errorGetMe)) && (
               <div>
                 <Link to="/signin">
                   <button className="bg-white text-[10px] leading-[10px] font-semibold text-[#808695] border-[1px] border-[#DCDEE2] box-border rounded-[40px] w-[60px] h-[41px]">

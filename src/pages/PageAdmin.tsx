@@ -28,7 +28,11 @@ const PageAdmin: React.FC = () => {
     () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/me`, token),
     { revalidateOnFocus: false, revalidateIfStale: false },
   );
-  const { data: dataUsers, mutate: mutateUsers } = useSWR<IUserEdit[]>(
+  const {
+    data: dataUsers,
+    mutate: mutateUsers,
+    error: errorUsers,
+  } = useSWR<IUserEdit[]>(
     !!token && !!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin'
       ? `${process.env.REACT_APP_BACK_URL}/user/admin/user`
       : null,
@@ -39,7 +43,11 @@ const PageAdmin: React.FC = () => {
       ),
     { revalidateOnFocus: false, revalidateIfStale: false },
   );
-  const { data: tagsData, mutate: tagsMutate } = useSWR<ITags[]>(
+  const {
+    data: dataTags,
+    mutate: mutateTags,
+    error: errorTags,
+  } = useSWR<ITags[]>(
     !!token && !!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin'
       ? `${process.env.REACT_APP_BACK_URL}/lecture/admin/tag`
       : null,
@@ -50,16 +58,20 @@ const PageAdmin: React.FC = () => {
       ),
     { revalidateOnFocus: false, revalidateIfStale: false },
   );
-  const { data: allLecturesData, mutate: allLecturesMutate } = useSWR<
-    ILectureInList[]
-  >(
+  const {
+    data: dataAllLectures,
+    mutate: mutateAllLectures,
+    error: errorAllLectures,
+  } = useSWR<ILectureInList[]>(
     `${process.env.REACT_APP_BACK_URL}/lecture/all`,
     () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/lecture/all`),
     { revalidateOnFocus: false, revalidateIfStale: false },
   );
-  const { data: allResourcesData, mutate: allResourcesMutate } = useSWR<
-    IResources[]
-  >(
+  const {
+    data: dataAllResource,
+    mutate: mutateAllResources,
+    error: errorAllResources,
+  } = useSWR<IResources[]>(
     `${process.env.REACT_APP_BACK_URL}/resource`,
     () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/resource`, token),
     { revalidateOnFocus: false, revalidateIfStale: false },
@@ -261,56 +273,50 @@ const PageAdmin: React.FC = () => {
               <ComponentFormAddLecture
                 token={token}
                 setSelectedMenu={setSelectedMenu}
-                allLecturesMutate={allLecturesMutate}
+                allLecturesMutate={mutateAllLectures}
               />
             </div>
           )}
-          {selectedMenu === CONST_ADMIN_MENU.LECTURE_EDIT && (
-            <div className="max-w-[90%] overflow-x-hidden mx-auto">
-              <ComponentContainerEditLecture
-                token={token}
-                setToken={setToken}
-                allLecturesData={allLecturesData}
-                allLecturesMutate={allLecturesMutate}
-                allTags={tagsData ? (tagsData.length > 0 ? tagsData : []) : []}
-              />
-            </div>
-          )}
-          {selectedMenu === CONST_ADMIN_MENU.LECTURE_PERMISSION && (
-            <div className="max-w-[90%] mx-auto">
-              <ComponentContainerPermissionLecture
-                token={token}
-                studentOptions={
-                  dataUsers
-                    ? dataUsers.length > 0
-                      ? dataUsers
-                          .filter((user) => {
-                            return user.role !== 'admin';
-                          })
-                          .map((user) => {
-                            return {
-                              value: user.id,
-                              label: user.nickname,
-                            };
-                          })
-                      : []
-                    : []
-                }
-                lectureOptions={
-                  allLecturesData
-                    ? allLecturesData.length > 0
-                      ? allLecturesData.map((lecture) => {
-                          return {
-                            value: lecture.id,
-                            label: `[${lecture.teacher_nickname}] ${lecture.title}`,
-                          };
-                        })
-                      : []
-                    : []
-                }
-              />
-            </div>
-          )}
+          {selectedMenu === CONST_ADMIN_MENU.LECTURE_EDIT &&
+            !!dataTags &&
+            !!!errorTags && (
+              <div className="max-w-[90%] overflow-x-hidden mx-auto">
+                <ComponentContainerEditLecture
+                  token={token}
+                  setToken={setToken}
+                  allLecturesData={dataAllLectures}
+                  allLecturesMutate={mutateAllLectures}
+                  allTags={dataTags}
+                />
+              </div>
+            )}
+          {selectedMenu === CONST_ADMIN_MENU.LECTURE_PERMISSION &&
+            !!dataUsers &&
+            !!!errorUsers &&
+            !!dataAllLectures &&
+            !!!errorAllLectures && (
+              <div className="max-w-[90%] mx-auto">
+                <ComponentContainerPermissionLecture
+                  token={token}
+                  studentOptions={dataUsers
+                    .filter((user) => {
+                      return user.role !== 'admin';
+                    })
+                    .map((user) => {
+                      return {
+                        value: user.id,
+                        label: user.nickname,
+                      };
+                    })}
+                  lectureOptions={dataAllLectures.map((lecture) => {
+                    return {
+                      value: lecture.id,
+                      label: `[${lecture.teacher_nickname}] ${lecture.title}`,
+                    };
+                  })}
+                />
+              </div>
+            )}
           {selectedMenu === CONST_ADMIN_MENU.STUDENT_EDIT && (
             <div className="max-w-[90%] overflow-w-hidden mx-auto">
               <ComponentContainerEditUser
@@ -325,20 +331,41 @@ const PageAdmin: React.FC = () => {
               <ComponentFormEditTag
                 token={token}
                 setToken={setToken}
-                tagsData={tagsData}
-                tagsMutate={tagsMutate}
+                tagsData={dataTags}
+                tagsMutate={mutateTags}
               />
             </div>
           )}
-          {selectedMenu === CONST_ADMIN_MENU.RESOURCE_EDIT && (
-            <div className="max-w-[90%] overflow-w-hidden mx-auto">
-              <ComponentContainerEditResource
-                token={token}
-                allResourcesData={allResourcesData}
-                allResourcesMutate={allResourcesMutate}
-              />
-            </div>
-          )}
+          {selectedMenu === CONST_ADMIN_MENU.RESOURCE_EDIT &&
+            !!dataAllResource &&
+            !!!errorAllResources && (
+              <div className="max-w-[90%] overflow-w-hidden mx-auto">
+                <ComponentContainerEditResource
+                  token={token}
+                  logoHeaderResourcesData={dataAllResource.filter(
+                    (resource) => {
+                      return resource.type === 'header_logo';
+                    },
+                  )}
+                  logoFooterResourcesData={dataAllResource.filter(
+                    (resource) => {
+                      return resource.type === 'footer_logo';
+                    },
+                  )}
+                  carouselLectureResourcesData={dataAllResource.filter(
+                    (resource) => {
+                      return resource.type === 'info_banner';
+                    },
+                  )}
+                  carouselOrgResourcesData={dataAllResource.filter(
+                    (resource) => {
+                      return resource.type === 'org_carousel';
+                    },
+                  )}
+                  allResourcesMutate={mutateAllResources}
+                />
+              </div>
+            )}
         </div>
       )}
     </div>

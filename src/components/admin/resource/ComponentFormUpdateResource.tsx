@@ -8,17 +8,17 @@ import { showError } from '../../../hooks/api';
 import { useStringInput } from '../../../hooks';
 
 interface IPropsComponentFormUpdateResource {
+  index: number;
   token: string | null;
   type: string;
   content_id: string;
   content: string;
   mutate: KeyedMutator<IResources[]>;
-  resourceIndex: number | null;
 }
 
 const ComponentFormUpdateResource: React.FC<
   IPropsComponentFormUpdateResource
-> = ({ token, type, content_id, content, mutate, resourceIndex }) => {
+> = ({ index, token, type, content_id, content, mutate }) => {
   const { value: addPreview, setValue: setAddPreview } = useStringInput('');
   const { value: preview, setValue: setPreview } = useStringInput(content);
   const [updateToggle, setUpdateToggle] = React.useState<boolean>(false);
@@ -113,7 +113,7 @@ const ComponentFormUpdateResource: React.FC<
   };
   return (
     <>
-      {type === 'org_carousel' && +content_id === 0 && (
+      {['info_banner', 'org_carousel'].includes(type) && +index === 0 && (
         <form
           className="w-full p-[10px]"
           onSubmit={(event) => {
@@ -134,7 +134,7 @@ const ComponentFormUpdateResource: React.FC<
               이미지 파일
             </label>
             <input
-              className="w-full p-[10px] disabled:opacity-50"
+              className="w-full p-[10px] disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isLoadingSubmitAdd}
               type="file"
               onChange={(event) => {
@@ -154,9 +154,9 @@ const ComponentFormUpdateResource: React.FC<
           </div>
           <input
             type="submit"
-            className="w-full h-[51px] text-[24px] font-semibold leading-[33px] bg-[#0D5B83] text-white mb-[12px] disabled:opacity-50"
+            className="cursor-pointer w-full h-[51px] text-[24px] font-semibold leading-[33px] bg-[#0D5B83] text-white mb-[12px] disabled:opacity-50 disabled:cursor-not-allowed"
             value="리소스 추가"
-            disabled={isLoadingSubmitAdd}
+            disabled={!!!addPreview || isLoadingSubmitAdd}
           />
         </form>
       )}
@@ -175,7 +175,7 @@ const ComponentFormUpdateResource: React.FC<
           )}
           <div className="flex w-full">
             <input
-              className="w-full px-[10px] disabled:opacity-50"
+              className="w-full px-[10px] disabled:opacity-50 disabled:cursor-not-allowed"
               type="file"
               disabled={isLoadingSubmitUpdateResource}
               onChange={(event) => {
@@ -193,7 +193,7 @@ const ComponentFormUpdateResource: React.FC<
               }}
             />
             <button
-              className="mx-[10px] lg:w-[4vw] w-[8vw] box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[41px] lg:text-[14px] text-[1vw] font-semibold leading-[150%] bg-[#4DBFF0] text-white disabled:opacity-50"
+              className="mx-[10px] lg:w-[4vw] w-[8vw] box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[41px] lg:text-[14px] text-[1vw] font-semibold leading-[150%] bg-[#4DBFF0] text-white disabled:opacity-50 disabled:cursor-not-allowed"
               type="submit"
               disabled={isLoadingSubmitUpdateResource}
             >
@@ -201,7 +201,7 @@ const ComponentFormUpdateResource: React.FC<
             </button>
             <button
               type="button"
-              className="lg:w-[4vw] w-[8vw] box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[41px] lg:text-[14px] text-[1vw] font-semibold leading-[150%] bg-[#4DBFF0] text-white disabled:opacity-50"
+              className="lg:w-[4vw] w-[8vw] box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[41px] lg:text-[14px] text-[1vw] font-semibold leading-[150%] bg-[#4DBFF0] text-white disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={onClickUpdateToggle}
               disabled={isLoadingSubmitUpdateResource}
             >
@@ -213,10 +213,8 @@ const ComponentFormUpdateResource: React.FC<
         <div className="flex items-center w-full p-[10px]">
           <div className="w-full overflow-x-hidden">
             <div>
-              {type === 'org_carousel' && (
-                <>{`#${
-                  !!resourceIndex && resourceIndex >= 0 && resourceIndex
-                }`}</>
+              {['info_banner', 'org_carousel'].includes(type) && (
+                <>{`#${(+index + 1).toString()}`}</>
               )}
               {!!preview && (
                 <img className="rounded-xl" src={preview} alt="resource_img" />

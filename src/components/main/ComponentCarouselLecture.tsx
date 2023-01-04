@@ -9,6 +9,7 @@ import { ReactComponent as ImgPrevArrow } from '../../assets/images/PrevArrow.sv
 import { ReactComponent as ImgNextArrow } from '../../assets/images/NextArrow.svg';
 import ContextToken from '../../store/ContextToken';
 import { axiosGetfetcher } from '../../hooks/api';
+import { useMediaQuery } from 'react-responsive';
 
 const ComponentArrowPrev = (props: CustomArrowProps) => {
   return (
@@ -19,6 +20,7 @@ const ComponentArrowPrev = (props: CustomArrowProps) => {
         display: 'absolute',
         width: 40,
         height: 40,
+        // left: useMediaQuery({}) '-3px',
         left: '-3px',
         zIndex: 999,
       }}
@@ -47,7 +49,7 @@ const ComponentArrowNext = (props: CustomArrowProps) => {
 const ComponentSmallNextArrow = (props: CustomArrowProps) => {
   return (
     <ImgNextArrow
-      className={props.className + ' hover:fill-black'}
+      className={props.className}
       style={{
         ...props.style,
         display: 'absolute',
@@ -55,7 +57,6 @@ const ComponentSmallNextArrow = (props: CustomArrowProps) => {
         height: 40,
         right: '-3px',
         zIndex: 999,
-        fill: 'black',
       }}
       onClick={props.onClick}
     />
@@ -80,7 +81,7 @@ const ComponentCarouselLecture: React.FC = () => {
         },
       },
       {
-        breakpoint: 1200,
+        breakpoint: 1199.98,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
@@ -130,7 +131,7 @@ const ComponentCarouselLecture: React.FC = () => {
     { revalidateOnFocus: false, revalidateIfStale: false },
   );
   return (
-    <div className="xl:max-w-[1260px] lg:max-w-[966px] md:max-w-[788px] xs:w-full mx-auto pl-[54px] lg:pr-[27px] pr-[54px] mt-[122px] pb-[96px]">
+    <div className="mt-[122px] xl:max-w-[1260px] lg:max-w-[966px] md:max-w-[788px] xs:w-full mx-auto pl-[54px] lg:pr-[27px] pr-[54px]">
       {!!token && !!dataGetMe && !!!errorGetMe && (
         <>
           <div className="text-2xl font-semibold text-gray-400">
@@ -160,7 +161,6 @@ const ComponentCarouselLecture: React.FC = () => {
                           thumbnail={lecture.thumbnail}
                           teacherNickname={lecture.teacher_nickname}
                           status={lecture.status}
-                          expired={lecture.expired}
                           tags={lecture.tags}
                         />
                       );
@@ -174,11 +174,11 @@ const ComponentCarouselLecture: React.FC = () => {
               )}
             </>
           ) : (
-            <Skeleton className="w-full h-[300px]" />
+            <Skeleton className="w-full max-h-[300px]" />
           )}
         </>
       )}
-      <div className="mt-[122px] text-2xl font-semibold text-gray-400">
+      <div className="text-2xl font-semibold text-gray-400">
         모든 강좌
         {!!dataAllLectures && !!!errorAllLectures && dataAllLectures.length >= 0
           ? ` (${dataAllLectures.length})`
@@ -201,7 +201,6 @@ const ComponentCarouselLecture: React.FC = () => {
                       thumbnail={lecture.thumbnail}
                       teacherNickname={lecture.teacher_nickname}
                       status={null}
-                      expired={lecture.expired}
                       tags={lecture.tags}
                     />
                   );
@@ -215,7 +214,7 @@ const ComponentCarouselLecture: React.FC = () => {
           )}
         </>
       ) : (
-        <Skeleton className="w-full h-[300px]" />
+        <Skeleton className="w-full max-h-[300px]" />
       )}
     </div>
   );

@@ -13,7 +13,6 @@ interface IPropsComponentCardLecture {
   thumbnail: string;
   teacherNickname: string;
   status: string | null;
-  expired: string | null;
   tags: ITags[] | [] | null;
 }
 
@@ -23,7 +22,6 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
   thumbnail,
   teacherNickname,
   status,
-  expired,
   tags,
 }) => {
   const settings: Settings | Readonly<Settings> = {
@@ -39,7 +37,7 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
   const [isBackdropShow, setIsBackdropShow] = React.useState<boolean>(false);
   return (
     <div
-      className={`cursor-pointer w-full lg:w-[261px] min-h-[444px] max-h-[444px] mx-0 rounded-[8px] ${
+      className={`cursor-pointer w-full md:max-w-[261px] lg:max-w-[261px] min-h-[444px] max-h-[444px] mx-0 rounded-[8px] ${
         isBackdropShow
           ? 'lecture-card-container lecture-card-container-hover'
           : 'lecture-card-container'
