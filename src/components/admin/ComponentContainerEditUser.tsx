@@ -1,21 +1,17 @@
-import { FC } from 'react';
+import * as React from 'react';
 import { KeyedMutator } from 'swr';
 import { IUserEdit } from '../../interfaces';
-import UserEditElement from './user/UserEditElement';
+import ComponentElementEditUser from './user/ComponentElementEditUser';
 
-interface UserEditProps {
+interface IPropsComponentContainerEditUser {
   token: string | null;
-  setToken: (v: string | null) => void;
   dataUsers: IUserEdit[] | undefined;
   mutateUsers: KeyedMutator<IUserEdit[]>;
 }
 
-const UserEdit: FC<UserEditProps> = ({
-  token,
-  setToken,
-  dataUsers,
-  mutateUsers,
-}) => {
+const ComponentContainerEditUser: React.FC<
+  IPropsComponentContainerEditUser
+> = ({ token, dataUsers, mutateUsers }) => {
   return (
     <div className="mt-[30px]">
       {!!token &&
@@ -23,10 +19,9 @@ const UserEdit: FC<UserEditProps> = ({
         dataUsers
           .sort((a, b) => +a.id - +b.id)
           .map((user, index) => (
-            <UserEditElement
+            <ComponentElementEditUser
               key={index}
               token={token}
-              setToken={setToken}
               user={user}
               mutate={mutateUsers}
             />
@@ -35,4 +30,4 @@ const UserEdit: FC<UserEditProps> = ({
   );
 };
 
-export default UserEdit;
+export default ComponentContainerEditUser;

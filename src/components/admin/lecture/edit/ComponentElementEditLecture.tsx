@@ -1,31 +1,29 @@
-import { FC, FormEvent, useCallback, useMemo, useState } from 'react';
+import * as React from 'react';
+import axios from 'axios';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
   KeyboardDateTimePicker,
 } from '@material-ui/pickers';
-import { ILectureInList, ITags } from '../../../interfaces';
-import RegisterTag from '../tag/RegisterTag';
-import UpdateLectureField from './UpdateLectureField';
-import axios from 'axios';
+import { ILectureInList, ITags } from '../../../../interfaces';
+import ComponentFormRegisterTags from '../../tag/ComponentFormRegisterTags';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { toast } from 'react-toastify';
-import { useInput } from '../../../hooks';
-import UpdateImageField from './UpdateImageField';
+import { useStringInput } from '../../../../hooks';
+import ComponentFormUpdateImage from './form/ComponentFormUpdateImage';
 import moment from 'moment';
 import { KeyedMutator } from 'swr';
-import { showError } from '../../../hooks/api';
+import { showError } from '../../../../hooks/api';
+import ComponentFormUpdateLecture from './form/ComponentFormUpdateLecture';
 
-interface LectureEditCardProps {
+interface IPropsComponentElementEditLecture {
   id: string;
   title: string;
   images: string[];
   description: string;
   thumbnail: string;
   teacherNickname: string;
-  status: string | null;
   expired: string | null;
   tags: ITags[] | [] | null;
   videoTitle: string;
@@ -36,14 +34,15 @@ interface LectureEditCardProps {
   mutate: KeyedMutator<ILectureInList[]>;
 }
 
-const LectureEditCard: FC<LectureEditCardProps> = ({
+const ComponentElementEditLecture: React.FC<
+  IPropsComponentElementEditLecture
+> = ({
   id,
   title,
   images,
   description,
   thumbnail,
   teacherNickname,
-  status,
   expired,
   tags,
   videoTitle,
@@ -54,7 +53,34 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
   mutate,
 }) => {
   const [isLoadingClickDeleteLecture, setIsLoadingClickDeleteLecture] =
-    useState<boolean>(false);
+    React.useState<boolean>(false);
+  const [updateExpiredToggle, setUpdateExpiredToggle] =
+    React.useState<boolean>(false);
+  const [expiredAt, setExpiredAt] = React.useState<Date | null>(
+    !!expired ? new Date(expired) : null,
+  );
+  const [isLoadingSubmitUpdateExpired, setIsLoadingSubmitUpdateExpired] =
+    React.useState<boolean>(false);
+  const [updateTeacherToggle, setUpdateTeacherToggle] =
+    React.useState<boolean>(false);
+  const {
+    value: updateTeacherName,
+    setValue: setUpdateTeacherName,
+    onChange: onChangeUpdateTeacherName,
+  } = useStringInput(teacherNickname);
+  const [isLoadingSubmitUpdateTeacher, setIsLoadingSubmitUpdateTeacher] =
+    React.useState<boolean>(false);
+  const onClickUpdateTeacherToggle = () => {
+    setUpdateTeacherToggle(!updateTeacherToggle);
+    setUpdateTeacherName(teacherNickname);
+  };
+  const onClickUpdateExpiredToggle = () => {
+    setUpdateExpiredToggle(!updateExpiredToggle);
+    setExpiredAt(!!expired ? new Date(expired) : null);
+  };
+  const onHandleExpiredAt = (date: Date | null) => {
+    setExpiredAt(date);
+  };
   const onClickDeleteLecture = async () => {
     try {
       setIsLoadingClickDeleteLecture(true);
@@ -67,39 +93,14 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
         },
       );
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-        }, 500);
+        await mutate();
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingClickDeleteLecture(false);
-      }, 500);
+      setIsLoadingClickDeleteLecture(false);
     }
   };
-  const [updateExpiredToggle, setUpdateExpiredToggle] =
-    useState<boolean>(false);
-  const onClickUpdateExpiredToggle = () => {
-    setUpdateExpiredToggle(!updateExpiredToggle);
-    setExpiredAt(expired ? new Date(expired) : null);
-  };
-  const [expiredAt, setExpiredAt] = useState<Date | null>(
-    expired ? new Date(expired) : null,
-  );
-  const onHandleExpiredAt = (date: Date | null) => {
-    setExpiredAt(date);
-  };
-  const [isLoadingSubmitUpdateExpired, setIsLoadingSubmitUpdateExpired] =
-    useState<boolean>(false);
   const onSubmitUpdateExpired = async () => {
     try {
       setIsLoadingSubmitUpdateExpired(true);
@@ -114,7 +115,6 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
           },
         },
       );
-
       if (response.status === 200) {
         await mutate();
         setUpdateExpiredToggle(!updateExpiredToggle);
@@ -125,16 +125,6 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
       setIsLoadingSubmitUpdateExpired(false);
     }
   };
-  const [updateTeacherToggle, setUpdateTeacherToggle] =
-    useState<boolean>(false);
-  const onClickUpdateTeacherToggle = () => {
-    setUpdateTeacherToggle(!updateTeacherToggle);
-    setUpdateTeacherName(teacherNickname);
-  };
-  const [updateTeacherName, onChangeUpdateTeacherName, setUpdateTeacherName] =
-    useInput(teacherNickname);
-  const [isLoadingSubmitUpdateTeacher, setIsLoadingSubmitUpdateTeacher] =
-    useState<boolean>(false);
   const onSubmitUpdateTeacher = async () => {
     try {
       setIsLoadingSubmitUpdateTeacher(true);
@@ -162,7 +152,7 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
   return (
     <div className="w-[560px] xs:w-[380px] justify-self-center">
       <button
-        className="my-[5px] w-full flex justify-center items-center disabled:opacity-50"
+        className="px-[15px] py-[5px] mx-auto my-[5px] border-[1px] border-black rounded-2xl w-max flex justify-center items-center hover:bg-black hover:text-white disabled:opacity-50"
         disabled={isLoadingClickDeleteLecture}
         onClick={onClickDeleteLecture}
       >
@@ -170,9 +160,8 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
         <FontAwesomeIcon className="ml-[20px]" icon={faTrash} />
       </button>
       <div className="mb-1 text-xs bg-white text-shuttle-gray mt-[10px]">
-        <UpdateImageField
+        <ComponentFormUpdateImage
           token={token}
-          setToken={setToken}
           fieldType="thumbnail"
           lectureId={id}
           userField={thumbnail}
@@ -226,9 +215,8 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
         )}
       </div>
       <div className="mb-1 text-xs bg-white text-shuttle-gray mt-[10px]">
-        <UpdateLectureField
+        <ComponentFormUpdateLecture
           token={token}
-          setToken={setToken}
           fieldType="title"
           lectureId={id}
           userField={title}
@@ -278,9 +266,8 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
         </div>
       )}
       <div className="mb-1 text-xs bg-white text-shuttle-gray mt-[10px]">
-        <UpdateLectureField
+        <ComponentFormUpdateLecture
           token={token}
-          setToken={setToken}
           fieldType="description"
           lectureId={id}
           userField={description}
@@ -292,10 +279,9 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
           images.length > 0 &&
           images.map((image, index) => {
             return (
-              <UpdateImageField
+              <ComponentFormUpdateImage
                 key={index}
                 token={token}
-                setToken={setToken}
                 fieldType="img_description"
                 lectureId={id}
                 userField={image}
@@ -306,9 +292,8 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
           })}
       </div>
       <div className="mb-1 text-xs bg-white text-shuttle-gray mt-[10px]">
-        <UpdateLectureField
+        <ComponentFormUpdateLecture
           token={token}
-          setToken={setToken}
           fieldType="video_title"
           lectureId={id}
           userField={videoTitle}
@@ -316,18 +301,16 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
         />
       </div>
       <div className="mb-1 text-xs bg-white text-shuttle-gray mt-[10px]">
-        <UpdateLectureField
+        <ComponentFormUpdateLecture
           token={token}
-          setToken={setToken}
           fieldType="video_url"
           lectureId={id}
           userField={videoUrl}
           mutate={mutate}
         />
       </div>
-      <RegisterTag
+      <ComponentFormRegisterTags
         token={token}
-        setToken={setToken}
         lectureId={id}
         allTags={allTags}
         tags={tags ? (tags.length > 0 ? tags : []) : []}
@@ -337,4 +320,4 @@ const LectureEditCard: FC<LectureEditCardProps> = ({
   );
 };
 
-export default LectureEditCard;
+export default ComponentElementEditLecture;

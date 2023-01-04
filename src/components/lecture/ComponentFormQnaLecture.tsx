@@ -3,13 +3,13 @@ import 'moment/locale/ko';
 import moment from 'moment';
 import axios from 'axios';
 import { ILectureDetail } from '../../interfaces';
-import { useInput } from '../../hooks';
+import { useStringInput } from '../../hooks';
 import ImgEdit from '../../assets/images/Edit.svg';
 import ImgClose from '../../assets/images/Close.svg';
 import { showError } from '../../hooks/api';
 import { KeyedMutator } from 'swr';
 
-interface LectureQuestionProps {
+interface IPropsComponentFormQnaLecture {
   token: string | null;
   userType?: string | null;
   mutate: KeyedMutator<ILectureDetail>;
@@ -27,7 +27,7 @@ interface LectureQuestionProps {
   creator_nickname: string;
 }
 
-const LectureQuestion: React.FC<LectureQuestionProps> = ({
+const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
   token,
   userType,
   mutate,
@@ -48,16 +48,12 @@ const LectureQuestion: React.FC<LectureQuestionProps> = ({
     React.useState<boolean>(false);
   const [isShowQuestionEdit, setIsShowQuestionEdit] =
     React.useState<boolean>(false);
-  const [
-    updateQuestionTitle,
-    onChangeUpdateQuestionTitle,
-    setUpdateQuestionTitle,
-  ] = useInput(question_title);
-  const [
-    updateQuestionDescription,
-    onChangeUpdateQuestionDescription,
-    setUpdateQuestionDescription,
-  ] = useInput(question_description);
+  const { value: updateQuestionTitle, onChange: onChangeUpdateQuestionTitle } =
+    useStringInput(question_title);
+  const {
+    value: updateQuestionDescription,
+    onChange: onChangeUpdateQuestionDescription,
+  } = useStringInput(question_description);
   const [isLoadingClickDeleteQuestion, setIsLoadingClickDeleteQuestion] =
     React.useState<boolean>(false);
   const onClickDeleteQuestionHandler = async () => {
@@ -98,33 +94,35 @@ const LectureQuestion: React.FC<LectureQuestionProps> = ({
         },
       );
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-          setIsShowQuestionEdit(false);
-        }, 500);
+        await mutate();
+        setIsShowQuestionEdit(false);
       }
     } catch (error: any) {
       showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmitUpdateQuestion(false);
-      }, 500);
+      setIsLoadingSubmitUpdateQuestion(false);
     }
   };
-  const [newAnswerTitle, onChangeNewAnswerTitle, setNewAnswerTitle] =
-    useInput('');
-  const [
-    newAnswerDescription,
-    onChangeNewAnswerDescription,
-    setNewAnswerDescription,
-  ] = useInput('');
-  const [updateAnswerTitle, onChangeUpdateAnswerTitle, setUpdateAnswerTitle] =
-    useInput(answer_title);
-  const [
-    updateAnswerDescription,
-    onChangeUpdateAnswerDescription,
-    setUpdateAnswerDescription,
-  ] = useInput(answer_description);
+  const {
+    value: newAnswerTitle,
+    setValue: setNewAnswerTitle,
+    onChange: onChangeNewAnswerTitle,
+  } = useStringInput('');
+  const {
+    value: newAnswerDescription,
+    setValue: setNewAnswerDescription,
+    onChange: onChangeNewAnswerDescription,
+  } = useStringInput('');
+  const {
+    value: updateAnswerTitle,
+    setValue: setUpdateAnswerTitle,
+    onChange: onChangeUpdateAnswerTitle,
+  } = useStringInput(answer_title);
+  const {
+    value: updateAnswerDescription,
+    setValue: setUpdateAnswerDescription,
+    onChange: onChangeUpdateAnswerDescription,
+  } = useStringInput(answer_description);
   const [isShowAnswerDescription, setIsShowAnswerDescription] =
     React.useState<boolean>(false);
   const [isShowAnswerEdit, setIsShowAnswerEdit] =
@@ -340,7 +338,7 @@ const LectureQuestion: React.FC<LectureQuestionProps> = ({
                       )}
                     </>
                   )}
-                {userType === 'admin' && !answer_id ? (
+                {userType === 'admin' && !!!answer_id ? (
                   <button
                     type="button"
                     className="absolute flex justify-center items-center xl:left-[133px] left-[90px] bottom-[6px] rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] min-w-max max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
@@ -513,7 +511,7 @@ const LectureQuestion: React.FC<LectureQuestionProps> = ({
           )}
         </form>
       )}
-      {!!token && userType === 'admin' && !answer_id && isShowAddAnswer && (
+      {!!token && userType === 'admin' && !!!answer_id && isShowAddAnswer && (
         <form
           className="min-h-[491px] max-h-[491px] px-[98px] py-[68px] box-border border-[1px] rounded-[8px] border-[#DCDEE2] w-full"
           onSubmit={(event) => {
@@ -556,4 +554,4 @@ const LectureQuestion: React.FC<LectureQuestionProps> = ({
   );
 };
 
-export default LectureQuestion;
+export default ComponentFormQnaLecture;

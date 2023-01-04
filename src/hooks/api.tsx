@@ -7,18 +7,18 @@ export function showError(error: any) {
   if (Array.isArray(messageData)) {
     toast(
       <div>
+        <p className="text-md sm:text-2xl text-[#e74c3c] mb-[10px] sm:mb-[20px]">
+          다음과 같은 오류가 발생하였습니다
+        </p>
         {messageData.length > 0
           ? messageData.map((message, index) => {
               return (
-                <>
-                  <p>{message}</p>
-                  {index < messageData.length - 1 && (
-                    <>
-                      <br />
-                      <br />
-                    </>
-                  )}
-                </>
+                <p
+                  key={index}
+                  className="text-sm sm:text-md ml-[20px] mt-[3px] sm:mt-[10px]"
+                >
+                  {message}
+                </p>
               );
             })
           : defaultMessage}
@@ -28,9 +28,18 @@ export function showError(error: any) {
       },
     );
   } else {
-    toast(messageData || defaultMessage, {
-      type: 'error',
-    });
+    toast(
+      <div>
+        <p className="text-md sm:text-2xl text-[#e74c3c]">
+          다음과 같은 오류가 발생하였습니다
+        </p>
+        <br />
+        <p className="ml-[20px] mt-[5px]">{messageData || defaultMessage}</p>
+      </div>,
+      {
+        type: 'error',
+      },
+    );
   }
 }
 
@@ -53,85 +62,3 @@ export const axiosGetfetcher = async (url: string, token?: string | null) => {
     throw error;
   }
 };
-
-// export function useGetSWR<T>(
-//   requestUrl: string,
-//   token: string | null,
-//   customConfig: {
-//     isImmutable?: boolean;
-//     isRevalidateOnFocus?: boolean;
-//     isRevalidateIfStale?: boolean;
-//     isShowError?: boolean;
-//     initialData?: T;
-//   },
-// ): DataResponse<T> {
-//   const isShowError = customConfig.isShowError === false ? false : true;
-//   const isImmutable = customConfig.isImmutable === true ? true : false;
-//   const isRevalidateOnFocus =
-//     customConfig.isRevalidateOnFocus === true ? true : false;
-//   const isRevalidateIfStale =
-//     customConfig.isRevalidateIfStale === true ? true : false;
-//   // const defaultSWRfetcher = async (url: string) => {
-//   //   try {
-//   //     const response = !!token
-//   //       ? await axios.get(url, tokenHeader(token))
-//   //       : await axios.get(url);
-//   //     return response.data;
-//   //   } catch (error: any) {
-//   //     if (isShowError) {
-//   //       throw error;
-//   //     }
-//   //   }
-//   // };
-//   const optionSwr = {
-//     revalidateOnFocus: isRevalidateOnFocus,
-//     revalidateIfStale: isRevalidateIfStale,
-//     // revalidateOnReconnect: false
-//     initialData: !!customConfig.initialData ? customConfig.initialData : null,
-//   };
-//   const { data, mutate, error } = isImmutable
-//     ? useSWRImmutable<T>(requestUrl, defaultSWRfetcher, optionSwr)
-//     : useSWR<T>(requestUrl, defaultSWRfetcher, optionSwr);
-//   return { data, mutate, error };
-// }
-
-// export function useGetSWR<T>(
-//   requestUrl: string,
-//   token: string | null,
-//   showError: boolean,
-//   shouldFetch = true,
-// ): DataResponse<T> {
-//   const fetcher = async (url: string) => {
-//     try {
-//       const response = token
-//         ? await axios.get(url, tokenHeader(token))
-//         : await axios.get(url);
-//       return response.data;
-//     } catch (error: any) {
-//       if (showError) {
-//         const messages = error.response?.data?.message;
-//         if (Array.isArray(messages)) {
-//           messages.map((message) => {
-//             toast.error(message);
-//           });
-//         } else {
-//           toast.error(messages);
-//         }
-//       }
-//       if (url.includes('admin')) {
-//         window.location.replace('/signin');
-//       }
-//       throw error;
-//     }
-//   };
-//   const { data, mutate, error } = useSWR<T>(
-//     shouldFetch ? requestUrl : null,
-//     fetcher,
-//     {
-//       revalidateOnFocus: false,
-//       revalidateIfStale: false,
-//       // revalidateOnReconnect: false
-//     },
-//   );
-//   return { data, mutate, error };
-// }

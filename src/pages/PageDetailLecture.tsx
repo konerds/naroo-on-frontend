@@ -5,16 +5,14 @@ import useSWR from 'swr';
 import Moment from 'react-moment';
 import 'moment/locale/ko';
 import axios from 'axios';
-import { useInput } from '../hooks';
+import { useStringInput } from '../hooks';
 import { IInfoMe, ILectureDetail } from '../interfaces';
 import Skeleton from 'react-loading-skeleton';
-import LectureNotice from '../components/lecture/LectureNotice';
+import ComponentFormNoticeLecture from '../components/lecture/ComponentFormNoticeLecture';
 import ImgEdit from '../assets/images/Edit.svg';
 import ImgClose from '../assets/images/Close.svg';
-import LectureQuestion from '../components/lecture/LectureQuestion';
-import TokenContext from '../store/TokenContext';
-
-interface IPropsPageLectureDetail {}
+import ComponentFormQnaLecture from '../components/lecture/ComponentFormQnaLecture';
+import ContextToken from '../store/ContextToken';
 
 export const CONST_LECTURE_DETAIL_MENU = {
   LECTURE_INTRODUCE: 'lecture_introduce',
@@ -25,26 +23,37 @@ export const CONST_LECTURE_DETAIL_MENU = {
 export type LECTURE_DETAIL_MENU =
   typeof CONST_LECTURE_DETAIL_MENU[keyof typeof CONST_LECTURE_DETAIL_MENU];
 
-const PageLectureDetail: React.FC<IPropsPageLectureDetail> = ({}) => {
+const PageDetailLecture: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const tokenCtx = React.useContext(TokenContext);
+  const tokenCtx = React.useContext(ContextToken);
   const { token } = tokenCtx;
   const [selectedMenu, setSelectedMenu] = React.useState<LECTURE_DETAIL_MENU>(
     CONST_LECTURE_DETAIL_MENU.LECTURE_INTRODUCE,
   );
-  const [noticeTitle, onChangeNoticeTitle, setNoticeTitle] = useInput('');
-  const [noticeDescription, onChangeNoticeDescription, setNoticeDescription] =
-    useInput('');
+  const {
+    value: noticeTitle,
+    setValue: setNoticeTitle,
+    onChange: onChangeNoticeTitle,
+  } = useStringInput('');
+  const {
+    value: noticeDescription,
+    setValue: setNoticeDescription,
+    onChange: onChangeNoticeDescription,
+  } = useStringInput('');
   const [isShowAddNotice, setIsShowAddNotice] = React.useState<boolean>(false);
   const [isLoadingSubmitNotice, setIsLoadingSubmitNotice] =
     React.useState<boolean>(false);
-  const [questionTitle, onChangeQuestionTitle, setQuestionTitle] = useInput('');
-  const [
-    questionDescription,
-    onChangeQuestionDescription,
-    setQuestionDescription,
-  ] = useInput('');
+  const {
+    value: questionTitle,
+    setValue: setQuestionTitle,
+    onChange: onChangeQuestionTitle,
+  } = useStringInput('');
+  const {
+    value: questionDescription,
+    setValue: setQuestionDescription,
+    onChange: onChangeQuestionDescription,
+  } = useStringInput('');
   const [isShowAddQuestion, setIsShowAddQuestion] =
     React.useState<boolean>(false);
   const [isLoadingSubmitQuestion, setIsLoadingSubmitQuestion] =
@@ -165,7 +174,7 @@ const PageLectureDetail: React.FC<IPropsPageLectureDetail> = ({}) => {
     <>
       {!!dataDetailLecture && !!!errorDetailLecture && (
         <>
-          <div className="w-full bg-gradient-to-br from-[#8DC556] to-[#00A0E9]">
+          <div className="pt-[100px] w-full bg-gradient-to-br from-[#8DC556] to-[#00A0E9]">
             <div className="hidden lg:flex w-full xl:max-w-[1152px] lg:max-w-[864px] md:max-w-[680px] sm:max-w-[500px] xs:max-w-[400px] xl:min-h-[506px] xl:max-h-[506px] lg:min-h-[431.79px] lg:max-h-[431.79px] mx-auto items-center justify-center">
               <img
                 className="xl:mr-[150px] lg:mr-[128px] xl:min-w-[346px] xl:max-w-[346px] xl:min-h-[346px] xl:max-h-[346px] lg:min-w-[295.25px] lg:max-w-[295.25px] lg:min-h-[295.25px] lg:max-h-[295.25px] object-fill rounded-[4px] lecture-detail-thumbnail-container"
@@ -527,7 +536,7 @@ const PageLectureDetail: React.FC<IPropsPageLectureDetail> = ({}) => {
                           })
                           .map((notice, index) => {
                             return (
-                              <LectureNotice
+                              <ComponentFormNoticeLecture
                                 key={notice.id}
                                 token={token}
                                 userType={dataGetMe?.role}
@@ -675,7 +684,7 @@ const PageLectureDetail: React.FC<IPropsPageLectureDetail> = ({}) => {
                           })
                           .map((qna, index) => {
                             return dataDetailLecture ? (
-                              <LectureQuestion
+                              <ComponentFormQnaLecture
                                 key={qna.question_id}
                                 token={token}
                                 userType={dataGetMe?.role}
@@ -702,7 +711,7 @@ const PageLectureDetail: React.FC<IPropsPageLectureDetail> = ({}) => {
                       ) : (
                         <div className="flex items-center justify-center min-h-[41px] text-[14px] leading-[150%] font-medium text-[#515A6E]">
                           {!token
-                            ? '문의사항은 로그인 후 조회할 수 있습니다!'
+                            ? '문의사항은 로그인 후 조회할 수 있습니다'
                             : !!!dataDetailLecture.qnas ||
                               dataDetailLecture.qnas.length === 0
                             ? '문의사항이 존재하지 않습니다'
@@ -724,4 +733,4 @@ const PageLectureDetail: React.FC<IPropsPageLectureDetail> = ({}) => {
   );
 };
 
-export default PageLectureDetail;
+export default PageDetailLecture;

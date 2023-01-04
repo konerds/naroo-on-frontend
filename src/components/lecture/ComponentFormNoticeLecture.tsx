@@ -3,7 +3,7 @@ import 'moment/locale/ko';
 import moment from 'moment';
 import axios from 'axios';
 import { ILectureDetail } from '../../interfaces';
-import { useInput } from '../../hooks';
+import { useStringInput } from '../../hooks';
 import { KeyedMutator } from 'swr';
 import { showError } from '../../hooks/api';
 
@@ -33,9 +33,16 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
   const [isShowDescription, setIsShowDescription] =
     React.useState<boolean>(false);
   const [isShowEdit, setIsShowEdit] = React.useState<boolean>(false);
-  const [updateTitle, onChangeUpdateTitle, setUpdateTitle] = useInput(title);
-  const [updateDescription, onChangeUpdateDescription, setUpdateDescription] =
-    useInput(description);
+  const {
+    value: updateTitle,
+    setValue: setUpdateTitle,
+    onChange: onChangeUpdateTitle,
+  } = useStringInput(title);
+  const {
+    value: updateDescription,
+    setValue: setUpdateDescription,
+    onChange: onChangeUpdateDescription,
+  } = useStringInput(description);
   const [isLoadingClickDeleteNotice, setIsLoadingClickDeleteNotice] =
     React.useState<boolean>(false);
   const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);

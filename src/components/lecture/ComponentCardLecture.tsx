@@ -1,13 +1,13 @@
-import { isArray } from 'lodash';
 import * as React from 'react';
+import { isArray } from 'lodash';
 import Skeleton from 'react-loading-skeleton';
 import { Link } from 'react-router-dom';
 import Slider, { Settings } from 'react-slick';
 import { ITags } from '../../interfaces';
-import Tag from '../common/Tag';
+import ComponentElementTag from '../common/ComponentElementTag';
 import PlayIcon from '../../assets/images/Play.svg';
 
-interface IPropsComponentLectureCard {
+interface IPropsComponentCardLecture {
   id: string;
   title: string;
   thumbnail: string;
@@ -17,7 +17,7 @@ interface IPropsComponentLectureCard {
   tags: ITags[] | [] | null;
 }
 
-const ComponentLectureCard: React.FC<IPropsComponentLectureCard> = ({
+const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
   id,
   title,
   thumbnail,
@@ -39,11 +39,17 @@ const ComponentLectureCard: React.FC<IPropsComponentLectureCard> = ({
   const [isBackdropShow, setIsBackdropShow] = React.useState<boolean>(false);
   return (
     <div
-      className={`w-full lg:w-[261px] min-h-[444px] max-h-[444px] mx-0 rounded-[8px] ${
+      className={`cursor-pointer w-full lg:w-[261px] min-h-[444px] max-h-[444px] mx-0 rounded-[8px] ${
         isBackdropShow
           ? 'lecture-card-container lecture-card-container-hover'
           : 'lecture-card-container'
       }`}
+      onMouseEnter={() => {
+        setIsBackdropShow(true);
+      }}
+      onMouseLeave={() => {
+        setIsBackdropShow(false);
+      }}
     >
       <Link
         to={`/lecture/${id}`}
@@ -60,16 +66,10 @@ const ComponentLectureCard: React.FC<IPropsComponentLectureCard> = ({
           style={{
             backgroundImage: `url(${thumbnail})`,
           }}
-          onMouseEnter={() => {
-            setIsBackdropShow(true);
-          }}
-          onMouseLeave={() => {
-            setIsBackdropShow(false);
-          }}
         >
           <div
-            className={`rounded-t-[8px] w-full min-h-[261px] max-h-[261px] z-[999] hover:bg-[#0000004D] ${
-              isBackdropShow ? 'absolute' : 'hidden'
+            className={`rounded-t-[8px] w-full min-h-[261px] max-h-[261px] z-[999] ${
+              isBackdropShow ? 'absolute bg-[#0000004D]' : 'hidden'
             }`}
           >
             <div className="flex items-center justify-center min-h-[261px] max-h-[261px]">
@@ -90,7 +90,7 @@ const ComponentLectureCard: React.FC<IPropsComponentLectureCard> = ({
               : ''}
           </div>
         )}
-        <div className="w-full max-h-[48px] overflow-hidden px-[20px] text-[16px] font-semibold leading-[150%] text-[#17233D]">
+        <div className="w-full max-h-[48px] overflow-hidden text-ellipsis px-[20px] text-[16px] font-semibold leading-[150%] text-[#17233D]">
           {title}
         </div>
         <div className="w-full px-[20px] font-medium text-[12px] leading-[150%] text-[#808695]">
@@ -105,13 +105,13 @@ const ComponentLectureCard: React.FC<IPropsComponentLectureCard> = ({
                 }}
               >
                 <Slider
-                  className="flex w-full md:max-w-[261px] px-[20px] mb-[16px]"
+                  className="cursor-grab flex w-full md:max-w-[261px] px-[20px] mb-[16px]"
                   {...settings}
                 >
-                  {tags.map((tag) => {
+                  {tags.map((tag, index) => {
                     return (
-                      <div className="max-w-max py-[5px]" key={tag.id}>
-                        <Tag name={tag.name} />
+                      <div className="max-w-max py-[5px]" key={index}>
+                        <ComponentElementTag name={tag.name} />
                       </div>
                     );
                   })}
@@ -131,4 +131,4 @@ const ComponentLectureCard: React.FC<IPropsComponentLectureCard> = ({
   );
 };
 
-export default ComponentLectureCard;
+export default ComponentCardLecture;

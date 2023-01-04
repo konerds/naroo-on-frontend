@@ -1,25 +1,23 @@
 import * as React from 'react';
+import axios from 'axios';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
 import Select from 'react-select';
 import { KeyedMutator } from 'swr';
 import { ILectureInList, ITags } from '../../../interfaces';
-import UnregisterTagElement from './UnregisterTagElement';
+import ComponentFormUnregisterTag from './ComponentFormUnregisterTag';
 import { showError } from '../../../hooks/api';
 
-interface RegisterTagProps {
+interface IPropsComponentFormRegisterTags {
   token: string | null;
-  setToken: (v: string | null) => void;
   lectureId: string;
   allTags: ITags[] | undefined;
   tags: ITags[] | [];
   mutate: KeyedMutator<ILectureInList[]>;
 }
 
-const RegisterTag: React.FC<RegisterTagProps> = ({
+const ComponentFormRegisterTags: React.FC<IPropsComponentFormRegisterTags> = ({
   token,
-  setToken,
   lectureId,
   allTags,
   tags,
@@ -27,6 +25,7 @@ const RegisterTag: React.FC<RegisterTagProps> = ({
 }) => {
   const [updateToggle, setUpdateToggle] = React.useState<boolean>(false);
   const [registerTags, setRegisterTags] = React.useState<ITags[]>(tags);
+  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
   const tagsOptions = React.useMemo(() => {
     const filteredTags = [];
     if (!!allTags) {
@@ -52,7 +51,6 @@ const RegisterTag: React.FC<RegisterTagProps> = ({
     setUpdateToggle(!updateToggle);
     setRegisterTags(tags);
   };
-  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
   const onSubmitRegisterTag = async () => {
     try {
       setIsLoadingSubmit(true);
@@ -134,7 +132,7 @@ const RegisterTag: React.FC<RegisterTagProps> = ({
                 tags.length > 0 &&
                 tags.map((tag, index) => {
                   return (
-                    <UnregisterTagElement
+                    <ComponentFormUnregisterTag
                       key={index}
                       token={token}
                       lectureId={lectureId}
@@ -152,4 +150,4 @@ const RegisterTag: React.FC<RegisterTagProps> = ({
   );
 };
 
-export default RegisterTag;
+export default ComponentFormRegisterTags;

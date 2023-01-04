@@ -1,33 +1,31 @@
+import * as React from 'react';
+import axios from 'axios';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
-import { FC, FormEvent, useCallback, useMemo, useState } from 'react';
-import { ILectureInListAdmin } from '../../../interfaces';
+import { ILectureInListAdmin } from '../../../../interfaces';
 import Select from 'react-select';
-import { toast } from 'react-toastify';
 import { KeyedMutator } from 'swr';
-import { showError } from '../../../hooks/api';
+import { showError } from '../../../../hooks/api';
 
-interface UpdateStatusProps {
+interface IPropsComponentFormUpdateStatus {
   token: string | null;
-  setToken: (v: string | null) => void;
   studentId: string;
   lectureId: string;
   status: string | null;
   mutate: KeyedMutator<ILectureInListAdmin[]>;
 }
 
-const UpdateStatus: FC<UpdateStatusProps> = ({
+const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
   token,
-  setToken,
   studentId,
   lectureId,
   status,
   mutate,
 }) => {
-  const [updateToggle, setUpdateToggle] = useState<boolean>(false);
-  const [updateStatus, setUpdateStatus] = useState(status);
-  const statusOptions = useMemo(() => {
+  const [updateToggle, setUpdateToggle] = React.useState<boolean>(false);
+  const [updateStatus, setUpdateStatus] = React.useState<string | null>(status);
+  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
+  const statusOptions = React.useMemo(() => {
     return [
       { value: null, label: '공개' },
       { value: 'apply', label: '승인 대기' },
@@ -36,27 +34,24 @@ const UpdateStatus: FC<UpdateStatusProps> = ({
       { value: 'invisible', label: '비공개' },
     ];
   }, []);
-  const onClickUpdateToggle = () => {
-    setUpdateToggle(!updateToggle);
-    setUpdateStatus(status);
-  };
-  const onHandleChange = useCallback(
+  const onHandleChange = React.useCallback(
     (changedOption: any) => {
       setUpdateStatus(changedOption.value);
     },
     [statusOptions],
   );
-  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
-  const onSubmitUpdateTag = async (event: FormEvent<HTMLFormElement>) => {
+  const onClickUpdateToggle = () => {
+    setUpdateToggle(!updateToggle);
+    setUpdateStatus(status);
+  };
+  const onSubmitUpdateTag = async () => {
     try {
-      event.preventDefault();
       setIsLoadingSubmit(true);
       if (updateStatus === status) {
         setUpdateToggle(!updateToggle);
         setUpdateStatus(status);
         return;
       }
-
       const response = await axios.put(
         `${process.env.REACT_APP_BACK_URL}/lecture/admin/status/${lectureId}?user_id=${studentId}`,
         {
@@ -68,7 +63,6 @@ const UpdateStatus: FC<UpdateStatusProps> = ({
           },
         },
       );
-
       if (response.status === 200) {
         await mutate();
         setUpdateToggle(!updateToggle);
@@ -84,7 +78,10 @@ const UpdateStatus: FC<UpdateStatusProps> = ({
       {updateToggle ? (
         <form
           className="flex items-center py-[10px]"
-          onSubmit={onSubmitUpdateTag}
+          onSubmit={(event) => {
+            event.preventDefault();
+            onSubmitUpdateTag();
+          }}
         >
           <Select
             className="w-full disabled:opacity-50"
@@ -110,18 +107,18 @@ const UpdateStatus: FC<UpdateStatusProps> = ({
       ) : (
         <div className="flex items-center py-[10px] w-full">
           <div className="w-full">
-            상태 :{' '}
+            상태 :
             {status === null
-              ? '공개'
+              ? ' 공개'
               : status === 'apply'
-              ? '승인 대기'
+              ? ' 승인 대기'
               : status === 'accept'
-              ? '승인 완료'
+              ? ' 승인 완료'
               : status === 'reject'
-              ? '승인 거부'
+              ? ' 승인 거부'
               : status === 'invisible'
-              ? '비공개'
-              : '오류'}
+              ? ' 비공개'
+              : ' 오류'}
           </div>
           <FontAwesomeIcon
             className="mx-[10px]"
@@ -134,4 +131,4 @@ const UpdateStatus: FC<UpdateStatusProps> = ({
   );
 };
 
-export default UpdateStatus;
+export default ComponentFormUpdateStatus;

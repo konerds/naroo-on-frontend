@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import ImgEllipsisVector from '../../../assets/images/EllipsisVector.png';
 
-interface IPropsComponentEllipsisProps {
+interface IPropsComponentEllipsisHeader {
   logoutHandler: () => void;
 }
 
-const ComponentEllipsis: React.FC<IPropsComponentEllipsisProps> = ({
+const ComponentEllipsisHeader: React.FC<IPropsComponentEllipsisHeader> = ({
   logoutHandler,
 }) => {
   return (
@@ -39,4 +39,4 @@ const ComponentEllipsis: React.FC<IPropsComponentEllipsisProps> = ({
   );
 };
 
-export default ComponentEllipsis;
+export default ComponentEllipsisHeader;

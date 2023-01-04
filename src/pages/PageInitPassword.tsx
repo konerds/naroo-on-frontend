@@ -1,21 +1,18 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useInput } from '../hooks';
-import { useEffect } from 'react';
+import { useStringInput } from '../hooks';
 import { toast } from 'react-toastify';
 import { showError } from '../hooks/api';
-import TokenContext from '../store/TokenContext';
+import ContextToken from '../store/ContextToken';
 
-interface IPropsPageInitPassword {}
-
-const PageInitPassword: React.FC<IPropsPageInitPassword> = () => {
+const PageInitPassword: React.FC = () => {
   const navigate = useNavigate();
-  const tokenCtx = React.useContext(TokenContext);
+  const tokenCtx = React.useContext(ContextToken);
   const { setToken } = tokenCtx;
-  const [email, onChangeEmail] = useInput('');
-  const [nickname, onChangeNickname] = useInput('');
-  const [phone, onChangePhone] = useInput('');
+  const { value: email, onChange: onChangeEmail } = useStringInput('');
+  const { value: nickname, onChange: onChangeNickname } = useStringInput('');
+  const { value: phone, onChange: onChangePhone } = useStringInput('');
   const onSubmitHandler = async () => {
     try {
       const response = await axios.post(
@@ -42,11 +39,11 @@ const PageInitPassword: React.FC<IPropsPageInitPassword> = () => {
       showError(error);
     }
   };
-  useEffect(() => {
+  React.useEffect(() => {
     setToken('');
   }, []);
   return (
-    <div className="min-h-[73vh] w-full flex justify-center items-center">
+    <div className="pt-[100px] min-h-[73vh] w-full flex justify-center items-center">
       <div className="xl:min-w-[554px] xl:max-w-[554px] lg:min-w-[472.75px] lg:max-w-[472.75px] md:min-w-[354.56px] md:max-w-[354.56px] sm:min-w-[295.47px] sm:max-w-[295.47px] xs:min-w-[295.47px] xs:max-w-[295.47px] box-border rounded-[8px] border-[1px] border-[#DCDEE2] mx-auto my-[120px] py-[30px] xl:px-[98px] lg:px-[83.63px] md:px-[62.72px] sm:px-[52.27px] xs:px-[52.27px]">
         <form
           onSubmit={(event) => {

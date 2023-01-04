@@ -1,23 +1,20 @@
+import * as React from 'react';
 import Select from 'react-select';
-import { FC, useCallback, useState } from 'react';
 import useSWR from 'swr';
-import UpdateStatus from './lecture/UpdateStatus';
+import moment from 'moment';
+import ComponentUpdateStatus from './lecture/permission/ComponentFormUpdateStatus';
 import { ILectureInListAdmin } from '../../interfaces';
 import { axiosGetfetcher } from '../../hooks/api';
 
-interface LecturePermissionProps {
+interface IPropsComponentContainerPermissionLecture {
   token: string | null;
-  setToken: (v: string | null) => void;
   studentOptions: { value: string; label: string }[] | [];
   lectureOptions: { value: string; label: string }[] | [];
 }
 
-const LecturePermission: FC<LecturePermissionProps> = ({
-  token,
-  setToken,
-  studentOptions,
-  lectureOptions,
-}) => {
+const ComponentContainerPermissionLecture: React.FC<
+  IPropsComponentContainerPermissionLecture
+> = ({ token, studentOptions, lectureOptions }) => {
   const { data: lectureStatusesData, mutate: lectureStatusesMutate } = useSWR<
     ILectureInListAdmin[]
   >(
@@ -33,19 +30,19 @@ const LecturePermission: FC<LecturePermissionProps> = ({
     { value: 'lecture', label: '강의 별' },
     { value: 'student', label: '학생 별' },
   ];
-  const [selectedFilter, setSelectedFilter] = useState<{
+  const [selectedFilter, setSelectedFilter] = React.useState<{
     value: string;
     label: string;
   }>();
-  const [lectureFilter, setLectureFilter] = useState<{
+  const [lectureFilter, setLectureFilter] = React.useState<{
     value: string;
     label: string;
   }>();
-  const [studentFilter, setStudentFilter] = useState<{
+  const [studentFilter, setStudentFilter] = React.useState<{
     value: string;
     label: string;
   }>();
-  const onHandleFilterChange = useCallback(
+  const onHandleFilterChange = React.useCallback(
     (changedOption: any) => {
       setSelectedFilter(changedOption);
       if (changedOption.value === 'lecture') {
@@ -56,13 +53,13 @@ const LecturePermission: FC<LecturePermissionProps> = ({
     },
     [filters],
   );
-  const onHandleLectureChange = useCallback(
+  const onHandleLectureChange = React.useCallback(
     (changedOption: any) => {
       setLectureFilter(changedOption);
     },
     [lectureOptions],
   );
-  const onHandleUserChange = useCallback(
+  const onHandleUserChange = React.useCallback(
     (changedOption: any) => {
       setStudentFilter(changedOption);
     },
@@ -96,18 +93,17 @@ const LecturePermission: FC<LecturePermissionProps> = ({
       {selectedFilter &&
         selectedFilter.value === 'lecture' &&
         lectureStatusesData &&
-        lectureStatusesData.map((lectureStatus) => {
+        lectureStatusesData.map((lectureStatus, index) => {
           if (lectureFilter) {
             if (lectureFilter.value === lectureStatus.lecture_id) {
               return (
-                <div key={lectureStatus.student_id + lectureStatus.lecture_id}>
+                <div key={index}>
                   <div className="w-full mt-[40px]">
                     {lectureStatus.student_nickname}
                   </div>
                   <div className="w-full">{lectureStatus.student_email}</div>
-                  <UpdateStatus
+                  <ComponentUpdateStatus
                     token={token}
-                    setToken={setToken}
                     studentId={lectureStatus.student_id}
                     lectureId={lectureStatus.lecture_id}
                     status={lectureStatus.status}
@@ -121,19 +117,27 @@ const LecturePermission: FC<LecturePermissionProps> = ({
       {selectedFilter &&
         selectedFilter.value === 'student' &&
         lectureStatusesData &&
-        lectureStatusesData.map((lectureStatus) => {
+        lectureStatusesData.map((lectureStatus, index) => {
           if (studentFilter) {
             if (studentFilter.value === lectureStatus.student_id) {
               return (
                 <div
-                  key={lectureStatus.student_id + lectureStatus.lecture_id}
+                  key={index}
                   className="border-[1px] border-black my-[20px] p-[10px]"
                 >
                   <div className="w-full">{lectureStatus.title}</div>
                   <div className="w-full">
-                    {lectureStatus.expired
-                      ? lectureStatus.expired
-                      : '만료 기간 없음'}{' '}
+                    {!!!lectureStatus.expired && (
+                      <div>강의 만료 일시가 설정되어 있지 않습니다</div>
+                    )}
+                    {!!lectureStatus.expired && (
+                      <div>
+                        {'강의 만료 일시 : ' +
+                          moment(lectureStatus.expired).format(
+                            'YYYY-MM-DD HH:mm:ss',
+                          )}
+                      </div>
+                    )}
                   </div>
                   <div className="flex flex-wrap items-center w-full justify-evenly">
                     {lectureStatus.thumbnail && (
@@ -142,9 +146,8 @@ const LecturePermission: FC<LecturePermissionProps> = ({
                     <div>{lectureStatus.teacher_nickname}</div>
                   </div>
                   <div className="w-full">
-                    <UpdateStatus
+                    <ComponentUpdateStatus
                       token={token}
-                      setToken={setToken}
                       studentId={lectureStatus.student_id}
                       lectureId={lectureStatus.lecture_id}
                       status={lectureStatus.status}
@@ -160,4 +163,4 @@ const LecturePermission: FC<LecturePermissionProps> = ({
   );
 };
 
-export default LecturePermission;
+export default ComponentContainerPermissionLecture;

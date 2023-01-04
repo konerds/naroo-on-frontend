@@ -1,35 +1,34 @@
+import * as React from 'react';
 import axios from 'axios';
 import { isArray } from 'lodash';
-import * as React from 'react';
-import { FC } from 'react';
-import { toast } from 'react-toastify';
 import { KeyedMutator } from 'swr';
-import { useInput } from '../../hooks';
+import { useStringInput } from '../../hooks';
 import { showError } from '../../hooks/api';
 import { ITags } from '../../interfaces';
-import UpdateTag from './tag/UpdateTag';
+import ComponentFormUpdateTag from './tag/ComponentFormUpdateTag';
 
-interface TagEditProps {
+interface IPropsComponentFormEditTag {
   token: string | null;
   setToken: (v: string | null) => void;
   tagsData: ITags[] | undefined;
   tagsMutate: KeyedMutator<ITags[]>;
 }
 
-const TagEdit: FC<TagEditProps> = ({
+const ComponentFormEditTag: React.FC<IPropsComponentFormEditTag> = ({
   token,
   setToken,
   tagsData,
   tagsMutate,
 }) => {
-  const [tagName, onChangeTagName, setTagName] = useInput('');
+  const {
+    value: tagName,
+    setValue: setTagName,
+    onChange: onChangeTagName,
+  } = useStringInput('');
   const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
   const onSubmitAddHandler = async () => {
     try {
       setIsLoadingSubmit(true);
-      if (!tagName) {
-        return;
-      }
       const response = await axios.post(
         `${process.env.REACT_APP_BACK_URL}/lecture/admin/tag/create`,
         {
@@ -76,21 +75,20 @@ const TagEdit: FC<TagEditProps> = ({
         <button
           type="submit"
           disabled={isLoadingSubmit}
-          className="w-full h-[51px] text-[24px] font-semibold leading-[33px] bg-[#4DBFF0] text-white mb-[12px] disabled:opacity-50"
+          className="w-full h-[51px] text-[24px] font-semibold leading-[33px] bg-[#4DBFF0] text-white mb-[12px] disabled:opacity-50 hover:opacity-50"
         >
           태그 추가
         </button>
       </form>
       <div className="flex flex-wrap items-center">
-        {tagsData &&
+        {!!tagsData &&
           isArray(tagsData) &&
           tagsData.length > 0 &&
           tagsData.map((tag) => {
             return (
-              <UpdateTag
+              <ComponentFormUpdateTag
                 key={tag.id}
                 token={token}
-                setToken={setToken}
                 id={tag.id}
                 name={tag.name}
                 mutate={tagsMutate}
@@ -102,4 +100,4 @@ const TagEdit: FC<TagEditProps> = ({
   );
 };
 
-export default TagEdit;
+export default ComponentFormEditTag;

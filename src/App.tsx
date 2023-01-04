@@ -1,19 +1,20 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ComponentHeader from './components/common/header/Header';
-import ComponentFooter from './components/common/Footer';
-import MainLayout from './pages/PageMain';
-import SigninLayout from './pages/PageSignin';
-import SignupLayout from './pages/PageSignup';
-import LetcureDetailLayout from './pages/PageLectureDetail';
-import LecturePlayLayout from './pages/PageLecturePlay';
+import ComponentHeader from './components/common/header/ComponentHeader';
+import ComponentFooter from './components/common/ComponentFooter';
+import PageMain from './pages/PageMain';
+import PageSignin from './pages/PageSignin';
+import PageSignup from './pages/PageSignup';
+import PageDetailLecture from './pages/PageDetailLecture';
+import PagePlayLecture from './pages/PagePlayLecture';
 import PageAdmin from './pages/PageAdmin';
+import PageProfile from './pages/PageProfile';
+import PageInitPassword from './pages/PageInitPassword';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import MyInfoLayout from './pages/PageProfile';
-import PageInitPassword from './pages/PageInitPassword';
-import TokenContext, { TokenContextProvider } from './store/TokenContext';
+import ContextToken, { ContextTokenProvider } from './store/ContextToken';
 import { getSavedIsRememberToken, getSavedToken } from './hooks';
+import MediaQuery from 'react-responsive';
 
 const AppRouterWrapper: React.FC = () => {
   return (
@@ -22,18 +23,28 @@ const AppRouterWrapper: React.FC = () => {
         process.env.NODE_ENV !== 'production' ? 'debug-screens' : ''
       }`}
     >
-      <TokenContextProvider>
+      <ContextTokenProvider>
         <Router>
           <App />
         </Router>
-        <ToastContainer limit={6} autoClose={500} hideProgressBar={true} />
-      </TokenContextProvider>
+        <MediaQuery maxWidth={639.98}>
+          <ToastContainer
+            limit={6}
+            autoClose={1500}
+            hideProgressBar={true}
+            position="bottom-center"
+          />
+        </MediaQuery>
+        <MediaQuery minWidth={640}>
+          <ToastContainer limit={6} autoClose={1500} hideProgressBar={true} />
+        </MediaQuery>
+      </ContextTokenProvider>
     </div>
   );
 };
 
 const App: React.FC = () => {
-  const tokenCtx = React.useContext(TokenContext);
+  const tokenCtx = React.useContext(ContextToken);
   const { token, setToken, isRememberToken, setIsRememberToken } = tokenCtx;
   React.useEffect(() => {
     const savedIsRememberToken = getSavedIsRememberToken(localStorage);
@@ -58,15 +69,15 @@ const App: React.FC = () => {
     <>
       <ComponentHeader />
       <Routes>
-        <Route path="/" element={<MainLayout />} />
+        <Route path="/" element={<PageMain />} />
         <Route path="/admin" element={<PageAdmin />} />
-        <Route path="/signin" element={<SigninLayout />} />
-        <Route path="/signup" element={<SignupLayout />} />
-        <Route path="/verify/:requestToken" element={<MainLayout />} />
+        <Route path="/signin" element={<PageSignin />} />
+        <Route path="/signup" element={<PageSignup />} />
+        <Route path="/verify/:requestToken" element={<PageMain />} />
         <Route path="/forgot" element={<PageInitPassword />} />
-        <Route path="/myinfo" element={<MyInfoLayout />} />
-        <Route path="/lecture/:id" element={<LetcureDetailLayout />} />
-        <Route path="/lecture-play/:id" element={<LecturePlayLayout />} />
+        <Route path="/myinfo" element={<PageProfile />} />
+        <Route path="/lecture/:id" element={<PageDetailLecture />} />
+        <Route path="/lecture-play/:id" element={<PagePlayLecture />} />
       </Routes>
       <ComponentFooter />
     </>

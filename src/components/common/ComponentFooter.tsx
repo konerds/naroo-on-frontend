@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {
   faEnvelope,
   faFax,
@@ -5,7 +6,6 @@ import {
   faPhoneAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as React from 'react';
 import useSWRImmutable from 'swr/immutable';
 import { axiosGetfetcher } from '../../hooks/api';
 import { IResourceContent } from '../../interfaces';
@@ -35,7 +35,7 @@ const ComponentFooter: React.FC = () => {
           )}
         </div>
         <div className="xl:w-[950px] lg:w-[660px] md:w-[480px] sm:w-[320px] xs:w-[260px]">
-          <div className="text-[#bfbfbf] text-[14px] font-light pb-[5px] leading-[20px] border-b-[1px] border-solid border-[rgba(255,255,255,0.1)] box-border">
+          <div className="cursor-pointer text-[#bfbfbf] text-[14px] font-light pb-[5px] leading-[20px] border-b-[1px] border-solid border-[rgba(255,255,255,0.1)] box-border">
             이메일무단수집거부
           </div>
           <div className="border-t-[1px] border-solid border-[rgba(0,0,0,0.1)] box-border"></div>

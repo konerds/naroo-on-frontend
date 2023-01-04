@@ -1,19 +1,17 @@
 import * as React from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import { useInput } from '../hooks';
-import TokenContext from '../store/TokenContext';
+import { useStringInput } from '../hooks';
+import ContextToken from '../store/ContextToken';
 import { showError } from '../hooks/api';
 import { toast } from 'react-toastify';
 
-interface IPropsPageSignin {}
-
-const PageSignin: React.FC<IPropsPageSignin> = ({}) => {
+const PageSignin: React.FC = () => {
   const navigate = useNavigate();
-  const tokenCtx = React.useContext(TokenContext);
+  const tokenCtx = React.useContext(ContextToken);
   const { token, setToken, isRememberToken, setIsRememberToken } = tokenCtx;
-  const [email, onChangeEmail] = useInput('');
-  const [password, onChangePassword] = useInput('');
+  const { value: email, onChange: onChangeEmail } = useStringInput('');
+  const { value: password, onChange: onChangePassword } = useStringInput('');
   const onSubmitHandler = async () => {
     try {
       const response = await axios.post(
@@ -40,7 +38,7 @@ const PageSignin: React.FC<IPropsPageSignin> = ({}) => {
     setToken('');
   }, []);
   return (
-    <div className="min-h-[73vh] w-full flex justify-center items-center">
+    <div className="pt-[100px] min-h-[73vh] w-full flex justify-center items-center">
       <div className="xl:min-w-[554px] xl:max-w-[554px] lg:min-w-[472.75px] lg:max-w-[472.75px] md:min-w-[354.56px] md:max-w-[354.56px] sm:min-w-[295.47px] sm:max-w-[295.47px] xs:min-w-[295.47px] xs:max-w-[295.47px] box-border rounded-[8px] border-[1px] border-[#DCDEE2] mx-auto my-[120px] py-[30px] xl:px-[98px] lg:px-[83.63px] md:px-[62.72px] sm:px-[52.27px] xs:px-[52.27px]">
         <form
           onSubmit={(event) => {

@@ -1,10 +1,35 @@
-# 2021 마포구청 뉴딜일자리 사업단
-# 협업, 실습 경험용 개발팀 프로젝트
+# Naroo-On (Frontend)
 
-리액트 + 타입스크립트 기반 CRUD 구현을 최대한 구현해내는 것을 목표로 잡았습니다
+<p>
+2021 New-deal-job Project of Mapo-gu Office<br/>
+(Lecture and Video-Link-Management Service)
+</p>
 
-백엔드는 다른 레포지토리에 함께 공유하고 있으며 사용된 스택은 Nest.js 입니다
+### Why devlope this?
 
-테스트용 페이지 URL : https://hungry-poitras-b5d4a8.netlify.app/
+> To promote collaborative hands-on experiences
 
-※ 실제로 운영되고 있는 웹 서비스가 아닙니다!
+### Using Framework
+
+> Typescript
+> React
+
+### Environment Variables
+
+> This project use dotenv library, and load .env.local file
+
+| Variable Name      | Description                           |
+| ------------------ | ------------------------------------- |
+| REACT_APP_BACK_URL | API Server of Backend Web Service URL |
+
+### Github Repository Link of Front-end Project
+
+> [Link](https://github.com/konerds/naroo-on-frontend)
+
+### ※ This is just for practice, not an actual web service!!!
+
+> [Link](https://naroo-on-frontend-dot-macro-market-370703.du.r.appspot.com)
+
+### Developer, Engineer Manual (in Korean)
+
+> [Link](https://cdn.discordapp.com/attachments/943123016659922977/1059857891256967318/naroo-on-manual-211028.pdf)

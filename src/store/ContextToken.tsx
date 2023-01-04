@@ -1,32 +1,32 @@
 import * as React from 'react';
 
-interface ITokenContext {
+interface IContextToken {
   token: string | null;
   setToken: (v: string | null) => void;
   isRememberToken: string | null;
   setIsRememberToken: (v: string | null) => void;
 }
 
-const TokenContext = React.createContext<ITokenContext>({
+const ContextToken = React.createContext<IContextToken>({
   token: null,
   setToken: () => {},
   isRememberToken: null,
   setIsRememberToken: () => {},
 });
 
-interface PropsTokenContextProvider {
+interface PropsContextTokenProvider {
   children: React.ReactNode;
 }
 
-export const TokenContextProvider = ({
+export const ContextTokenProvider = ({
   children,
-}: PropsTokenContextProvider) => {
+}: PropsContextTokenProvider) => {
   const [token, setToken] = React.useState<string | null>(null);
   const [isRememberToken, setIsRememberToken] = React.useState<string | null>(
     null,
   );
   return (
-    <TokenContext.Provider
+    <ContextToken.Provider
       value={{
         token: token,
         setToken: (v) => {
@@ -39,8 +39,8 @@ export const TokenContextProvider = ({
       }}
     >
       {children}
-    </TokenContext.Provider>
+    </ContextToken.Provider>
   );
 };
 
-export default TokenContext;
+export default ContextToken;

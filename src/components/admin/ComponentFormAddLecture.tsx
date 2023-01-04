@@ -1,6 +1,6 @@
+import * as React from 'react';
 import axios from 'axios';
-import { FC, FormEvent, useCallback, useRef, useState } from 'react';
-import { useInput } from '../../hooks';
+import { useStringInput } from '../../hooks';
 import CreatableSelect from 'react-select/creatable';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -8,26 +8,24 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDateTimePicker,
 } from '@material-ui/pickers';
-import { ILectureInList } from '../../interfaces';
-import { ADMIN_MENU, CONST_ADMIN_MENU } from './AdminLecture';
-import { toast } from 'react-toastify';
+import {
+  CONST_ADMIN_MENU,
+  ILectureInList,
+  TYPE_ADMIN_MENU,
+} from '../../interfaces';
 import Slider from 'react-slick';
 import { KeyedMutator } from 'swr';
 import { showError } from '../../hooks/api';
 
-interface LectureAddProps {
+interface IPropsComponentFormAddLecture {
   token: string | null;
-  setToken: (v: string | null) => void;
-  setSelectedMenu: React.Dispatch<React.SetStateAction<ADMIN_MENU>>;
-  allLecturesData: ILectureInList[] | undefined;
+  setSelectedMenu: React.Dispatch<React.SetStateAction<TYPE_ADMIN_MENU>>;
   allLecturesMutate: KeyedMutator<ILectureInList[]>;
 }
 
-const LectureAdd: FC<LectureAddProps> = ({
+const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
   token,
-  setToken,
   setSelectedMenu,
-  allLecturesData,
   allLecturesMutate,
 }) => {
   const settings = {
@@ -38,27 +36,29 @@ const LectureAdd: FC<LectureAddProps> = ({
     slidesToScroll: 1,
     pauseOnHover: true,
   };
-  const [title, onChangeTitle] = useInput('');
-  const [thumbnail, setThumbnail] = useState<any>(null);
-  const [description, onChangeDescription] = useInput('');
-  const [expiredAt, setExpiredAt] = useState<Date | null>(new Date());
+  const { value: title, onChange: onChangeTitle } = useStringInput('');
+  const [thumbnail, setThumbnail] = React.useState<any>(null);
+  const { value: description, onChange: onChangeDescription } =
+    useStringInput('');
+  const [expiredAt, setExpiredAt] = React.useState<Date | null>(new Date());
   const onHandleExpiredAt = (date: Date | null) => {
     setExpiredAt(date);
   };
-  const [teacherName, onChangeTeacherName] = useInput('');
-  const [lectureImageOptions, setLectureImageOptions] = useState<
+  const { value: teacherName, onChange: onChangeTeacherName } =
+    useStringInput('');
+  const [lectureImageOptions, setLectureImageOptions] = React.useState<
     {
       value: string | ArrayBuffer | null | undefined;
       label: string | ArrayBuffer | null | undefined;
     }[]
   >([]);
-  const onHandleImagesChange = useCallback(
+  const onHandleImagesChange = React.useCallback(
     (changedOptions: any) => {
       setLectureImageOptions(changedOptions);
     },
     [lectureImageOptions],
   );
-  const onHandleImagesCreate = useCallback(
+  const onHandleImagesCreate = React.useCallback(
     (changedOptions: any) => {
       setLectureImageOptions([
         ...lectureImageOptions,
@@ -67,14 +67,14 @@ const LectureAdd: FC<LectureAddProps> = ({
     },
     [lectureImageOptions],
   );
-  const inputFileRef = useRef<any>(null);
+  const inputFileRef = React.useRef<any>(null);
   const onMenuOpenSelectImages = () => {
-    if (inputFileRef && inputFileRef.current) {
+    if (!!inputFileRef.current) {
       inputFileRef.current.click();
     }
   };
-  const onFileChange = (event: any) => {
-    if (!event.target.files || !event.target.files[0]) {
+  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!!!event.target.files || !!!event.target.files[0]) {
       return;
     }
     const imageFile = event.target.files[0];
@@ -90,12 +90,12 @@ const LectureAdd: FC<LectureAddProps> = ({
       ]);
     };
   };
-  const [videoTitle, onChangeVideoTitle] = useInput('');
-  const [videoUrl, onChangeVideoUrl] = useInput('');
-  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
-  const onSubmitHandler = async (event: FormEvent<HTMLFormElement>) => {
+  const { value: videoTitle, onChange: onChangeVideoTitle } =
+    useStringInput('');
+  const { value: videoUrl, onChange: onChangeVideoUrl } = useStringInput('');
+  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
+  const onSubmitHandler = async () => {
     try {
-      event.preventDefault();
       setIsLoadingSubmit(true);
       const images = [];
       for (const image of lectureImageOptions) {
@@ -130,7 +130,13 @@ const LectureAdd: FC<LectureAddProps> = ({
     }
   };
   return (
-    <form className="mt-[47px] w-full" onSubmit={onSubmitHandler}>
+    <form
+      className="mt-[47px] w-full"
+      onSubmit={(event) => {
+        event.preventDefault();
+        onSubmitHandler();
+      }}
+    >
       <div className="mt-[67px] mb-[29px]">
         <div>
           <label htmlFor="title">제목</label>
@@ -216,7 +222,9 @@ const LectureAdd: FC<LectureAddProps> = ({
           className="hidden"
           type="file"
           ref={inputFileRef}
-          onChange={onFileChange}
+          onChange={(event) => {
+            onFileChange(event);
+          }}
           disabled={isLoadingSubmit}
         />
         <Slider {...settings}>
@@ -284,4 +292,4 @@ const LectureAdd: FC<LectureAddProps> = ({
   );
 };
 
-export default LectureAdd;
+export default ComponentFormAddLecture;

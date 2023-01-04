@@ -1,47 +1,42 @@
+import * as React from 'react';
+import axios from 'axios';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
-import { FC, FormEvent, useState } from 'react';
-import { toast } from 'react-toastify';
 import { KeyedMutator } from 'swr';
-import { useInput } from '../../../hooks';
-import { ILectureInList } from '../../../interfaces';
+import { useStringInput } from '../../../../../hooks';
+import { ILectureInList } from '../../../../../interfaces';
+import { showError } from '../../../../../hooks/api';
 
-interface UpdateLectureFieldProps {
+interface IPropsComponentFormUpdateLecture {
   token: string | null;
-  setToken: (v: string | null) => void;
   fieldType: string;
   lectureId: string;
-  userField: string | null;
+  userField: string;
   mutate: KeyedMutator<ILectureInList[]>;
 }
 
-const UpdateLectureField: FC<UpdateLectureFieldProps> = ({
-  token,
-  setToken,
-  fieldType,
-  lectureId,
-  userField,
-  mutate,
-}) => {
-  const [updateToggle, setUpdateToggle] = useState<boolean>(false);
-  const [updateFieldName, onChangeUpdateFieldName, setUpdateFieldName] =
-    useInput('');
+const ComponentFormUpdateLecture: React.FC<
+  IPropsComponentFormUpdateLecture
+> = ({ token, fieldType, lectureId, userField, mutate }) => {
+  const [updateToggle, setUpdateToggle] = React.useState<boolean>(false);
+  const {
+    value: updateFieldName,
+    setValue: setUpdateFieldName,
+    onChange: onChangeUpdateFieldName,
+  } = useStringInput('');
+  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
   const onClickUpdateToggle = () => {
     setUpdateToggle(!updateToggle);
     setUpdateFieldName(userField);
   };
-  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
-  const onSubmitUpdateField = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitUpdateField = async () => {
     try {
-      event.preventDefault();
       setIsLoadingSubmit(true);
       if (!updateFieldName || updateFieldName === userField) {
         setUpdateToggle(!updateToggle);
         setUpdateFieldName(userField);
         return;
       }
-
       const response = await axios.put(
         `${process.env.REACT_APP_BACK_URL}/lecture/admin/${lectureId}`,
         {
@@ -53,26 +48,14 @@ const UpdateLectureField: FC<UpdateLectureFieldProps> = ({
           },
         },
       );
-
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-          setUpdateToggle(!updateToggle);
-        }, 500);
+        await mutate();
+        setUpdateToggle(!updateToggle);
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmit(false);
-      }, 500);
+      setIsLoadingSubmit(false);
     }
   };
   return (
@@ -80,7 +63,10 @@ const UpdateLectureField: FC<UpdateLectureFieldProps> = ({
       {updateToggle ? (
         <form
           className="flex items-center py-[10px]"
-          onSubmit={onSubmitUpdateField}
+          onSubmit={(event) => {
+            event.preventDefault();
+            onSubmitUpdateField();
+          }}
         >
           <div className="w-full">
             <input
@@ -137,4 +123,4 @@ const UpdateLectureField: FC<UpdateLectureFieldProps> = ({
   );
 };
 
-export default UpdateLectureField;
+export default ComponentFormUpdateLecture;

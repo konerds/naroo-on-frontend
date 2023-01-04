@@ -1,48 +1,45 @@
+import * as React from 'react';
+import axios from 'axios';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
-import { FC, FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { KeyedMutator } from 'swr';
-import { ILectureInList } from '../../../interfaces';
+import { useStringInput } from '../../../../../hooks';
+import { showError } from '../../../../../hooks/api';
+import { ILectureInList } from '../../../../../interfaces';
 
-interface UpdateImageFieldProps {
+interface IPropsComponentFormUpdateImage {
   token: string | null;
-  setToken: (v: string | null) => void;
   fieldType: string;
   lectureId: string;
-  userField: string | null;
+  userField: string;
   mutate: KeyedMutator<ILectureInList[]>;
   imageIndex: number | null;
 }
 
-const UpdateImageField: FC<UpdateImageFieldProps> = ({
+const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
   token,
-  setToken,
   fieldType,
   lectureId,
   userField,
   mutate,
   imageIndex,
 }) => {
-  const [preview, setPreview] = useState<any>(userField);
-  const [updateToggle, setUpdateToggle] = useState<boolean>(false);
+  const { value: preview, setValue: setPreview } = useStringInput(userField);
+  const [updateToggle, setUpdateToggle] = React.useState<boolean>(false);
+  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
   const onClickUpdateToggle = () => {
     setUpdateToggle(!updateToggle);
     setPreview(userField);
   };
-  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
-  const onSubmitUpdateImage = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitUpdateImage = async () => {
     try {
-      event.preventDefault();
       setIsLoadingSubmit(true);
-      if (!preview || preview === userField) {
+      if (!!!preview || preview === userField) {
         setUpdateToggle(!updateToggle);
         setPreview(userField);
         return;
       }
-
       const response = await axios.put(
         `${process.env.REACT_APP_BACK_URL}/lecture/admin/${lectureId}`,
         fieldType === 'img_description' && imageIndex !== null
@@ -61,24 +58,13 @@ const UpdateImageField: FC<UpdateImageFieldProps> = ({
       );
 
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-          setUpdateToggle(!updateToggle);
-        }, 500);
+        await mutate();
+        setUpdateToggle(!updateToggle);
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmit(false);
-      }, 500);
+      setIsLoadingSubmit(false);
     }
   };
   return (
@@ -86,7 +72,10 @@ const UpdateImageField: FC<UpdateImageFieldProps> = ({
       {updateToggle ? (
         <form
           className="w-full items-center p-[10px] border-[1px] border-[#C4C4C4]"
-          onSubmit={onSubmitUpdateImage}
+          onSubmit={(event) => {
+            event.preventDefault();
+            onSubmitUpdateImage();
+          }}
         >
           <div>
             <label htmlFor="image-file">
@@ -98,7 +87,7 @@ const UpdateImageField: FC<UpdateImageFieldProps> = ({
               이미지 {imageIndex ? '#' + imageIndex + ' ' : ''}파일
             </label>
           </div>
-          {preview && (
+          {!!preview && (
             <div className="mb-[29px]">
               <img className="rounded-xl" src={preview} />
             </div>
@@ -109,14 +98,16 @@ const UpdateImageField: FC<UpdateImageFieldProps> = ({
               type="file"
               disabled={isLoadingSubmit}
               onChange={(event) => {
-                if (!event.target.files || !event.target.files[0]) {
+                if (!!!event.target.files || !!!event.target.files[0]) {
                   return;
                 }
                 const imageFile = event.target.files[0];
                 const fileReader = new FileReader();
                 fileReader.readAsDataURL(imageFile);
                 fileReader.onload = (readerEvent) => {
-                  setPreview(readerEvent.target?.result);
+                  if (!!readerEvent.target) {
+                    setPreview(readerEvent.target.result as string);
+                  }
                 };
               }}
             />
@@ -145,17 +136,19 @@ const UpdateImageField: FC<UpdateImageFieldProps> = ({
                 ? '썸네일 이미지 파일'
                 : fieldType === 'img_description'
                 ? `강의 설명 이미지 ${
-                    imageIndex ? '#' + imageIndex + ' ' : ''
+                    !!imageIndex && imageIndex >= 0
+                      ? '#' + imageIndex + ' '
+                      : ''
                   }파일`
                 : ''}
-              {fieldType === 'thumbnail' && userField ? (
+              {fieldType === 'thumbnail' && !!userField ? (
                 <Link to={`/lecture/${lectureId}`}>
                   <img className="rounded-xl" src={userField} alt="lecture" />
                 </Link>
               ) : (
                 ''
               )}
-              {fieldType === 'img_description' && userField ? (
+              {fieldType === 'img_description' && !!userField ? (
                 <img
                   className="rounded-xl"
                   src={userField}
@@ -177,4 +170,4 @@ const UpdateImageField: FC<UpdateImageFieldProps> = ({
   );
 };
 
-export default UpdateImageField;
+export default ComponentFormUpdateImage;

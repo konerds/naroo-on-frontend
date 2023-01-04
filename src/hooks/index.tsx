@@ -1,12 +1,17 @@
 import * as React from 'react';
 
-export const useInput = (initialValue: any) => {
-  const [value, setValue] = React.useState(initialValue);
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setValue(value);
+export const useStringInput = (initialValue: string) => {
+  const [value, setValue] = React.useState<string>(initialValue);
+  return {
+    value: value,
+    setValue: setValue,
+    onChange: (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+      const { value } = e.target;
+      setValue(value);
+    },
   };
-  return [value, onChange, setValue];
 };
 
 export const getSavedToken = (localStorage: Storage) => {

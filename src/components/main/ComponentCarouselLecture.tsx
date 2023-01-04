@@ -1,21 +1,18 @@
-import { isArray } from 'lodash';
 import * as React from 'react';
+import { isArray } from 'lodash';
 import Skeleton from 'react-loading-skeleton';
 import Slider, { CustomArrowProps, Settings } from 'react-slick';
 import useSWR from 'swr';
 import { IInfoMe, ILectureInList } from '../../interfaces';
-import ComponentLectureCard from '../lecture/LectureCard';
-import ImgPrevArrow from '../../assets/images/PrevArrow.svg';
-import ImgNextArrow from '../../assets/images/NextArrow.svg';
-import TokenContext from '../../store/TokenContext';
+import ComponentCardLecture from '../lecture/ComponentCardLecture';
+import { ReactComponent as ImgPrevArrow } from '../../assets/images/PrevArrow.svg';
+import { ReactComponent as ImgNextArrow } from '../../assets/images/NextArrow.svg';
+import ContextToken from '../../store/ContextToken';
 import { axiosGetfetcher } from '../../hooks/api';
 
-interface IPropsComponentLectureCarousel {}
-
-const ComponentPrevArrow = (props: CustomArrowProps) => {
+const ComponentArrowPrev = (props: CustomArrowProps) => {
   return (
-    <img
-      src={ImgPrevArrow}
+    <ImgPrevArrow
       className={props.className}
       style={{
         ...props.style,
@@ -30,10 +27,9 @@ const ComponentPrevArrow = (props: CustomArrowProps) => {
   );
 };
 
-const ComponentNextArrow = (props: CustomArrowProps) => {
+const ComponentArrowNext = (props: CustomArrowProps) => {
   return (
-    <img
-      src={ImgNextArrow}
+    <ImgNextArrow
       className={props.className}
       style={{
         ...props.style,
@@ -50,9 +46,8 @@ const ComponentNextArrow = (props: CustomArrowProps) => {
 
 const ComponentSmallNextArrow = (props: CustomArrowProps) => {
   return (
-    <img
-      src={ImgNextArrow}
-      className={props.className}
+    <ImgNextArrow
+      className={props.className + ' hover:fill-black'}
       style={{
         ...props.style,
         display: 'absolute',
@@ -60,15 +55,14 @@ const ComponentSmallNextArrow = (props: CustomArrowProps) => {
         height: 40,
         right: '-3px',
         zIndex: 999,
+        fill: 'black',
       }}
       onClick={props.onClick}
     />
   );
 };
 
-const ComponentLectureCarousel: React.FC<
-  IPropsComponentLectureCarousel
-> = ({}) => {
+const ComponentCarouselLecture: React.FC = () => {
   const settings: Settings | Readonly<Settings> = {
     arrows: true,
     dots: false,
@@ -109,10 +103,10 @@ const ComponentLectureCarousel: React.FC<
         },
       },
     ],
-    prevArrow: <ComponentPrevArrow />,
-    nextArrow: <ComponentNextArrow />,
+    prevArrow: <ComponentArrowPrev />,
+    nextArrow: <ComponentArrowNext />,
   };
-  const tokenCtx = React.useContext(TokenContext);
+  const tokenCtx = React.useContext(ContextToken);
   const { token } = tokenCtx;
   const { data: dataAllLectures, error: errorAllLectures } = useSWR<
     ILectureInList[]
@@ -159,8 +153,8 @@ const ComponentLectureCarousel: React.FC<
                   <Slider {...settings}>
                     {dataUserLectures.map((lecture, index) => {
                       return (
-                        <ComponentLectureCard
-                          key={lecture.id}
+                        <ComponentCardLecture
+                          key={index}
                           id={lecture.id}
                           title={lecture.title}
                           thumbnail={lecture.thumbnail}
@@ -200,8 +194,8 @@ const ComponentLectureCarousel: React.FC<
               <Slider {...settings}>
                 {dataAllLectures.map((lecture, index) => {
                   return (
-                    <ComponentLectureCard
-                      key={lecture.id}
+                    <ComponentCardLecture
+                      key={index}
                       id={lecture.id}
                       title={lecture.title}
                       thumbnail={lecture.thumbnail}
@@ -227,4 +221,4 @@ const ComponentLectureCarousel: React.FC<
   );
 };
 
-export default ComponentLectureCarousel;
+export default ComponentCarouselLecture;

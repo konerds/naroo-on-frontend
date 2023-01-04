@@ -1,17 +1,16 @@
-import { isArray } from 'lodash';
 import * as React from 'react';
+import { isArray } from 'lodash';
 import Skeleton from 'react-loading-skeleton';
 import Slider, { CustomArrowProps, Settings } from 'react-slick';
 import useSWRImmutable from 'swr/immutable';
 import { IResourceContent } from '../../interfaces';
-import ImgPrevArrow from '../../assets/images/PrevArrow.svg';
-import ImgNextArrow from '../../assets/images/NextArrow.svg';
+import { ReactComponent as ImgPrevArrow } from '../../assets/images/PrevArrow.svg';
+import { ReactComponent as ImgNextArrow } from '../../assets/images/NextArrow.svg';
 import { axiosGetfetcher } from '../../hooks/api';
 
-const ComponentPrevArrow = (props: CustomArrowProps) => {
+const ComponentArrowPrev = (props: CustomArrowProps) => {
   return (
-    <img
-      src={ImgPrevArrow}
+    <ImgPrevArrow
       className={props.className}
       style={{
         ...props.style,
@@ -26,10 +25,9 @@ const ComponentPrevArrow = (props: CustomArrowProps) => {
   );
 };
 
-const ComponentNextArrow = (props: CustomArrowProps) => {
+const ComponentArrowNext = (props: CustomArrowProps) => {
   return (
-    <img
-      src={ImgNextArrow}
+    <ImgNextArrow
       className={props.className}
       style={{
         ...props.style,
@@ -44,7 +42,7 @@ const ComponentNextArrow = (props: CustomArrowProps) => {
   );
 };
 
-const OrgCarousel: React.FC = () => {
+const ComponentCarouselOrg: React.FC = () => {
   const settings: Settings | Readonly<Settings> = {
     arrows: true,
     dots: false,
@@ -83,8 +81,8 @@ const OrgCarousel: React.FC = () => {
         },
       },
     ],
-    prevArrow: <ComponentPrevArrow />,
-    nextArrow: <ComponentNextArrow />,
+    prevArrow: <ComponentArrowPrev />,
+    nextArrow: <ComponentArrowNext />,
   };
   const { data: dataResourceContent } = useSWRImmutable<IResourceContent[]>(
     `${process.env.REACT_APP_BACK_URL}/resource/org_carousel`,
@@ -120,4 +118,4 @@ const OrgCarousel: React.FC = () => {
   );
 };
 
-export default OrgCarousel;
+export default ComponentCarouselOrg;

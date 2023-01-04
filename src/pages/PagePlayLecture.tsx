@@ -1,18 +1,16 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import TokenContext from '../store/TokenContext';
+import ContextToken from '../store/ContextToken';
 import useSWR from 'swr';
 import { isArray } from 'lodash';
 import Skeleton from 'react-loading-skeleton';
 import { useParams } from 'react-router-dom';
 import Slider from 'react-slick';
-import Tag from '../components/common/Tag';
+import ComponentElementTag from '../components/common/ComponentElementTag';
 import { IInfoMe, ILectureVideoDetail } from '../interfaces';
 import { axiosGetfetcher } from '../hooks/api';
 
-interface LecturePlayLayoutProps {}
-
-const LecturePlayLayout: React.FC<LecturePlayLayoutProps> = ({}) => {
+const PagePlayLecture: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const settings = {
     arrows: false,
@@ -25,7 +23,7 @@ const LecturePlayLayout: React.FC<LecturePlayLayoutProps> = ({}) => {
     variableWidth: true,
   };
   const navigate = useNavigate();
-  const tokenCtx = React.useContext(TokenContext);
+  const tokenCtx = React.useContext(ContextToken);
   const { token } = tokenCtx;
   const { data: dataGetMe, error: errorGetMe } = useSWR<IInfoMe>(
     !!token ? `${process.env.REACT_APP_BACK_URL}/user/me` : null,
@@ -46,13 +44,20 @@ const LecturePlayLayout: React.FC<LecturePlayLayoutProps> = ({}) => {
     );
   React.useEffect(() => {
     if (
-      !(!!token && !!dataGetMe && !!!errorGetMe && dataGetMe.role === 'student')
+      !(
+        !!token &&
+        !!dataGetMe &&
+        !!!errorGetMe &&
+        dataGetMe.role === 'student' &&
+        !!id &&
+        !!!errorGetMe
+      )
     ) {
       navigate('/', { replace: true });
     }
   }, [token, dataGetMe, errorGetMe]);
   return (
-    <>
+    <div className="pt-[100px]">
       {!!token &&
         !!dataGetMe &&
         !!!errorGetMe &&
@@ -66,18 +71,21 @@ const LecturePlayLayout: React.FC<LecturePlayLayoutProps> = ({}) => {
                 {!!dataLectureVideo.tags && isArray(dataLectureVideo.tags) ? (
                   <>
                     {dataLectureVideo.tags.length > 0 ? (
-                      <Slider className="flex w-full px-[5px]" {...settings}>
+                      <Slider
+                        className="cursor-grab flex w-full px-[5px]"
+                        {...settings}
+                      >
                         {dataLectureVideo.tags.map((tag) => {
                           return (
                             <div className="max-w-max py-[5px]" key={tag.id}>
-                              <Tag name={tag.name} />
+                              <ComponentElementTag name={tag.name} />
                             </div>
                           );
                         })}
                       </Slider>
                     ) : (
                       <div className="p-[10px] text-xs text-white">
-                        태그가 존재하지 않습니다!
+                        태그가 존재하지 않습니다
                       </div>
                     )}
                   </>
@@ -87,7 +95,7 @@ const LecturePlayLayout: React.FC<LecturePlayLayoutProps> = ({}) => {
                 <div className="w-[100vw] flex pl-[9px] pb-[9px] text-4xl text-white font-medium">
                   {dataLectureVideo.video_title}
                 </div>
-                <div className="w-[100vw] flex aspect-w-16 aspect-h-9">
+                <div className="aspect-w-16 aspect-h-9">
                   <iframe
                     src={dataLectureVideo.video_url}
                     frameBorder="0"
@@ -101,7 +109,7 @@ const LecturePlayLayout: React.FC<LecturePlayLayoutProps> = ({}) => {
               <>
                 <div className="flex p-[10px] items-center">
                   <div className="py-1 text-xs text-white">
-                    잘못된 접근입니다!
+                    잘못된 접근입니다
                   </div>
                 </div>
                 <div className="w-[100vw] flex">
@@ -113,8 +121,8 @@ const LecturePlayLayout: React.FC<LecturePlayLayoutProps> = ({}) => {
             )}
           </div>
         )}
-    </>
+    </div>
   );
 };
 
-export default LecturePlayLayout;
+export default PagePlayLecture;

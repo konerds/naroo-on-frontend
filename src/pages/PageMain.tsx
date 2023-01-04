@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useParams, useLocation } from 'react-router';
 import { axiosGetfetcher, showError } from '../hooks/api';
-import ComponentLectureCarousel from '../components/main/LectureCarousel';
-import ComponentOrgCarousel from '../components/main/OrgCarousel';
+import ComponentCarouselLecture from '../components/main/ComponentCarouselLecture';
+import ComponentOrgCarousel from '../components/main/ComponentCarouselOrg';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import { IInfoMe, IResourceContent, IUserVerify } from '../interfaces';
@@ -10,15 +10,12 @@ import { isArray } from 'lodash';
 import Skeleton from 'react-loading-skeleton';
 import useSWR from 'swr';
 import useSWRImmutable from 'swr/immutable';
-import TokenContext from '../store/TokenContext';
-import { getSavedToken } from '../hooks';
+import ContextToken from '../store/ContextToken';
 
-interface IPropsPageMain {}
-
-const PageMain: React.FC<IPropsPageMain> = ({}) => {
+const PageMain: React.FC = () => {
   const { requestToken } = useParams();
   const navigate = useNavigate();
-  const tokenCtx = React.useContext(TokenContext);
+  const tokenCtx = React.useContext(ContextToken);
   const { token } = tokenCtx;
   const location = useLocation();
   const { pathname: currentPathname } = location;
@@ -69,7 +66,7 @@ const PageMain: React.FC<IPropsPageMain> = ({}) => {
           ) : (
             <Skeleton className="w-full h-[380px]" />
           )}
-          <ComponentLectureCarousel />
+          <ComponentCarouselLecture />
           <div className="min-h-[200px] bg-[#F8F8F9]">
             <ComponentOrgCarousel />
           </div>

@@ -1,46 +1,43 @@
+import * as React from 'react';
+import axios from 'axios';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
-import { FC, FormEvent, useState } from 'react';
-import { toast } from 'react-toastify';
 import { KeyedMutator } from 'swr';
 import { IResources } from '../../../interfaces';
+import { showError } from '../../../hooks/api';
+import { useStringInput } from '../../../hooks';
 
-interface UpdateResourceFieldProps {
+interface IPropsComponentFormUpdateResource {
   token: string | null;
-  setToken: (v: string | null) => void;
   type: string;
   content_id: string;
-  content: string | null;
+  content: string;
   mutate: KeyedMutator<IResources[]>;
   resourceIndex: number | null;
 }
 
-const UpdateResourceField: FC<UpdateResourceFieldProps> = ({
-  token,
-  setToken,
-  type,
-  content_id,
-  content,
-  mutate,
-  resourceIndex,
-}) => {
-  const [addPreview, setAddPreview] = useState<any>('');
-  const [preview, setPreview] = useState<any>(content);
-  const [updateToggle, setUpdateToggle] = useState<boolean>(false);
+const ComponentFormUpdateResource: React.FC<
+  IPropsComponentFormUpdateResource
+> = ({ token, type, content_id, content, mutate, resourceIndex }) => {
+  const { value: addPreview, setValue: setAddPreview } = useStringInput('');
+  const { value: preview, setValue: setPreview } = useStringInput(content);
+  const [updateToggle, setUpdateToggle] = React.useState<boolean>(false);
+  const [isLoadingSubmitAdd, setIsLoadingSubmitAdd] =
+    React.useState<boolean>(false);
+  const [isLoadingSubmitUpdateResource, setIsLoadingSubmitUpdateResource] =
+    React.useState<boolean>(false);
+  const [isLoadingClickDeleteResource, setIsLoadingClickDeleteResource] =
+    React.useState<boolean>(false);
   const onClickUpdateToggle = () => {
     setUpdateToggle(!updateToggle);
     setPreview(content);
   };
-  const [isLoadingSubmitAdd, setIsLoadingSubmitAdd] = useState<boolean>(false);
-  const onSubmitAddHandler = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitAddHandler = async () => {
     try {
-      event.preventDefault();
       setIsLoadingSubmitAdd(true);
-      if (!addPreview) {
+      if (!!!addPreview) {
         return;
       }
-
       const response = await axios.post(
         `${process.env.REACT_APP_BACK_URL}/resource`,
         {
@@ -53,40 +50,24 @@ const UpdateResourceField: FC<UpdateResourceFieldProps> = ({
           },
         },
       );
-
       if (response.status === 201) {
-        setTimeout(() => {
-          mutate();
-          setAddPreview('');
-        }, 500);
+        await mutate();
+        setAddPreview('');
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmitAdd(false);
-      }, 500);
+      setIsLoadingSubmitAdd(false);
     }
   };
-  const [isLoadingSubmitUpdateResource, setIsLoadingSubmitUpdateResource] =
-    useState<boolean>(false);
-  const onSubmitUpdateResource = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitUpdateResource = async () => {
     try {
-      event.preventDefault();
       setIsLoadingSubmitUpdateResource(true);
-      if (!preview || preview === content) {
+      if (!!!preview || preview === content) {
         setUpdateToggle(!updateToggle);
         setPreview(content);
         return;
       }
-
       const response = await axios.put(
         `${process.env.REACT_APP_BACK_URL}/resource`,
         {
@@ -100,30 +81,16 @@ const UpdateResourceField: FC<UpdateResourceFieldProps> = ({
           },
         },
       );
-
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-          setUpdateToggle(!updateToggle);
-        }, 500);
+        await mutate();
+        setUpdateToggle(!updateToggle);
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingSubmitUpdateResource(false);
-      }, 500);
+      setIsLoadingSubmitUpdateResource(false);
     }
   };
-  const [isLoadingClickDeleteResource, setIsLoadingClickDeleteResource] =
-    useState<boolean>(false);
   const onClickDeleteResource = async () => {
     try {
       setIsLoadingClickDeleteResource(true);
@@ -136,30 +103,25 @@ const UpdateResourceField: FC<UpdateResourceFieldProps> = ({
         },
       );
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-        }, 500);
+        await mutate();
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingClickDeleteResource(false);
-      }, 500);
+      setIsLoadingClickDeleteResource(false);
     }
   };
   return (
     <>
       {type === 'org_carousel' && +content_id === 0 && (
-        <form className="w-full p-[10px]" onSubmit={onSubmitAddHandler}>
-          {addPreview && (
+        <form
+          className="w-full p-[10px]"
+          onSubmit={(event) => {
+            event.preventDefault();
+            onSubmitAddHandler();
+          }}
+        >
+          {!!addPreview && (
             <div className="mb-[15px]">
               <img className="rounded-xl" src={addPreview} />
             </div>
@@ -176,14 +138,16 @@ const UpdateResourceField: FC<UpdateResourceFieldProps> = ({
               disabled={isLoadingSubmitAdd}
               type="file"
               onChange={(event) => {
-                if (!event.target.files || !event.target.files[0]) {
+                if (!!!event.target.files || !!!event.target.files[0]) {
                   return;
                 }
                 const imageFile = event.target.files[0];
                 const fileReader = new FileReader();
                 fileReader.readAsDataURL(imageFile);
                 fileReader.onload = (readerEvent) => {
-                  setAddPreview(readerEvent.target?.result);
+                  if (!!readerEvent.target) {
+                    setAddPreview(readerEvent.target.result as string);
+                  }
                 };
               }}
             />
@@ -199,9 +163,12 @@ const UpdateResourceField: FC<UpdateResourceFieldProps> = ({
       {updateToggle ? (
         <form
           className="items-center p-[10px]"
-          onSubmit={onSubmitUpdateResource}
+          onSubmit={(event) => {
+            event.preventDefault();
+            onSubmitUpdateResource();
+          }}
         >
-          {preview && (
+          {!!preview && (
             <div className="mb-[29px]">
               <img className="rounded-xl" src={preview} />
             </div>
@@ -212,14 +179,16 @@ const UpdateResourceField: FC<UpdateResourceFieldProps> = ({
               type="file"
               disabled={isLoadingSubmitUpdateResource}
               onChange={(event) => {
-                if (!event.target.files || !event.target.files[0]) {
+                if (!!!event.target.files || !!!event.target.files[0]) {
                   return;
                 }
                 const imageFile = event.target.files[0];
                 const fileReader = new FileReader();
                 fileReader.readAsDataURL(imageFile);
                 fileReader.onload = (readerEvent) => {
-                  setPreview(readerEvent.target?.result);
+                  if (!!readerEvent.target) {
+                    setPreview(readerEvent.target.result as string);
+                  }
                 };
               }}
             />
@@ -244,14 +213,12 @@ const UpdateResourceField: FC<UpdateResourceFieldProps> = ({
         <div className="flex items-center w-full p-[10px]">
           <div className="w-full overflow-x-hidden">
             <div>
-              {type === 'org_carousel' ? (
+              {type === 'org_carousel' && (
                 <>{`#${
-                  resourceIndex && resourceIndex >= 0 && resourceIndex
+                  !!resourceIndex && resourceIndex >= 0 && resourceIndex
                 }`}</>
-              ) : (
-                ''
               )}
-              {preview && (
+              {!!preview && (
                 <img className="rounded-xl" src={preview} alt="resource_img" />
               )}
             </div>
@@ -265,7 +232,7 @@ const UpdateResourceField: FC<UpdateResourceFieldProps> = ({
             icon={faEdit}
             onClick={onClickUpdateToggle}
           />
-          {+content_id !== 0 && (
+          {+content_id > 0 && (
             <FontAwesomeIcon
               icon={faTrash}
               onClick={onClickDeleteResource}
@@ -282,4 +249,4 @@ const UpdateResourceField: FC<UpdateResourceFieldProps> = ({
   );
 };
 
-export default UpdateResourceField;
+export default ComponentFormUpdateResource;

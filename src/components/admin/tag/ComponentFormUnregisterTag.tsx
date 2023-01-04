@@ -1,27 +1,24 @@
+import * as React from 'react';
+import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FC, useState } from 'react';
 import { ILectureInList, ITags } from '../../../interfaces';
-import Tag from '../../common/Tag';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import ComponentElementTag from '../../common/ComponentElementTag';
 import { KeyedMutator } from 'swr';
+import { showError } from '../../../hooks/api';
 
-interface UnregisterTagElementProps {
+interface IPropsComponentFormUnregisterTag {
   token: string | null;
   lectureId: string;
   tag: ITags;
   mutate: KeyedMutator<ILectureInList[]>;
 }
 
-const UnregisterTagElement: FC<UnregisterTagElementProps> = ({
-  token,
-  lectureId,
-  tag,
-  mutate,
-}) => {
+const ComponentFormUnregisterTag: React.FC<
+  IPropsComponentFormUnregisterTag
+> = ({ token, lectureId, tag, mutate }) => {
   const [isLoadingClickUnregisterTag, setIsLoadingClickUnregisterTag] =
-    useState<boolean>(false);
+    React.useState<boolean>(false);
   const onClickUnregisterTag = async (tagId: string) => {
     try {
       setIsLoadingClickUnregisterTag(true);
@@ -34,28 +31,17 @@ const UnregisterTagElement: FC<UnregisterTagElementProps> = ({
         },
       );
       if (response.status === 200) {
-        setTimeout(() => {
-          mutate();
-        }, 500);
+        await mutate();
       }
     } catch (error: any) {
-      const messages = error.response.data.message;
-      if (Array.isArray(messages)) {
-        messages.map((message) => {
-          toast.error(message);
-        });
-      } else {
-        toast.error(messages);
-      }
+      showError(error);
     } finally {
-      setTimeout(() => {
-        setIsLoadingClickUnregisterTag(false);
-      }, 500);
+      setIsLoadingClickUnregisterTag(false);
     }
   };
   return (
     <div key={tag.id} className="flex items-center py-[5px] pr-[20px]">
-      <Tag name={tag.name} />
+      <ComponentElementTag name={tag.name} />
       <FontAwesomeIcon
         className={`ml-[5px] ${
           isLoadingClickUnregisterTag
@@ -69,4 +55,4 @@ const UnregisterTagElement: FC<UnregisterTagElementProps> = ({
   );
 };
 
-export default UnregisterTagElement;
+export default ComponentFormUnregisterTag;

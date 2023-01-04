@@ -1,30 +1,26 @@
 import * as React from 'react';
 import { KeyedMutator } from 'swr';
 import { IResources } from '../../interfaces';
-import UpdateResourceField from './resource/UpdateResourceField';
+import ComponentFormUpdateResource from './resource/ComponentFormUpdateResource';
 
-interface ResourceEditProps {
+interface IPropsComponentContainerEditResource {
   token: string | null;
-  setToken: (v: string | null) => void;
   allResourcesData: IResources[] | undefined;
   allResourcesMutate: KeyedMutator<IResources[]>;
 }
 
-const ResourceEdit: React.FC<ResourceEditProps> = ({
-  token,
-  setToken,
-  allResourcesData,
-  allResourcesMutate,
-}) => {
+const ComponentContainerEditResource: React.FC<
+  IPropsComponentContainerEditResource
+> = ({ token, allResourcesData, allResourcesMutate }) => {
   let orgIndex = 0;
   return (
     <div className="mt-[30px]">
       {!!allResourcesData &&
-        allResourcesData.map((resource) => (
-          <div key={resource.type + resource.content_id}>
-            {resource ? (
+        allResourcesData.map((resource, index) => (
+          <div key={index}>
+            {!!resource ? (
               <>
-                {+resource.content_id === 0 ? (
+                {+resource.content_id === 0 && (
                   <div className="mt-[20px]">
                     {resource.type === 'header_logo'
                       ? 'Header 로고 : '
@@ -36,14 +32,11 @@ const ResourceEdit: React.FC<ResourceEditProps> = ({
                       ? `기관 슬라이더 이미지 : `
                       : ''}
                   </div>
-                ) : (
-                  ''
                 )}
                 <div className="border-2 rounded">
-                  {resource.content && (
-                    <UpdateResourceField
+                  {!!resource.content && (
+                    <ComponentFormUpdateResource
                       token={token}
-                      setToken={setToken}
                       type={resource.type}
                       content_id={resource.content_id}
                       content={resource.content}
@@ -56,7 +49,7 @@ const ResourceEdit: React.FC<ResourceEditProps> = ({
                 </div>
               </>
             ) : (
-              <div>리소스가 존재하지 않습니다!</div>
+              <div>리소스가 존재하지 않습니다</div>
             )}
           </div>
         ))}
@@ -64,4 +57,4 @@ const ResourceEdit: React.FC<ResourceEditProps> = ({
   );
 };
 
-export default ResourceEdit;
+export default ComponentContainerEditResource;

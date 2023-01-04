@@ -1,27 +1,25 @@
+import * as React from 'react';
+import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
-import { FC, useState } from 'react';
 import { IUserEdit } from '../../../interfaces';
-import UpdateUserField from './UpdateUserField';
+import ComponentFormUpdateUser from './ComponentFormUpdateUser';
 import { KeyedMutator } from 'swr';
 import { showError } from '../../../hooks/api';
 
-interface UserEditElementProps {
+interface IPropsComponentElementEditUser {
   token: string;
-  setToken: (v: string | null) => void;
   user: IUserEdit;
   mutate: KeyedMutator<IUserEdit[]>;
 }
 
-const UserEditElement: FC<UserEditElementProps> = ({
+const ComponentElementEditUser: React.FC<IPropsComponentElementEditUser> = ({
   token,
-  setToken,
   user,
   mutate,
 }) => {
   const [isLoadingDeleteUser, setIsLoadingDeleteUser] =
-    useState<boolean>(false);
+    React.useState<boolean>(false);
   const onClickDeleteUser = async (id: string | null) => {
     try {
       setIsLoadingDeleteUser(true);
@@ -43,8 +41,8 @@ const UserEditElement: FC<UserEditElementProps> = ({
     }
   };
   return (
-    <div key={user.id ? user.id : null}>
-      {user.id && (
+    <div key={!!user.id ? user.id : null}>
+      {!!user.id && (
         <div
           className={`border-[1px] rounded-[4px] p-[20px] my-[20px] ${
             user.role === 'admin'
@@ -53,30 +51,30 @@ const UserEditElement: FC<UserEditElementProps> = ({
           }`}
         >
           <div>
-            {user.email && (
-              <UpdateUserField
+            {!!user.email && (
+              <ComponentFormUpdateUser
                 fieldType="email"
                 id={user.id}
                 userField={user.email}
                 mutate={mutate}
               />
             )}
-            {user.nickname && (
-              <UpdateUserField
+            {!!user.nickname && (
+              <ComponentFormUpdateUser
                 fieldType="nickname"
                 id={user.id}
                 userField={user.nickname}
                 mutate={mutate}
               />
             )}
-            <UpdateUserField
+            <ComponentFormUpdateUser
               fieldType="password"
               id={user.id}
-              userField={null}
+              userField={''}
               mutate={mutate}
             />
-            {user.phone && (
-              <UpdateUserField
+            {!!user.phone && (
+              <ComponentFormUpdateUser
                 fieldType="phone"
                 id={user.id}
                 userField={user.phone}
@@ -88,16 +86,13 @@ const UserEditElement: FC<UserEditElementProps> = ({
             disabled={isLoadingDeleteUser}
             className={`${
               user.role === 'admin' ? 'hidden' : 'block'
-            } border-[1px] mx-auto mt-[10px] rounded-[4px] w-[10vw] disabled:opacity-50`}
+            } border-[1px] mx-auto md:mr-0 mt-[10px] rounded-[4px] w-max px-[10px] py-[5px] disabled:opacity-50 hover:bg-black hover:text-white`}
+            onClick={() => {
+              !!user.id ? onClickDeleteUser(user.id) : null;
+            }}
           >
             삭제
-            <FontAwesomeIcon
-              className="ml-[1vw]"
-              icon={faTrash}
-              onClick={() => {
-                user.id ? onClickDeleteUser(user.id) : null;
-              }}
-            />
+            <FontAwesomeIcon className="ml-[1vw]" icon={faTrash} />
           </button>
         </div>
       )}
@@ -105,4 +100,4 @@ const UserEditElement: FC<UserEditElementProps> = ({
   );
 };
 
-export default UserEditElement;
+export default ComponentElementEditUser;

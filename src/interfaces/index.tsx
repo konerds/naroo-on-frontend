@@ -108,3 +108,15 @@ export interface ILectureVideoDetail {
   tags: ITags[] | [] | null;
   users: string;
 }
+
+export const CONST_ADMIN_MENU = {
+  LECTURE_ADD: 'lecture_add',
+  LECTURE_EDIT: 'lecture_edit',
+  LECTURE_PERMISSION: 'lecture_permission',
+  STUDENT_EDIT: 'student_edit',
+  TAG_EDIT: 'tag_edit',
+  RESOURCE_EDIT: 'resource_edit',
+} as const;
+
+export type TYPE_ADMIN_MENU =
+  typeof CONST_ADMIN_MENU[keyof typeof CONST_ADMIN_MENU];
