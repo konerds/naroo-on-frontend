@@ -22,9 +22,9 @@
 | ------------------ | ------------------------------------- |
 | REACT_APP_BACK_URL | API Server of Backend Web Service URL |
 
-### Github Repository Link of Front-end Project
+### Github Repository Link of Back-end Project
 
-> [Link](https://github.com/konerds/naroo-on-frontend)
+> [Link](https://github.com/konerds/naroo-on-backend)
 
 ### ※ This is just for practice, not an actual web service!!!
 
