@@ -4,10 +4,12 @@ import ImgEllipsisVector from '../../../assets/images/EllipsisVector.png';
 
 interface IPropsComponentEllipsisHeader {
   logoutHandler: () => void;
+  setIsVisibleMenu: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ComponentEllipsisHeader: React.FC<IPropsComponentEllipsisHeader> = ({
   logoutHandler,
+  setIsVisibleMenu,
 }) => {
   return (
     <div className="absolute md:right-[-46px] right-[-6px] top-[-6px]">
@@ -17,7 +19,12 @@ const ComponentEllipsisHeader: React.FC<IPropsComponentEllipsisHeader> = ({
           backgroundImage: `url(${ImgEllipsisVector})`,
         }}
       >
-        <Link to="/myinfo">
+        <Link
+          to="/myinfo"
+          onClick={(event) => {
+            setIsVisibleMenu(false);
+          }}
+        >
           <button
             className={`block pl-[26px] py-[10px] text-[18px] leading-[150%] font-medium ${
               location.pathname === '/myinfo'
@@ -30,7 +37,10 @@ const ComponentEllipsisHeader: React.FC<IPropsComponentEllipsisHeader> = ({
         </Link>
         <button
           className="block pl-[26px] py-[10px] text-[18px] leading-[150%] font-medium text-[#515A6E]"
-          onClick={logoutHandler}
+          onClick={() => {
+            setIsVisibleMenu(false);
+            logoutHandler();
+          }}
         >
           로그아웃
         </button>

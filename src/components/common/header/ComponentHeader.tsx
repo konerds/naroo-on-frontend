@@ -73,7 +73,12 @@ const ComponentHeader: React.FC = () => {
         <div className="xl:max-w-[1152px] lg:max-w-[864px] md:max-w-[680px] md:flex hidden h-[100px] mx-auto justify-center items-center">
           <div className="flex items-center">
             {!!dataHeaderLogo && dataHeaderLogo.length > 0 && (
-              <Link to="/">
+              <Link
+                to="/"
+                onClick={(event) => {
+                  setIsVisibleMenu(false);
+                }}
+              >
                 <img
                   className="xl:mr-[80px] lg:mr-[47px] md:mr-[40px] mr-[20px]"
                   src={dataHeaderLogo[0].content}
@@ -90,7 +95,12 @@ const ComponentHeader: React.FC = () => {
                 dataGetMe.role === 'admin'
               ) && (
                 <>
-                  <Link to="/">
+                  <Link
+                    to="/"
+                    onClick={(event) => {
+                      setIsVisibleMenu(false);
+                    }}
+                  >
                     <button
                       className={`mr-[42px] text-[20px] leading-[150%] font-semibold ${
                         location.pathname === '/'
@@ -101,7 +111,12 @@ const ComponentHeader: React.FC = () => {
                       강의
                     </button>
                   </Link>
-                  <a href="mailto:mpnaroo@naver.com">
+                  <a
+                    href="mailto:mpnaroo@naver.com"
+                    onClick={(event) => {
+                      setIsVisibleMenu(false);
+                    }}
+                  >
                     <button className="text-[20px] leading-[150%] font-semibold text-[#515A6E]">
                       문의하기
                     </button>
@@ -126,19 +141,32 @@ const ComponentHeader: React.FC = () => {
                   </button>
                   {isVisibleEllipsis && (
                     <div className="fixed z-[999] min-w-max">
-                      <ComponentEllipsisHeader logoutHandler={logoutHandler} />
+                      <ComponentEllipsisHeader
+                        logoutHandler={logoutHandler}
+                        setIsVisibleMenu={setIsVisibleMenu}
+                      />
                     </div>
                   )}
                 </div>
               )}
             {!(!!token && !!dataGetMe && !!!errorGetMe) && (
               <div className="xl:ml-[586px] lg:ml-[360px] md:ml-[230px]">
-                <Link to="/signin">
+                <Link
+                  to="/signin"
+                  onClick={(event) => {
+                    setIsVisibleMenu(false);
+                  }}
+                >
                   <button className="bg-white text-[14px] leading-[21px] font-semibold text-[#808695] border-[1px] border-[#DCDEE2] box-border rounded-[40px] h-[41px] xl:w-[99px] lg:w-[84.48px] md:w-[63.36px]">
                     로그인
                   </button>
                 </Link>
-                <Link to="/signup">
+                <Link
+                  to="/signup"
+                  onClick={(event) => {
+                    setIsVisibleMenu(false);
+                  }}
+                >
                   <button className="ml-[12px] text-[14px] leading-[21px] font-semibold text-white bg-[#8DC556] rounded-[40px] h-[41px] xl:w-[112px] lg:w-[95.57px] md:w-[71.68px]">
                     회원가입
                   </button>
@@ -163,7 +191,12 @@ const ComponentHeader: React.FC = () => {
       <MediaQuery maxWidth={767.98}>
         <div className="flex items-center justify-between h-[100px] mx-auto md:hidden">
           <div className="flex items-center justify-center w-full">
-            <Link to="/">
+            <Link
+              to="/"
+              onClick={(event) => {
+                setIsVisibleMenu(false);
+              }}
+            >
               {!!dataHeaderLogo && dataHeaderLogo.length > 0 && (
                 <img
                   src={dataHeaderLogo[0].content}
@@ -214,19 +247,32 @@ const ComponentHeader: React.FC = () => {
                   </button>
                   {isVisibleEllipsis && (
                     <div className="relative top-[20px] z-[999] min-w-max">
-                      <ComponentEllipsisHeader logoutHandler={logoutHandler} />
+                      <ComponentEllipsisHeader
+                        logoutHandler={logoutHandler}
+                        setIsVisibleMenu={setIsVisibleMenu}
+                      />
                     </div>
                   )}
                 </>
               )}
             {(!!!token || (!!token && !!!dataGetMe && !!errorGetMe)) && (
               <div>
-                <Link to="/signin">
+                <Link
+                  to="/signin"
+                  onClick={(event) => {
+                    setIsVisibleMenu(false);
+                  }}
+                >
                   <button className="bg-white text-[10px] leading-[10px] font-semibold text-[#808695] border-[1px] border-[#DCDEE2] box-border rounded-[40px] w-[60px] h-[41px]">
                     로그인
                   </button>
                 </Link>
-                <Link to="/signup">
+                <Link
+                  to="/signup"
+                  onClick={(event) => {
+                    setIsVisibleMenu(false);
+                  }}
+                >
                   <button className="ml-[12px] text-[10px] leading-[10px] font-semibold text-white bg-[#8DC556] rounded-[40px] w-[70px] h-[41px]">
                     회원가입
                   </button>
@@ -249,7 +295,12 @@ const ComponentHeader: React.FC = () => {
         </div>
         {isVisibleMenu && (
           <div className="block relative border-[1px] border-[#DCDEE2] box-border rounded-[10px] bg-white min-w-full z-[999]">
-            <Link to="/">
+            <Link
+              to="/"
+              onClick={(event) => {
+                setIsVisibleMenu(false);
+              }}
+            >
               <button
                 className={`block w-full px-[10px] py-[10px] ${
                   location.pathname === '/'
@@ -260,7 +311,12 @@ const ComponentHeader: React.FC = () => {
                 강의
               </button>
             </Link>
-            <a href="mailto:mpnaroo@naver.com">
+            <a
+              href="mailto:mpnaroo@naver.com"
+              onClick={(event) => {
+                setIsVisibleMenu(false);
+              }}
+            >
               <button className="block w-full px-[10px] py-[10px]">
                 문의하기
               </button>
