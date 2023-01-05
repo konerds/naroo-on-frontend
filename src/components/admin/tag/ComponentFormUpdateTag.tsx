@@ -87,28 +87,28 @@ const ComponentFormUpdateTag: React.FC<IPropsComponentFormUpdateTag> = ({
     <>
       {updateToggle ? (
         <form
-          className="flex flex-wrap items-center py-[10px]"
+          className="flex flex-wrap items-center"
           onSubmit={(event) => {
             event.preventDefault();
             onSubmitUpdateTag();
           }}
         >
           <input
-            className="h-[24px] w-[100px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[14px] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white pl-[5px] disabled:opacity-50"
+            className="w-[100px] h-[24px] border-[1px] box-border rounded-[10px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white pl-[10px] disabled:opacity-50"
             type="text"
             value={updateTagName}
             onChange={onChangeUpdateTagName}
             disabled={isLoadingSubmit}
           />
           <button
-            className="mx-[5px] px-[8px] w-max box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[24px] lg:text-[14px] text-[1vw] font-semibold bg-[#4DBFF0] text-white disabled:opacity-50 hover:opacity-50"
+            className="w-[40px] h-[24px] mx-[5px] box-border rounded-[10px] border-[1px] border-[#4DBFF0] lg:text-[0.8rem] text-[0.5rem] font-semibold bg-[#4DBFF0] text-white disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed;"
             type="submit"
             disabled={isLoadingSubmit}
           >
             수정
           </button>
           <button
-            className="w-max px-[8px] box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[24px] lg:text-[14px] text-[1vw] font-semibold bg-[#4DBFF0] text-white disabled:opacity-50 mr-[10px] hover:opacity-50"
+            className="mr-[10px] w-[40px] h-[24px] box-border rounded-[10px] border-[1px] border-[#4DBFF0] lg:text-[0.8rem] text-[0.5rem] font-semibold bg-[#4DBFF0] text-white disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed;"
             onClick={onClickUpdateToggle}
             disabled={isLoadingSubmit}
           >
@@ -116,12 +116,12 @@ const ComponentFormUpdateTag: React.FC<IPropsComponentFormUpdateTag> = ({
           </button>
         </form>
       ) : (
-        <div className="flex items-center py-[10px]">
+        <div className="flex items-center h-[30px] py-[20px]">
           <div className="overflow-x-hidden">
             <ComponentElementTag name={name} />
           </div>
           <FontAwesomeIcon
-            className={`mx-[5px] ${
+            className={`mx-[5px] button-fa-icon-admin ${
               isLoadingDeleteTag
                 ? 'opacity-50 cursor-not-allowed pointer-events-none'
                 : ''
@@ -130,7 +130,7 @@ const ComponentFormUpdateTag: React.FC<IPropsComponentFormUpdateTag> = ({
             onClick={onClickUpdateToggle}
           />
           <FontAwesomeIcon
-            className={`mr-[20px] ${
+            className={`mr-[20px] button-fa-icon-admin ${
               isLoadingDeleteTag
                 ? 'opacity-50 cursor-not-allowed pointer-events-none'
                 : ''

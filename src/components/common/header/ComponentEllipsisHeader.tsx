@@ -26,7 +26,7 @@ const ComponentEllipsisHeader: React.FC<IPropsComponentEllipsisHeader> = ({
           }}
         >
           <button
-            className={`block pl-[26px] py-[10px] text-[18px] leading-[150%] font-medium ${
+            className={`block pl-[26px] py-[10px] text-[1.125rem] font-medium hover:opacity-50 ${
               location.pathname === '/myinfo'
                 ? 'text-[#8DC556]'
                 : 'text-[#515A6E]'
@@ -36,7 +36,7 @@ const ComponentEllipsisHeader: React.FC<IPropsComponentEllipsisHeader> = ({
           </button>
         </Link>
         <button
-          className="block pl-[26px] py-[10px] text-[18px] leading-[150%] font-medium text-[#515A6E]"
+          className="block pl-[26px] py-[10px] text-[1.125rem] font-medium text-[#515A6E] hover:opacity-50"
           onClick={() => {
             setIsVisibleMenu(false);
             logoutHandler();

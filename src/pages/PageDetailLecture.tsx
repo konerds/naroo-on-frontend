@@ -171,10 +171,10 @@ const PageDetailLecture: React.FC = () => {
     }
   };
   return (
-    <>
+    <div className="w-full">
       {!!dataDetailLecture && !!!errorDetailLecture && (
         <>
-          <div className="pt-[100px] w-full bg-gradient-to-br from-[#8DC556] to-[#00A0E9]">
+          <div className="w-full bg-gradient-to-br from-[#8DC556] to-[#00A0E9]">
             <div className="hidden lg:flex w-full xl:max-w-[1152px] lg:max-w-[864px] md:max-w-[680px] sm:max-w-[500px] xs:max-w-[400px] xl:min-h-[506px] xl:max-h-[506px] lg:min-h-[431.79px] lg:max-h-[431.79px] mx-auto items-center justify-center">
               <img
                 className="xl:mr-[150px] lg:mr-[128px] xl:min-w-[346px] xl:max-w-[346px] xl:min-h-[346px] xl:max-h-[346px] lg:min-w-[295.25px] lg:max-w-[295.25px] lg:min-h-[295.25px] lg:max-h-[295.25px] object-fill rounded-[4px] lecture-detail-thumbnail-container"
@@ -185,18 +185,18 @@ const PageDetailLecture: React.FC = () => {
                 }
               />
               <div className="xl:min-w-[644px] xl:max-w-[644px] lg:min-w-[549.55px] lg:max-w-[549.55px] xl:min-h-[346px] xl:max-h-[346px] lg:min-h-[295.25px] lg:max-h-[295.25px] flex flex-col justify-between">
-                <div className="w-full max-h-[96px] overflow-hidden text-white text-[32px] leading-[150%] font-semibold">
+                <div className="w-full max-h-[96px] overflow-hidden text-white text-[2rem] font-semibold">
                   {!!dataDetailLecture.title && dataDetailLecture.title}
                 </div>
                 <div className="flex wrap items-center w-full min-h-[209.5px] max-h-[209.5px]">
                   <div className="block w-full">
-                    <div className="mb-[30px] w-full flex justify-between items-center text-white text-[16px] leading-[150%] font-semibold">
+                    <div className="mb-[30px] w-full flex justify-between items-center text-white text-[1rem] font-semibold">
                       <div>
                         {!!dataDetailLecture.teacher_nickname
                           ? dataDetailLecture.teacher_nickname
                           : ''}
                       </div>
-                      <div className="text-[16px] text-white leading-[150%] font-semibold">
+                      <div className="text-[1rem] text-white font-semibold">
                         현재{' '}
                         {!!dataDetailLecture.users
                           ? dataDetailLecture.users
@@ -204,7 +204,7 @@ const PageDetailLecture: React.FC = () => {
                         명이 수강하고 있어요!
                       </div>
                     </div>
-                    <div className="w-full max-h-[96px] overflow-hidden text-[16px] text-white leading-[24px] font-semibold">
+                    <div className="w-full max-h-[96px] overflow-hidden text-[1rem] text-white leading-[1.5rem] font-semibold">
                       {!!dataDetailLecture.description
                         ? dataDetailLecture.description
                         : ''}
@@ -219,7 +219,7 @@ const PageDetailLecture: React.FC = () => {
                     <button
                       type="button"
                       onClick={onPlayLectureHandler}
-                      className={`rounded-[4px] xl:min-w-[132px] xl:max-w-[132px] lg:min-w-[112.64px] lg:max-w-[112.64px] min-h-[41px] max-h-[41px] text-[#4DBFF0] text-[14px] font-semibold leading-[150%] bg-white ${
+                      className={`rounded-[4px] xl:min-w-[132px] xl:max-w-[132px] lg:min-w-[112.64px] lg:max-w-[112.64px] min-h-[41px] max-h-[41px] text-[#4DBFF0] text-[0.875rem] font-semibold bg-white ${
                         dataDetailLecture.status === 'apply' ||
                         dataDetailLecture.status === 'reject' ||
                         dataDetailLecture.status === 'expired'
@@ -244,7 +244,7 @@ const PageDetailLecture: React.FC = () => {
                                 <>
                                   {
                                     {
-                                      apply: '수강 신청',
+                                      apply: '승인 대기',
                                       reject: '승인 거부',
                                       accept: '학습 하기',
                                     }[dataDetailLecture.status]
@@ -265,7 +265,7 @@ const PageDetailLecture: React.FC = () => {
                       )}
                     </button>
                   )}
-                  <div className="text-[14px] leading-[150%] text-white font-semibold">
+                  <div className="text-[0.875rem] text-white font-semibold">
                     {!!dataDetailLecture.expired && (
                       <>
                         {new Date(dataDetailLecture.expired).toISOString() >=
@@ -295,7 +295,7 @@ const PageDetailLecture: React.FC = () => {
                 }
               />
               <div className="flex mx-auto justify-between items-center min-h-[96px] max-h-[96px] mt-[1vh]">
-                <div className="flex-1 overflow-hidden max-w-max max-h-[75px] text-white text-[18px] leading-[150%] font-semibold">
+                <div className="flex-1 overflow-hidden max-w-max max-h-[75px] text-white text-[1.125rem] font-semibold">
                   {dataDetailLecture.title && dataDetailLecture.title}
                 </div>
                 {((!!token &&
@@ -306,7 +306,7 @@ const PageDetailLecture: React.FC = () => {
                   <button
                     type="button"
                     onClick={onPlayLectureHandler}
-                    className={`flex-1 rounded-[4px] max-w-[176px] h-[54px] font-semibold leading-[150%] text-[#4DBFF0] text-[14px] bg-white ${
+                    className={`flex-1 rounded-[4px] max-w-[176px] h-[54px] font-semibold text-[#4DBFF0] text-[0.875rem] bg-white ${
                       dataDetailLecture.status === 'apply' ||
                       dataDetailLecture.status === 'reject' ||
                       dataDetailLecture.status === 'expired'
@@ -331,7 +331,7 @@ const PageDetailLecture: React.FC = () => {
                               <>
                                 {
                                   {
-                                    apply: '수강 신청',
+                                    apply: '승인 대기',
                                     reject: '승인 거부',
                                     accept: '학습 하기',
                                   }[dataDetailLecture.status]
@@ -359,7 +359,7 @@ const PageDetailLecture: React.FC = () => {
             <div className="flex-1 h-[44px] border-b-[1px] border-[#8DC556]"></div>
             <button
               type="button"
-              className={`flex-none w-[120px] h-[44px] text-[16px] leading-[22px] font-medium border-[#8DC556] ${
+              className={`flex-none w-[120px] h-[44px] text-[1rem] leading-[1.375rem] font-medium border-[#8DC556] ${
                 selectedMenu === CONST_LECTURE_DETAIL_MENU.LECTURE_INTRODUCE
                   ? 'text-[#8DC556] border-t-[1px] border-l-[1px] border-r-[1px]'
                   : 'text-[#808695] border-b-[1px]'
@@ -372,7 +372,7 @@ const PageDetailLecture: React.FC = () => {
             </button>
             <button
               type="button"
-              className={`flex-none w-[120px] h-[44px] text-[16px] leading-[22px] font-medium border-[#8DC556] ${
+              className={`flex-none w-[120px] h-[44px] text-[1rem] leading-[1.375rem] font-medium border-[#8DC556] ${
                 selectedMenu === CONST_LECTURE_DETAIL_MENU.LECTURE_NOTICE
                   ? 'text-[#8DC556] border-t-[1px] border-l-[1px] border-r-[1px]'
                   : 'text-[#808695] border-b-[1px]'
@@ -385,7 +385,7 @@ const PageDetailLecture: React.FC = () => {
             </button>
             <button
               type="button"
-              className={`flex-none w-[120px] h-[44px] text-[16px] leading-[22px] font-medium border-[#8DC556] ${
+              className={`flex-none w-[120px] h-[44px] text-[1rem] leading-[1.375rem] font-medium border-[#8DC556] ${
                 selectedMenu === CONST_LECTURE_DETAIL_MENU.LECTURE_QNA
                   ? 'text-[#8DC556] border-t-[1px] border-l-[1px] border-r-[1px]'
                   : 'text-[#808695] border-b-[1px]'
@@ -417,11 +417,12 @@ const PageDetailLecture: React.FC = () => {
             )}
             {selectedMenu === CONST_LECTURE_DETAIL_MENU.LECTURE_NOTICE && (
               <div className="min-h-[478px] py-[80px] mx-auto">
-                {token &&
+                {!!token &&
                   !!dataGetMe &&
                   !!!errorGetMe &&
                   dataGetMe.role === 'admin' &&
                   !!dataDetailLecture &&
+                  !!!errorDetailLecture &&
                   isShowAddNotice && (
                     <form
                       className="min-h-[491px] max-h-[491px] mb-[60px] xl:px-[98px] lg:px-[50px] md:px-[30px] sm:px-[14px] xs:px-[10px] py-[68px] box-border border-[1px] rounded-[8px] border-[#DCDEE2] w-full"
@@ -430,137 +431,137 @@ const PageDetailLecture: React.FC = () => {
                         onSubmitNoticeHandler();
                       }}
                     >
-                      <div className="mb-[28px] text-[#17233D] font-semibold text-[20px] leading-[150%]">
+                      <div className="mb-[28px] text-[#17233D] font-semibold text-[1.25rem] leading-[150%]">
                         공지사항 등록
                       </div>
                       <div className="my-0">
                         <input
-                          className="w-full border-[1px] min-h-[41px] max-h-[41px] border-[#DCDEE2] pl-[10px] py-[10px] text-[14px] leading-[150%] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
+                          className="w-full border-[1px] min-h-[41px] max-h-[41px] border-[#DCDEE2] pl-[10px] py-[10px] text-[0.875rem] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
                           type="text"
                           value={noticeTitle}
                           onChange={onChangeNoticeTitle}
-                          placeholder="제목을 입력하세요!"
+                          placeholder="제목을 입력하세요"
                           disabled={isLoadingSubmitNotice}
                         />
                       </div>
                       <div className="mt-0 mb-[20px]">
                         <textarea
-                          className="w-full min-h-[204px] max-h-[204px] border-[1px] border-[#DCDEE2] pl-[10px] py-[10px] text-[14px] leading-[150%] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
+                          className="w-full min-h-[204px] max-h-[204px] border-[1px] border-[#DCDEE2] pl-[10px] py-[10px] text-[0.875rem] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
                           value={noticeDescription}
                           onChange={onChangeNoticeDescription}
-                          placeholder="내용을 입력하세요!"
+                          placeholder="내용을 입력하세요"
                           disabled={isLoadingSubmitNotice}
                         />
                       </div>
                       <button
                         type="submit"
-                        className="w-full min-h-[41px] max-h-[41px] text-[14px] leading-[150%] font-semibold bg-[#8DC556] box-border border-[1px] border-[#8DC556] rounded-[4px] text-white my-0 disabled:opacity-50"
+                        className="w-full min-h-[41px] max-h-[41px] text-[0.875rem] font-semibold bg-[#8DC556] box-border border-[1px] border-[#8DC556] rounded-[4px] text-white my-0 disabled:opacity-50"
                         disabled={isLoadingSubmitNotice}
                       >
                         공지사항 등록
                       </button>
                     </form>
                   )}
-                <div>
-                  <div className="box-border rounded-[8px] border-[1px] border-[#DCDEE2] xl:px-[98px] lg:px-[50px] md:px-[30px] sm:px-[14px] xs:px-[10px] py-[60px] w-full">
-                    <div className="w-full flex justify-between items-center mb-[20px]">
-                      <div className="text-[#17233D] font-semibold text-[20px] leading-[150%]">
-                        공지사항
-                      </div>
-                      {!!token &&
-                      !!dataGetMe &&
-                      !!!errorGetMe &&
-                      dataGetMe.role === 'admin' &&
-                      !!dataDetailLecture ? (
-                        <button
-                          type="button"
-                          className="flex px-[10px] py-[4px] border-[1px] border-[#EBEEEF] rounded-[4px] bg-[#F9F9FA] disabled:opacity-50"
-                          onClick={(event) => {
-                            setIsShowAddNotice(!isShowAddNotice);
-                          }}
-                          disabled={isLoadingSubmitNotice}
-                        >
-                          {isShowAddNotice ? (
-                            <>
-                              <span className="m-auto mr-[4px] h-[18px] text-[12px] leading-[150%] font-medium text-[#808695]">
-                                공지사항 등록
-                              </span>
-                              <img
-                                className="w-[16px] h-[16px] m-auto object-fit"
-                                src={ImgClose}
-                              />
-                            </>
-                          ) : (
-                            <>
-                              <span className="m-auto mr-[4px] h-[18px] text-[12px] leading-[150%] font-medium text-[#808695]">
-                                공지사항 등록
-                              </span>
-                              <img
-                                className="w-[16px] h-[16px] m-auto object-fit"
-                                src={ImgEdit}
-                              />
-                            </>
-                          )}
-                        </button>
-                      ) : (
-                        <></>
-                      )}
+                <div className="box-border rounded-[8px] border-[1px] border-[#DCDEE2] xl:px-[98px] lg:px-[50px] md:px-[30px] sm:px-[14px] xs:px-[10px] py-[60px] w-full">
+                  <div className="w-full flex justify-between items-center mb-[20px]">
+                    <div className="text-[#17233D] font-semibold text-[1.25rem] leading-[150%]">
+                      공지사항
                     </div>
-                    <div className="w-full rounded-[4px] border-[1px] border-[#EBEEEF]">
-                      <div className="w-full h-[41px] bg-[#F9F9FA] flex">
-                        <div className="flex-none min-w-[60px] max-w-[60px] flex justify-center items-center">
-                          <div className="text-[14px] leading-[150%] font-semibold text-[#515A6E]">
-                            No
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-center flex-1">
-                          <div className="text-[14px] leading-[150%] font-semibold text-[#515A6E]">
-                            제목
-                          </div>
-                        </div>
-                        <div className="flex-none min-w-[126px] max-w-[126px] flex justify-end items-center mr-[20px]">
-                          <div className="text-[14px] leading-[150%] font-semibold text-[#515A6E]">
-                            작성일시
-                          </div>
+                    {!!token &&
+                    !!dataGetMe &&
+                    !!!errorGetMe &&
+                    dataGetMe.role === 'admin' &&
+                    !!dataDetailLecture &&
+                    !!!errorDetailLecture ? (
+                      <button
+                        type="button"
+                        className="flex px-[10px] py-[4px] border-[1px] border-[#EBEEEF] rounded-[4px] bg-[#F9F9FA] disabled:opacity-50"
+                        onClick={(event) => {
+                          setIsShowAddNotice(!isShowAddNotice);
+                        }}
+                        disabled={isLoadingSubmitNotice}
+                      >
+                        {isShowAddNotice ? (
+                          <>
+                            <span className="m-auto mr-[4px] h-[18px] text-[0.75rem] font-medium text-[#808695]">
+                              공지사항 등록
+                            </span>
+                            <img
+                              className="w-[16px] h-[16px] m-auto object-fill"
+                              src={ImgClose}
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <span className="m-auto mr-[4px] h-[18px] text-[0.75rem] font-medium text-[#808695]">
+                              공지사항 등록
+                            </span>
+                            <img
+                              className="w-[16px] h-[16px] m-auto object-fill"
+                              src={ImgEdit}
+                            />
+                          </>
+                        )}
+                      </button>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  <div className="w-full rounded-[4px] border-[1px] border-[#EBEEEF]">
+                    <div className="w-full h-[41px] bg-[#F9F9FA] flex">
+                      <div className="flex-none min-w-[60px] max-w-[60px] flex justify-center items-center">
+                        <div className="text-[0.875rem] font-semibold text-[#515A6E]">
+                          No
                         </div>
                       </div>
-                      {!!dataDetailLecture &&
-                      !!dataDetailLecture.notices &&
-                      dataDetailLecture.notices.length > 0 ? (
-                        !!dataDetailLecture.notices
-                          .sort((a: any, b: any) => {
-                            return (
-                              new Date(b.created_at).getTime() -
-                              new Date(a.created_at).getTime()
-                            );
-                          })
-                          .map((notice, index) => {
-                            return (
-                              <ComponentFormNoticeLecture
-                                key={notice.id}
-                                token={token}
-                                userType={dataGetMe?.role}
-                                mutate={mutateDetailLecture}
-                                lecture_id={dataDetailLecture.id}
-                                array_index={
-                                  dataDetailLecture.notices.length - index
-                                }
-                                id={notice.id}
-                                created_at={notice.created_at}
-                                title={notice.title}
-                                description={notice.description}
-                              />
-                            );
-                          })
-                      ) : (
-                        <div className="flex items-center justify-center min-h-[41px] text-[14px] leading-[150%] font-medium text-[#515A6E]">
-                          {!!!dataDetailLecture.notices ||
-                          dataDetailLecture.notices.length === 0
-                            ? '공지사항이 존재하지 않습니다'
-                            : '잘못된 접근입니다'}
+                      <div className="flex items-center justify-center flex-1">
+                        <div className="text-[0.875rem] font-semibold text-[#515A6E]">
+                          제목
                         </div>
-                      )}
+                      </div>
+                      <div className="flex-none min-w-[126px] max-w-[126px] flex justify-end items-center mr-[20px]">
+                        <div className="text-[0.875rem] font-semibold text-[#515A6E]">
+                          작성일시
+                        </div>
+                      </div>
                     </div>
+                    {!!dataDetailLecture &&
+                    !!!errorDetailLecture &&
+                    !!dataDetailLecture.notices &&
+                    dataDetailLecture.notices.length > 0 ? (
+                      dataDetailLecture.notices
+                        .sort((a: any, b: any) => {
+                          return (
+                            new Date(b.created_at).getTime() -
+                            new Date(a.created_at).getTime()
+                          );
+                        })
+                        .map((notice, index) => {
+                          return (
+                            <ComponentFormNoticeLecture
+                              key={notice.id}
+                              token={token}
+                              userType={dataGetMe?.role}
+                              mutate={mutateDetailLecture}
+                              lecture_id={dataDetailLecture.id}
+                              array_index={
+                                dataDetailLecture.notices.length - index
+                              }
+                              id={notice.id}
+                              created_at={notice.created_at}
+                              title={notice.title}
+                              description={notice.description}
+                            />
+                          );
+                        })
+                    ) : (
+                      <div className="flex items-center justify-center min-h-[41px] text-[0.875rem] font-medium text-[#515A6E]">
+                        {!!!dataDetailLecture.notices ||
+                        dataDetailLecture.notices.length === 0
+                          ? '공지사항이 존재하지 않습니다'
+                          : '잘못된 접근입니다'}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -580,41 +581,41 @@ const PageDetailLecture: React.FC = () => {
                         onSubmitQuestionHandler();
                       }}
                     >
-                      <div className="mb-[28px] text-[#17233D] font-semibold text-[20px] leading-[150%]">
+                      <div className="mb-[28px] text-[#17233D] font-semibold text-[1.25rem] leading-[150%]">
                         문의사항 등록
                       </div>
                       <div className="my-0">
                         <input
-                          className="w-full border-[1px] min-h-[41px] max-h-[41px] border-[#DCDEE2] pl-[10px] py-[10px] text-[14px] leading-[150%] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
+                          className="w-full border-[1px] min-h-[41px] max-h-[41px] border-[#DCDEE2] pl-[10px] py-[10px] text-[0.875rem] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
                           type="text"
                           value={questionTitle}
                           onChange={onChangeQuestionTitle}
-                          placeholder="제목을 입력하세요!"
+                          placeholder="제목을 입력하세요"
                           disabled={isLoadingSubmitQuestion}
                         />
                       </div>
                       <div className="mt-0 mb-[20px]">
                         <textarea
-                          className="w-full min-h-[204px] max-h-[204px] border-[1px] border-[#DCDEE2] pl-[10px] py-[10px] text-[14px] leading-[150%] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
+                          className="w-full min-h-[204px] max-h-[204px] border-[1px] border-[#DCDEE2] pl-[10px] py-[10px] text-[0.875rem] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
                           value={questionDescription}
                           onChange={onChangeQuestionDescription}
-                          placeholder="내용을 입력하세요!"
+                          placeholder="내용을 입력하세요"
                           disabled={isLoadingSubmitQuestion}
                         />
                       </div>
                       <button
                         type="submit"
-                        className="w-full min-h-[41px] max-h-[41px] text-[14px] leading-[150%] font-semibold bg-[#8DC556] box-border border-[1px] border-[#8DC556] rounded-[4px] text-white my-0 disabled:opacity-50"
+                        className="w-full min-h-[41px] max-h-[41px] text-[0.875rem] font-semibold bg-[#8DC556] box-border border-[1px] border-[#8DC556] rounded-[4px] text-white my-0 disabled:opacity-50"
                         disabled={isLoadingSubmitQuestion}
                       >
                         문의사항 등록
                       </button>
                     </form>
                   )}
-                <div>
+                <>
                   <div className="box-border rounded-[8px] border-[1px] border-[#DCDEE2] xl:px-[98px] lg:px-[50px] md:px-[30px] sm:px-[14px] xs:px-[10px] py-[60px] w-full">
                     <div className="w-full flex justify-between items-center mb-[20px]">
-                      <div className="text-[#17233D] font-semibold text-[20px] leading-[150%]">
+                      <div className="text-[#17233D] font-semibold text-[1.25rem] leading-[150%]">
                         문의사항
                       </div>
                       {!!token &&
@@ -631,21 +632,21 @@ const PageDetailLecture: React.FC = () => {
                         >
                           {isShowAddNotice ? (
                             <>
-                              <span className="m-auto mr-[4px] h-[18px] text-[12px] leading-[150%] font-medium text-[#808695]">
+                              <span className="m-auto mr-[4px] h-[18px] text-[0.75rem] font-medium text-[#808695]">
                                 문의사항 등록
                               </span>
                               <img
-                                className="w-[16px] h-[16px] m-auto object-fit"
+                                className="w-[16px] h-[16px] m-auto object-fill"
                                 src={ImgClose}
                               />
                             </>
                           ) : (
                             <>
-                              <span className="m-auto mr-[4px] h-[18px] text-[12px] leading-[150%] font-medium text-[#808695]">
+                              <span className="m-auto mr-[4px] h-[18px] text-[0.75rem] font-medium text-[#808695]">
                                 문의사항 등록
                               </span>
                               <img
-                                className="w-[16px] h-[16px] m-auto object-fit"
+                                className="w-[16px] h-[16px] m-auto object-fill"
                                 src={ImgEdit}
                               />
                             </>
@@ -658,17 +659,17 @@ const PageDetailLecture: React.FC = () => {
                     <div className="w-full rounded-[4px] border-[1px] border-[#EBEEEF]">
                       <div className="w-full h-[41px] bg-[#F9F9FA] flex">
                         <div className="flex-none min-w-[60px] max-w-[60px] flex justify-center items-center">
-                          <div className="text-[14px] leading-[150%] font-semibold text-[#515A6E]">
+                          <div className="text-[0.875rem] font-semibold text-[#515A6E]">
                             No
                           </div>
                         </div>
                         <div className="flex items-center justify-center flex-1">
-                          <div className="text-[14px] leading-[150%] font-semibold text-[#515A6E]">
+                          <div className="text-[0.875rem] font-semibold text-[#515A6E]">
                             제목
                           </div>
                         </div>
                         <div className="flex-none min-w-[126px] max-w-[126px] flex justify-end items-center mr-[20px]">
-                          <div className="text-[14px] leading-[150%] font-semibold text-[#515A6E]">
+                          <div className="text-[0.875rem] font-semibold text-[#515A6E]">
                             작성일시
                           </div>
                         </div>
@@ -709,7 +710,7 @@ const PageDetailLecture: React.FC = () => {
                             );
                           })
                       ) : (
-                        <div className="flex items-center justify-center min-h-[41px] text-[14px] leading-[150%] font-medium text-[#515A6E]">
+                        <div className="flex items-center justify-center min-h-[41px] text-[0.875rem] font-medium text-[#515A6E]">
                           {!token
                             ? '문의사항은 로그인 후 조회할 수 있습니다'
                             : !!!dataDetailLecture.qnas ||
@@ -720,7 +721,7 @@ const PageDetailLecture: React.FC = () => {
                       )}
                     </div>
                   </div>
-                </div>
+                </>
               </div>
             )}
           </div>
@@ -729,7 +730,7 @@ const PageDetailLecture: React.FC = () => {
       {!(!!dataDetailLecture && !!!errorDetailLecture) && (
         <Skeleton className="w-full h-screen" />
       )}
-    </>
+    </div>
   );
 };
 

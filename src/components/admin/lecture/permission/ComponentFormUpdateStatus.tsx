@@ -77,27 +77,28 @@ const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
     <>
       {updateToggle ? (
         <form
-          className="flex items-center py-[10px]"
+          className="mt-[10px] flex items-center"
           onSubmit={(event) => {
             event.preventDefault();
             onSubmitUpdateTag();
           }}
         >
           <Select
-            className="w-full disabled:opacity-50"
+            className="w-full text-xs text-gray-200 bg-harp disabled:opacity-50"
             options={statusOptions}
             onChange={onHandleChange}
+            placeholder="수강 상태를 업데이트하세요"
             isDisabled={isLoadingSubmit}
           />
           <button
-            className="mx-[10px] lg:w-[4vw] w-[8vw] box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[41px] lg:text-[14px] text-[1vw] font-semibold leading-[150%] bg-[#4DBFF0] text-white disabled:opacity-50"
+            className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
             type="submit"
             disabled={isLoadingSubmit}
           >
             수정
           </button>
           <button
-            className="lg:w-[4vw] w-[8vw] box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[41px] lg:text-[14px] text-[1vw] font-semibold leading-[150%] bg-[#4DBFF0] text-white disabled:opacity-50"
+            className="w-[65px] h-[32px] button-modify-cancel-admin relative"
             onClick={onClickUpdateToggle}
             disabled={isLoadingSubmit}
           >
@@ -105,8 +106,8 @@ const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
           </button>
         </form>
       ) : (
-        <div className="flex items-center py-[10px] w-full">
-          <div className="w-full">
+        <div className="flex items-center w-full">
+          <div className="w-full text-right">
             상태 :
             {status === null
               ? ' 공개'
@@ -121,7 +122,7 @@ const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
               : ' 오류'}
           </div>
           <FontAwesomeIcon
-            className="mx-[10px]"
+            className="ml-[10px] button-fa-icon-admin"
             icon={faEdit}
             onClick={onClickUpdateToggle}
           />

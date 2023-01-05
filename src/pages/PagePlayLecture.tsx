@@ -43,21 +43,12 @@ const PagePlayLecture: React.FC = () => {
       { revalidateOnFocus: false, revalidateIfStale: false },
     );
   React.useEffect(() => {
-    if (
-      !(
-        !!token &&
-        !!dataGetMe &&
-        !!!errorGetMe &&
-        dataGetMe.role === 'student' &&
-        !!id &&
-        !!!errorGetMe
-      )
-    ) {
+    if (token === '' || !!errorGetMe || !!!id) {
       navigate('/', { replace: true });
     }
   }, [token, dataGetMe, errorGetMe]);
   return (
-    <div className="pt-[100px]">
+    <div className="w-full bg-gray-500 min-h-[inherit] pt-[5px]">
       {!!token &&
         !!dataGetMe &&
         !!!errorGetMe &&

@@ -27,16 +27,14 @@ const PageProfile: React.FC = () => {
     { revalidateOnFocus: false, revalidateIfStale: false },
   );
   React.useEffect(() => {
-    if (!(!!dataGetMe && !!!errorGetMe && dataGetMe.role === 'student')) {
+    if (token === '' || !!errorGetMe) {
       navigate('/', { replace: true });
     }
   }, [errorGetMe]);
   return (
-    <div className="pt-[100px] min-h-[73vh] w-full flex justify-center items-center">
-      <div className="xl:min-w-[554px] xl:max-w-[554px] lg:min-w-[472.75px] lg:max-w-[472.75px] md:min-w-[354.56px] md:max-w-[354.56px] sm:min-w-[295.47px] sm:max-w-[295.47px] xs:min-w-[295.47px] xs:max-w-[295.47px] box-border rounded-[8px] border-[1px] border-[#DCDEE2] mx-auto my-[120px] py-[30px] xl:px-[98px] lg:px-[83.63px] md:px-[62.72px] sm:px-[52.27px] xs:px-[52.27px]">
-        <div className="text-[24px] leading-[150%] font-semibold">
-          개인 정보 수정
-        </div>
+    <div className="w-full flex justify-center items-center">
+      <div className="xl:min-w-[554px] xl:max-w-[554px] md:min-w-[472.75px] md:max-w-[472.75px] min-w-[400px] max-w-[400px] box-border rounded-[8px] border-[1px] border-[#DCDEE2] mx-auto my-[120px] py-[30px] xl:px-[98px] px-[52.27px]">
+        <div className="text-[1.5rem] font-semibold">개인 정보 수정</div>
         <div className="mt-[20px]">
           {!!dataMyInfo && (
             <>

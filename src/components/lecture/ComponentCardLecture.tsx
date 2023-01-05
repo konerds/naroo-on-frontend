@@ -37,7 +37,7 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
   const [isBackdropShow, setIsBackdropShow] = React.useState<boolean>(false);
   return (
     <div
-      className={`cursor-pointer w-full md:max-w-[261px] lg:max-w-[261px] min-h-[444px] max-h-[444px] mx-0 rounded-[8px] ${
+      className={`cursor-pointer w-full min-h-[444px] max-h-[444px] mx-0 rounded-[8px] ${
         isBackdropShow
           ? 'lecture-card-container lecture-card-container-hover'
           : 'lecture-card-container'
@@ -78,7 +78,7 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
       </Link>
       <div className="flex flex-wrap items-center w-full min-h-[183px] max-h-[183px] pt-[12px]">
         {status && (
-          <div className="w-full px-[10px] text-[12px] text-[#808695]">
+          <div className="w-full px-[10px] text-[0.75rem] text-[#808695]">
             {status === 'accept'
               ? '승인 완료'
               : status === 'apply'
@@ -88,10 +88,10 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
               : ''}
           </div>
         )}
-        <div className="w-full max-h-[48px] overflow-hidden text-ellipsis px-[20px] text-[16px] font-semibold leading-[150%] text-[#17233D]">
+        <div className="w-full max-h-[48px] overflow-hidden text-ellipsis px-[20px] text-[1rem] font-semibold text-[#17233D]">
           {title}
         </div>
-        <div className="w-full px-[20px] font-medium text-[12px] leading-[150%] text-[#808695]">
+        <div className="w-full px-[20px] font-medium text-[0.75rem] text-[#808695]">
           {teacherNickname}
         </div>
         {!!tags && isArray(tags) ? (

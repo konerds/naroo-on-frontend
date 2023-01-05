@@ -40,10 +40,10 @@ const ComponentFormUnregisterTag: React.FC<
     }
   };
   return (
-    <div key={tag.id} className="flex items-center py-[5px] pr-[20px]">
+    <div key={tag.id} className="flex items-center pr-[20px]">
       <ComponentElementTag name={tag.name} />
       <FontAwesomeIcon
-        className={`ml-[5px] ${
+        className={`ml-[5px] button-fa-icon-admin ${
           isLoadingClickUnregisterTag
             ? 'opacity-50 cursor-not-allowed pointer-events-none'
             : ''

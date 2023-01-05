@@ -41,16 +41,16 @@ const ComponentElementEditUser: React.FC<IPropsComponentElementEditUser> = ({
     }
   };
   return (
-    <div key={!!user.id ? user.id : null}>
+    <React.Fragment key={!!user.id ? user.id : null}>
       {!!user.id && (
         <div
-          className={`border-[1px] rounded-[4px] p-[20px] my-[20px] ${
+          className={`w-auto sm border-[1px] rounded-[4px] p-[20px] my-[20px] ${
             user.role === 'admin'
               ? 'border-[3px] border-red-700'
               : 'border-black'
           }`}
         >
-          <div>
+          <>
             {!!user.email && (
               <ComponentFormUpdateUser
                 fieldType="email"
@@ -81,7 +81,7 @@ const ComponentElementEditUser: React.FC<IPropsComponentElementEditUser> = ({
                 mutate={mutate}
               />
             )}
-          </div>
+          </>
           <button
             disabled={isLoadingDeleteUser}
             className={`${
@@ -92,11 +92,11 @@ const ComponentElementEditUser: React.FC<IPropsComponentElementEditUser> = ({
             }}
           >
             삭제
-            <FontAwesomeIcon className="ml-[1vw]" icon={faTrash} />
+            <FontAwesomeIcon className="ml-[10px]" icon={faTrash} />
           </button>
         </div>
       )}
-    </div>
+    </React.Fragment>
   );
 };
 

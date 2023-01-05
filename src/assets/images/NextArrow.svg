@@ -1,18 +1,1 @@
-<svg width="48" height="49" viewBox="0 0 48 49" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M23.8921 0.0136719C12.8464 0.0136692 3.89209 8.96797 3.89209 20.0137C3.89209 31.0594 12.8464 40.0137 23.8921 40.0137C34.9378 40.0137 43.8921 31.0594 43.8921 20.0137C43.8921 8.96798 34.9378 0.0136719 23.8921 0.0136719ZM20.8211 15.7707L24.7839 19.7335C24.9387 19.8882 24.9387 20.1391 24.7839 20.2939L20.8211 24.2567C20.4306 24.6471 20.4306 25.2802 20.8211 25.6707C21.2116 26.0611 21.8446 26.0611 22.2351 25.6707L27.4758 20.43C27.7057 20.2001 27.7057 19.8273 27.4758 19.5973L22.2351 14.3567C21.8446 13.9662 21.2116 13.9662 20.8211 14.3567C20.4306 14.7471 20.4306 15.3802 20.8211 15.7707Z" fill="white" fill-opacity="1"/>
-<g filter="url(#filter0_d_910:3862)" opacity="1">
-<circle cx="24.001" cy="20.0137" r="19.5" stroke="white" shape-rendering="crispEdges"/>
-</g>
-<defs>
-<filter id="filter0_d_910:3862" x="0.000976562" y="0.0136719" width="48" height="48" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-<feOffset dy="4"/>
-<feGaussianBlur stdDeviation="2"/>
-<feComposite in2="hardAlpha" operator="out"/>
-<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
-<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_910:3862"/>
-<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_910:3862" result="shape"/>
-</filter>
-</defs>
-</svg>
+<svg viewBox="-11.7 -11.7 140.40 140.40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"><rect x="-11.7" y="-11.7" width="140.40" height="140.40" rx="70.2" fill="#ffffff4a4a4a" strokewidth="0"></rect></g><g id="SVGRepo_iconCarrier"> <title></title> <desc></desc> <defs></defs> <g fill="none" fill-rule="evenodd" id="Page-1" stroke-width="0.00117"> <g fill-rule="nonzero" id="right-arrow"> <path d="M58.5,116.6 C90.5,116.6 116.6,90.6 116.6,58.5 C116.6,26.4 90.5,0.4 58.5,0.4 C26.5,0.4 0.4,26.5 0.4,58.5 C0.4,90.5 26.5,116.6 58.5,116.6 Z M58.5,8.6 C86,8.6 108.4,31 108.4,58.5 C108.4,86 86,108.4 58.5,108.4 C31,108.4 8.6,86 8.6,58.5 C8.6,31 31,8.6 58.5,8.6 Z" fill="#ffffff4A4A4A" id="Shape"></path> <path d="M45.1,87.5 C45.9,88.3 46.9,88.7 48,88.7 C49,88.7 50.1,88.3 50.9,87.5 L77.3,61.1 C78.1,60.3 78.5,59.3 78.5,58.2 C78.5,57.1 78.1,56.1 77.3,55.3 L50.9,28.9 C49.3,27.3 46.7,27.3 45.1,28.9 C43.5,30.5 43.5,33.1 45.1,34.7 L68.6,58.2 L45.1,81.7 C43.5,83.3 43.5,85.9 45.1,87.5 Z" fill="#ffffff" id="Shape"></path> </g> </g> </g></svg>

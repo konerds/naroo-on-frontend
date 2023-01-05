@@ -13,9 +13,54 @@ import {
   ILectureInList,
   TYPE_ADMIN_MENU,
 } from '../../interfaces';
-import Slider from 'react-slick';
+import { ReactComponent as ImgPrevArrow } from '../../assets/images/PrevArrow.svg';
+import { ReactComponent as ImgNextArrow } from '../../assets/images/NextArrow.svg';
+import Slider, { CustomArrowProps } from 'react-slick';
 import { KeyedMutator } from 'swr';
 import { showError } from '../../hooks/api';
+
+const ComponentArrowPrev = (props: CustomArrowProps) => {
+  return (
+    <ImgPrevArrow
+      className={props.className}
+      style={{
+        ...props.style,
+        display: 'absolute',
+        width: 15,
+        height: 15,
+        zIndex: 999,
+      }}
+      onClick={props.onClick}
+    />
+  );
+};
+
+const ComponentArrowNext = (props: CustomArrowProps) => {
+  return (
+    <ImgNextArrow
+      className={props.className}
+      style={{
+        ...props.style,
+        display: 'absolute',
+        width: 15,
+        height: 15,
+        zIndex: 999,
+      }}
+      onClick={props.onClick}
+    />
+  );
+};
+
+const settings = {
+  dots: false,
+  infinite: false,
+  speed: 500,
+  slidesToShow: 4,
+  slidesToScroll: 1,
+  pauseOnHover: true,
+  prevArrow: <ComponentArrowPrev />,
+  nextArrow: <ComponentArrowNext />,
+};
 
 interface IPropsComponentFormAddLecture {
   token: string | null;
@@ -28,14 +73,6 @@ const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
   setSelectedMenu,
   allLecturesMutate,
 }) => {
-  const settings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    pauseOnHover: true,
-  };
   const { value: title, onChange: onChangeTitle } = useStringInput('');
   const [thumbnail, setThumbnail] = React.useState<any>(null);
   const { value: description, onChange: onChangeDescription } =
@@ -131,38 +168,38 @@ const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
   };
   return (
     <form
-      className="mt-[47px] w-full"
+      className="w-full"
       onSubmit={(event) => {
         event.preventDefault();
         onSubmitHandler();
       }}
     >
-      <div className="mt-[67px] mb-[29px]">
-        <div>
-          <label htmlFor="title">제목</label>
-        </div>
-        <input
-          className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[14px] leading-[150%] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white px-[20px] disabled:opacity-50"
-          type="text"
-          value={title}
-          onChange={onChangeTitle}
-          disabled={isLoadingSubmit}
-        />
-      </div>
       <div className="mb-[29px]">
-        <div>
-          <label htmlFor="expired_at">강의 만료 일시</label>
-        </div>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDateTimePicker
-            format="yyyy년 MM월 dd일 hh시 mm분 ss초"
-            value={expiredAt}
-            margin="normal"
-            onChange={onHandleExpiredAt}
-            className="w-full disabled:opacity-50"
+        <label htmlFor="title">
+          제목
+          <input
+            className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white px-[20px] disabled:opacity-50"
+            type="text"
+            value={title}
+            onChange={onChangeTitle}
             disabled={isLoadingSubmit}
           />
-        </MuiPickersUtilsProvider>
+        </label>
+      </div>
+      <div className="mb-[29px]">
+        <label htmlFor="expired_at">
+          강의 만료 일시
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDateTimePicker
+              format="yyyy년 MM월 dd일 hh시 mm분 ss초"
+              value={expiredAt}
+              margin="normal"
+              onChange={onHandleExpiredAt}
+              className="w-full disabled:opacity-50"
+              disabled={isLoadingSubmit}
+            />
+          </MuiPickersUtilsProvider>
+        </label>
       </div>
       {thumbnail && (
         <div className="mb-[29px]">
@@ -170,73 +207,74 @@ const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
         </div>
       )}
       <div className="mb-[29px]">
-        <div>
-          <label htmlFor="thumbnail-file">썸네일 이미지</label>
-        </div>
-        <input
-          className="w-full border-[1px] border-[#C4C4C4] p-[20px] disabled:opacity-50"
-          type="file"
-          disabled={isLoadingSubmit}
-          onChange={(event) => {
-            if (!event.target.files || !event.target.files[0]) {
-              return;
-            }
-            const imageFile = event.target.files[0];
-            const fileReader = new FileReader();
-            fileReader.readAsDataURL(imageFile);
-            fileReader.onload = (readerEvent) => {
-              setThumbnail(readerEvent.target?.result);
-            };
-          }}
-        />
+        <label htmlFor="thumbnail-file">
+          썸네일 이미지
+          <input
+            className="w-full border-[1px] border-[#C4C4C4] p-[20px] disabled:opacity-50"
+            type="file"
+            disabled={isLoadingSubmit}
+            onChange={(event) => {
+              if (!event.target.files || !event.target.files[0]) {
+                return;
+              }
+              const imageFile = event.target.files[0];
+              const fileReader = new FileReader();
+              fileReader.readAsDataURL(imageFile);
+              fileReader.onload = (readerEvent) => {
+                setThumbnail(readerEvent.target?.result);
+              };
+            }}
+          />
+        </label>
       </div>
       <div className="mb-[29px]">
-        <div>
-          <label htmlFor="description">강의 설명</label>
-        </div>
-        <input
-          className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[14px] leading-[150%] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white px-[20px] disabled:opacity-50"
-          type="text"
-          value={description}
-          onChange={onChangeDescription}
-          disabled={isLoadingSubmit}
-        />
+        <label>
+          강의 설명
+          <textarea
+            className="w-full h-[100px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white px-[20px] disabled:opacity-50"
+            value={description}
+            onChange={onChangeDescription}
+            disabled={isLoadingSubmit}
+          ></textarea>
+        </label>
       </div>
       <div className="mb-[29px]">
-        <div>
-          <label htmlFor="teacher-name">강사 이름</label>
-        </div>
-        <input
-          className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[14px] leading-[150%] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white px-[20px] disabled:opacity-50"
-          type="text"
-          value={teacherName}
-          onChange={onChangeTeacherName}
-          disabled={isLoadingSubmit}
-        />
+        <label htmlFor="teacher-name">
+          강사 이름
+          <input
+            className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white px-[20px] disabled:opacity-50"
+            type="text"
+            value={teacherName}
+            onChange={onChangeTeacherName}
+            disabled={isLoadingSubmit}
+          />
+        </label>
       </div>
       <div className="mb-[29px]">
-        <div>
-          <label htmlFor="images">강의 소개 이미지</label>
-        </div>
-        <input
-          className="hidden"
-          type="file"
-          ref={inputFileRef}
-          onChange={(event) => {
-            onFileChange(event);
-          }}
-          disabled={isLoadingSubmit}
-        />
+        <label htmlFor="images">
+          강의 소개 이미지
+          <input
+            className="hidden"
+            type="file"
+            ref={inputFileRef}
+            onChange={(event) => {
+              onFileChange(event);
+            }}
+            disabled={isLoadingSubmit}
+          />
+        </label>
         <Slider {...settings}>
           {lectureImageOptions &&
             lectureImageOptions.length > 0 &&
             lectureImageOptions.map((lectureImageOption) => {
               if (lectureImageOption.value) {
                 return (
-                  <img
-                    className="w-[25%] h-[300px] rounded-xl mb-[15px]"
-                    src={lectureImageOption.value.toString()}
-                  />
+                  <div className="pr-[4px]">
+                    <img
+                      className="w-auto rounded-xl mb-[15px]"
+                      src={lectureImageOption.value.toString()}
+                    />
+                  </div>
                 );
               }
             })}
@@ -250,9 +288,9 @@ const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
           onChange={onHandleImagesChange}
           onCreateOption={onHandleImagesCreate}
           onMenuOpen={onMenuOpenSelectImages}
-          formatCreateLabel={() => '이미지 URL 추가하기'}
+          formatCreateLabel={() => '강의 소개 이미지 추가하기'}
           noOptionsMessage={() => null}
-          placeholder="강의 소개 이미지 URL을 추가하세요!"
+          placeholder="강의 소개 이미지를 추가하세요"
           className="disabled:opacity-50"
           isDisabled={isLoadingSubmit}
         />
@@ -262,7 +300,7 @@ const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
           <label htmlFor="video_title">강의 영상 제목</label>
         </div>
         <input
-          className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[14px] leading-[150%] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white px-[20px] disabled:opacity-50"
+          className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white px-[20px] disabled:opacity-50"
           type="text"
           value={videoTitle}
           onChange={onChangeVideoTitle}
@@ -274,7 +312,7 @@ const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
           <label htmlFor="video_url">강의 영상 URL</label>
         </div>
         <input
-          className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[14px] leading-[150%] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white px-[20px] disabled:opacity-50"
+          className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white px-[20px] disabled:opacity-50"
           type="text"
           value={videoUrl}
           onChange={onChangeVideoUrl}
@@ -284,7 +322,7 @@ const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
       <button
         type="submit"
         disabled={isLoadingSubmit}
-        className="w-full h-[51px] text-[24px] font-semibold leading-[33px] bg-[#4DBFF0] text-white mb-[12px] disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full h-[41px] rounded-3xl text-[1.5rem] font-semibold leading-[2.0625rem] bg-[#4DBFF0] text-white mb-[12px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
       >
         강의 추가
       </button>

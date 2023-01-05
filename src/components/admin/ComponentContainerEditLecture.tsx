@@ -15,10 +15,10 @@ const ComponentContainerEditLecture: React.FC<
   IPropsComponentContainerEditLecture
 > = ({ token, setToken, allLecturesData, allLecturesMutate, allTags }) => {
   return (
-    <div className="flex items-center justify-center mt-[30px]">
+    <div className="flex items-center justify-center">
       <div>
         {allLecturesData && (
-          <div className="grid grid-flow-row 2xl:grid-cols-2 2xl:gap-6 xl:grid-cols-2 xl:gap-6 lg:grid-cols-1 lg:gap-6 md:grid-cols-1 md:gap-3">
+          <div className="grid grid-flow-row 2xl:grid-cols-2 2xl:gap-6 xl:grid-cols-2 xl:gap-6 lg:grid-cols-1 lg:gap-6 md:grid-cols-1 md:gap-3 gap-y-10">
             {allLecturesData.map((lecture, index) => {
               return (
                 <ComponentElementEditLecture

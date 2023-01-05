@@ -88,13 +88,13 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
             </label>
           </div>
           {!!preview && (
-            <div className="mb-[29px]">
-              <img className="rounded-xl" src={preview} />
+            <div className="my-[10px]">
+              <img className="rounded-2xl m-auto" src={preview} />
             </div>
           )}
           <div className="flex">
             <input
-              className="w-full px-[10px] disabled:opacity-50"
+              className="w-full m-auto h-[32px] px-[10px] disabled:opacity-50 relative top-[5px]"
               type="file"
               disabled={isLoadingSubmit}
               onChange={(event) => {
@@ -112,7 +112,7 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
               }}
             />
             <button
-              className="mx-[10px] lg:w-[4vw] w-[8vw] box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[41px] lg:text-[14px] text-[1vw] font-semibold leading-[150%] bg-[#4DBFF0] text-white disabled:opacity-50"
+              className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
               type="submit"
               disabled={isLoadingSubmit}
             >
@@ -120,7 +120,7 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
             </button>
             <button
               type="button"
-              className="lg:w-[4vw] w-[8vw] box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[41px] lg:text-[14px] text-[1vw] font-semibold leading-[150%] bg-[#4DBFF0] text-white disabled:opacity-50"
+              className="w-[65px] h-[32px] button-modify-cancel-admin"
               onClick={onClickUpdateToggle}
               disabled={isLoadingSubmit}
             >
@@ -150,7 +150,7 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
               )}
               {fieldType === 'img_description' && !!userField ? (
                 <img
-                  className="rounded-xl"
+                  className="rounded-xl mt-[10px] mx-auto"
                   src={userField}
                   alt="lecture_description_img"
                 />
@@ -160,7 +160,7 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
             </div>
           </div>
           <FontAwesomeIcon
-            className="mx-[10px]"
+            className="ml-[10px] button-fa-icon-admin"
             icon={faEdit}
             onClick={onClickUpdateToggle}
           />

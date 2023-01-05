@@ -100,15 +100,15 @@ const PageAdmin: React.FC = () => {
     }
   }, [dataGetMe, errorGetMe]);
   return (
-    <div className="pt-[100px] min-h-screen bg-white font-noto">
+    <div className="w-full bg-white mt-[20px] mb-auto">
       {!!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin' && (
-        <div className="mx-auto mt-[2vh] pb-[96px]">
+        <div className="mx-auto">
           <div className="text-4xl font-semibold text-center text-gray-400 mb-[4vh] 2xl:max-w-[900px] xl:max-w-[750px] lg:max-w-[600px] md:max-w-[500px] sm:max-w-[400px] xs:max-w-[350px] mx-auto">
             관리자 페이지
           </div>
           <div className="items-center hidden md:flex justify-evenly">
             <button
-              className={`border-[1px] border-[#515A6E] rounded p-[10px] text-xl min-w-max ${
+              className={`hover:opacity-50 border-[1px] border-[#515A6E] rounded p-[10px] text-xl min-w-max ${
                 selectedMenu === CONST_ADMIN_MENU.LECTURE_ADD
                   ? 'text-[#8DC556] border-[#678a44]'
                   : 'text-[#515A6E]'
@@ -118,7 +118,7 @@ const PageAdmin: React.FC = () => {
               강의 추가
             </button>
             <button
-              className={`border-[1px] border-[#515A6E] rounded p-[10px] text-xl min-w-max ${
+              className={`hover:opacity-50 border-[1px] border-[#515A6E] rounded p-[10px] text-xl min-w-max ${
                 selectedMenu === CONST_ADMIN_MENU.LECTURE_EDIT
                   ? 'text-[#8DC556] border-[#8DC556]'
                   : 'text-[#515A6E]'
@@ -128,7 +128,7 @@ const PageAdmin: React.FC = () => {
               강의 관리
             </button>
             <button
-              className={`border-[1px] border-[#515A6E] rounded p-[10px] text-xl min-w-max ${
+              className={`hover:opacity-50 border-[1px] border-[#515A6E] rounded p-[10px] text-xl min-w-max ${
                 selectedMenu === CONST_ADMIN_MENU.LECTURE_PERMISSION
                   ? 'text-[#8DC556] border-[#8DC556]'
                   : 'text-[#515A6E]'
@@ -140,7 +140,7 @@ const PageAdmin: React.FC = () => {
               강의 승인
             </button>
             <button
-              className={`border-[1px] border-[#515A6E] rounded p-[10px] text-xl min-w-max ${
+              className={`hover:opacity-50 border-[1px] border-[#515A6E] rounded p-[10px] text-xl min-w-max ${
                 selectedMenu === CONST_ADMIN_MENU.STUDENT_EDIT
                   ? 'text-[#8DC556] border-[#8DC556]'
                   : 'text-[#515A6E]'
@@ -150,7 +150,7 @@ const PageAdmin: React.FC = () => {
               사용자 관리
             </button>
             <button
-              className={`border-[1px] border-[#515A6E] rounded p-[10px] text-xl min-w-max ${
+              className={`hover:opacity-50 border-[1px] border-[#515A6E] rounded p-[10px] text-xl min-w-max ${
                 selectedMenu === CONST_ADMIN_MENU.TAG_EDIT
                   ? 'text-[#8DC556] border-[#8DC556]'
                   : 'text-[#515A6E]'
@@ -160,7 +160,7 @@ const PageAdmin: React.FC = () => {
               태그 관리
             </button>
             <button
-              className={`border-[1px] border-[#515A6E] rounded p-[10px] text-xl min-w-max ${
+              className={`hover:opacity-50 border-[1px] border-[#515A6E] rounded p-[10px] text-xl min-w-max ${
                 selectedMenu === CONST_ADMIN_MENU.RESOURCE_EDIT
                   ? 'text-[#8DC556] border-[#8DC556]'
                   : 'text-[#515A6E]'
@@ -174,7 +174,7 @@ const PageAdmin: React.FC = () => {
             <>
               <button
                 ref={refMenuElement}
-                className="border-[#8DC556] border-[1px] rounded-[4px] text-[#8DC556] font-semibold text-[20px] leading-[20px] w-full py-[5px]"
+                className="border-[#8DC556] border-[1px] rounded-[4px] text-[#8DC556] font-semibold text-[1.25rem] leading-[1.25rem] w-full py-[5px] hover:opacity-50"
                 onClick={() => setIsVisibleMenu(!isVisibleMenu)}
               >
                 메뉴
@@ -182,7 +182,7 @@ const PageAdmin: React.FC = () => {
               {isVisibleMenu && (
                 <div className="flex-none border-[1px] border-[#DCDEE2] box-border rounded-[10px] bg-white min-w-full relative z-[999]">
                   <button
-                    className={`block w-full px-[10px] py-[10px] ${
+                    className={`hover:opacity-50 block w-full px-[10px] py-[10px] ${
                       selectedMenu === CONST_ADMIN_MENU.LECTURE_ADD
                         ? 'text-[#8DC556]'
                         : 'text-[#515A6E]'
@@ -194,9 +194,8 @@ const PageAdmin: React.FC = () => {
                   >
                     강의 추가
                   </button>
-
                   <button
-                    className={`block w-full px-[10px] py-[10px]  ${
+                    className={`hover:opacity-50 block w-full px-[10px] py-[10px]  ${
                       selectedMenu === CONST_ADMIN_MENU.LECTURE_EDIT
                         ? 'text-[#8DC556]'
                         : 'text-[#515A6E]'
@@ -208,9 +207,8 @@ const PageAdmin: React.FC = () => {
                   >
                     강의 관리
                   </button>
-
                   <button
-                    className={`block w-full px-[10px] py-[10px]  ${
+                    className={`hover:opacity-50 block w-full px-[10px] py-[10px]  ${
                       selectedMenu === CONST_ADMIN_MENU.LECTURE_PERMISSION
                         ? 'text-[#8DC556]'
                         : 'text-[#515A6E]'
@@ -222,9 +220,8 @@ const PageAdmin: React.FC = () => {
                   >
                     강의 승인
                   </button>
-
                   <button
-                    className={`block w-full px-[10px] py-[10px]  ${
+                    className={`hover:opacity-50 block w-full px-[10px] py-[10px]  ${
                       selectedMenu === CONST_ADMIN_MENU.STUDENT_EDIT
                         ? 'text-[#8DC556]'
                         : 'text-[#515A6E]'
@@ -236,9 +233,8 @@ const PageAdmin: React.FC = () => {
                   >
                     사용자 관리
                   </button>
-
                   <button
-                    className={`block w-full px-[10px] py-[10px]  ${
+                    className={`hover:opacity-50 block w-full px-[10px] py-[10px]  ${
                       selectedMenu === CONST_ADMIN_MENU.TAG_EDIT
                         ? 'text-[#8DC556]'
                         : 'text-[#515A6E]'
@@ -250,9 +246,8 @@ const PageAdmin: React.FC = () => {
                   >
                     태그 관리
                   </button>
-
                   <button
-                    className={`block w-full px-[10px] py-[10px]  ${
+                    className={`hover:opacity-50 block w-full px-[10px] py-[10px]  ${
                       selectedMenu === CONST_ADMIN_MENU.RESOURCE_EDIT
                         ? 'text-[#8DC556]'
                         : 'text-[#515A6E]'
@@ -269,7 +264,7 @@ const PageAdmin: React.FC = () => {
             </>
           </div>
           {selectedMenu === CONST_ADMIN_MENU.LECTURE_ADD && (
-            <div className="max-w-[90%] overflow-w-hidden mx-auto">
+            <div className="my-[45px] max-w-[90%] md:max-w-[600px] overflow-w-hidden mx-auto border-[1px] rounded-2xl p-[40px]">
               <ComponentFormAddLecture
                 token={token}
                 setSelectedMenu={setSelectedMenu}
@@ -280,7 +275,7 @@ const PageAdmin: React.FC = () => {
           {selectedMenu === CONST_ADMIN_MENU.LECTURE_EDIT &&
             !!dataTags &&
             !!!errorTags && (
-              <div className="max-w-[90%] overflow-x-hidden mx-auto">
+              <div className="my-[45px] max-w-[90%] overflow-x-hidden mx-auto">
                 <ComponentContainerEditLecture
                   token={token}
                   setToken={setToken}
@@ -295,7 +290,7 @@ const PageAdmin: React.FC = () => {
             !!!errorUsers &&
             !!dataAllLectures &&
             !!!errorAllLectures && (
-              <div className="max-w-[90%] mx-auto">
+              <div className="my-[45px] xs:max-w-[90vw] sm:max-w-[500px] overflow-w-hidden mx-auto border-[1px] rounded-2xl p-[40px]">
                 <ComponentContainerPermissionLecture
                   token={token}
                   studentOptions={dataUsers
@@ -318,7 +313,7 @@ const PageAdmin: React.FC = () => {
               </div>
             )}
           {selectedMenu === CONST_ADMIN_MENU.STUDENT_EDIT && (
-            <div className="max-w-[90%] overflow-w-hidden mx-auto">
+            <div className="my-[45px] max-w-[90vw] overflow-w-hidden mx-auto border-[1px] rounded-2xl px-[40px] py-[20px]">
               <ComponentContainerEditUser
                 token={token}
                 dataUsers={dataUsers}
@@ -327,10 +322,9 @@ const PageAdmin: React.FC = () => {
             </div>
           )}
           {selectedMenu === CONST_ADMIN_MENU.TAG_EDIT && (
-            <div className="max-w-[90%] overflow-w-hidden mx-auto">
+            <div className="my-[45px] max-w-[90vw] md:max-w-[700px] overflow-w-hidden mx-auto border-[1px] rounded-2xl px-[40px] py-[20px]">
               <ComponentFormEditTag
                 token={token}
-                setToken={setToken}
                 tagsData={dataTags}
                 tagsMutate={mutateTags}
               />
@@ -339,7 +333,7 @@ const PageAdmin: React.FC = () => {
           {selectedMenu === CONST_ADMIN_MENU.RESOURCE_EDIT &&
             !!dataAllResource &&
             !!!errorAllResources && (
-              <div className="max-w-[90%] overflow-w-hidden mx-auto">
+              <div className="my-[45px] max-w-[90vw] overflow-w-hidden mx-auto border-[1px] rounded-2xl px-[40px] py-[20px]">
                 <ComponentContainerEditResource
                   token={token}
                   logoHeaderResourcesData={dataAllResource.filter(

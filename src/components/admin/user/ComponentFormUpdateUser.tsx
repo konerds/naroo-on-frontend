@@ -75,7 +75,7 @@ const ComponentFormUpdateUser: React.FC<IPropsComponentFormUpdateUser> = ({
         >
           <div className="w-full">
             <input
-              className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[14px] leading-[150%] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white px-[20px] disabled:opacity-50"
+              className="w-full h-[32px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white px-[20px] disabled:opacity-50"
               type="text"
               value={updateFieldName ? updateFieldName : ''}
               onChange={onChangeUpdateFieldName}
@@ -83,14 +83,14 @@ const ComponentFormUpdateUser: React.FC<IPropsComponentFormUpdateUser> = ({
             />
           </div>
           <button
-            className="mx-[10px] w-[50px] box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[41px] text-[14px] font-semibold bg-[#4DBFF0] text-white disabled:opacity-50"
+            className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
             type="submit"
             disabled={isLoadingSubmit}
           >
             수정
           </button>
           <button
-            className="w-[50px] box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[41px] text-[14px] font-semibold leading-[150%] bg-[#4DBFF0] text-white disabled:opacity-50"
+            className="w-[65px] h-[32px] button-modify-cancel-admin"
             type="button"
             onClick={onClickUpdateToggle}
             disabled={isLoadingSubmit}
@@ -115,12 +115,14 @@ const ComponentFormUpdateUser: React.FC<IPropsComponentFormUpdateUser> = ({
                 '보안을 위해 기존 비밀번호 확인은 불가능하며, 새로운 비밀번호를 설정하는 것은 가능합니다'}
             </div>
           </div>
-          <ImgEdit
-            className="ml-[20px] cursor-pointer fill-[black] hover:fill-[#4DBFF0]"
-            onClick={onClickUpdateToggle}
-            width={14}
-            height={14}
-          />
+          {fieldType !== 'email' && (
+            <ImgEdit
+              className="ml-[20px] cursor-pointer fill-[black] hover:fill-[#4DBFF0]"
+              onClick={onClickUpdateToggle}
+              width={14}
+              height={14}
+            />
+          )}
         </div>
       )}
     </>

@@ -68,17 +68,20 @@ const App: React.FC = () => {
   return (
     <>
       <ComponentHeader />
-      <Routes>
-        <Route path="/" element={<PageMain />} />
-        <Route path="/admin" element={<PageAdmin />} />
-        <Route path="/signin" element={<PageSignin />} />
-        <Route path="/signup" element={<PageSignup />} />
-        <Route path="/verify/:requestToken" element={<PageMain />} />
-        <Route path="/forgot" element={<PageInitPassword />} />
-        <Route path="/myinfo" element={<PageProfile />} />
-        <Route path="/lecture/:id" element={<PageDetailLecture />} />
-        <Route path="/lecture-play/:id" element={<PagePlayLecture />} />
-      </Routes>
+      <div className="w-full min-h-[100px] h-[100px] max-h-[100px]">&nbsp;</div>
+      <div className="w-full min-h-[calc(100vh-257px)] flex justify-center items-center">
+        <Routes>
+          <Route path="/" element={<PageMain />} />
+          <Route path="/admin" element={<PageAdmin />} />
+          <Route path="/signin" element={<PageSignin />} />
+          <Route path="/signup" element={<PageSignup />} />
+          <Route path="/verify/:requestToken" element={<PageMain />} />
+          <Route path="/forgot" element={<PageInitPassword />} />
+          <Route path="/myinfo" element={<PageProfile />} />
+          <Route path="/lecture/:id" element={<PageDetailLecture />} />
+          <Route path="/lecture-play/:id" element={<PagePlayLecture />} />
+        </Routes>
+      </div>
       <ComponentFooter />
     </>
   );

@@ -11,6 +11,57 @@ import Skeleton from 'react-loading-skeleton';
 import useSWR from 'swr';
 import useSWRImmutable from 'swr/immutable';
 import ContextToken from '../store/ContextToken';
+import { ReactComponent as ImgPrevArrow } from '../assets/images/PrevArrow.svg';
+import { ReactComponent as ImgNextArrow } from '../assets/images/NextArrow.svg';
+import Slider, { CustomArrowProps, Settings } from 'react-slick';
+
+const ComponentArrowPrev = (props: CustomArrowProps) => {
+  return (
+    <ImgPrevArrow
+      className={props.className}
+      style={{
+        ...props.style,
+        display: 'absolute',
+        width: 30,
+        height: 30,
+        left: '10px',
+        zIndex: 999,
+      }}
+      onClick={props.onClick}
+    />
+  );
+};
+
+const ComponentArrowNext = (props: CustomArrowProps) => {
+  return (
+    <ImgNextArrow
+      className={props.className}
+      style={{
+        ...props.style,
+        display: 'absolute',
+        width: 30,
+        height: 30,
+        right: '10px',
+        zIndex: 999,
+      }}
+      onClick={props.onClick}
+    />
+  );
+};
+
+const settings: Settings | Readonly<Settings> = {
+  arrows: true,
+  dots: true,
+  infinite: true,
+  speed: 500,
+  pauseOnHover: true,
+  autoplay: true,
+  autoplaySpeed: 5000,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  prevArrow: <ComponentArrowPrev />,
+  nextArrow: <ComponentArrowNext />,
+};
 
 const PageMain: React.FC = () => {
   const { requestToken } = useParams();
@@ -55,14 +106,21 @@ const PageMain: React.FC = () => {
     }
   }, [dataVerify?.token, errorVerify]);
   return (
-    <div className="pt-[100px] max-w-full min-h-screen mx-auto bg-white font-noto">
+    <div className="max-w-full min-h-screen mx-auto bg-white">
       {!(!!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin') && (
         <>
           {!!infoBanner && isArray(infoBanner) && infoBanner.length > 0 ? (
-            <img
-              className="w-full max-h-[380px] object-fit"
-              src={infoBanner[0].content}
-            />
+            <Slider {...settings} className="bg-white text-center">
+              {infoBanner.map((element, index) => {
+                return (
+                  <img
+                    key={index}
+                    className="pointer-cursor w-[100vw] h-[380px] max-h-[380px] object-fill"
+                    src={element.content}
+                  />
+                );
+              })}
+            </Slider>
           ) : (
             <Skeleton className="w-full max-h-[380px]" />
           )}

@@ -68,18 +68,17 @@ const ComponentContainerPermissionLecture: React.FC<
   return (
     <>
       <Select
-        className="mt-[40px]"
         options={filters}
         value={selectedFilter}
         onChange={onHandleFilterChange}
-        placeholder="필터를 선택하세요!"
+        placeholder="필터를 선택하세요"
       />
       {selectedFilter && selectedFilter.value === 'lecture' && (
         <Select
           className="mt-[20px]"
           options={lectureOptions}
           onChange={onHandleLectureChange}
-          placeholder="강의를 선택하세요!"
+          placeholder="강의를 선택하세요"
         />
       )}
       {selectedFilter && selectedFilter.value === 'student' && (
@@ -87,7 +86,7 @@ const ComponentContainerPermissionLecture: React.FC<
           className="mt-[20px]"
           options={studentOptions}
           onChange={onHandleUserChange}
-          placeholder="유저를 선택하세요!"
+          placeholder="유저를 선택하세요"
         />
       )}
       {selectedFilter &&
@@ -97,18 +96,18 @@ const ComponentContainerPermissionLecture: React.FC<
           if (lectureFilter) {
             if (lectureFilter.value === lectureStatus.lecture_id) {
               return (
-                <div key={index}>
-                  <div className="w-full mt-[40px]">
-                    {lectureStatus.student_nickname}
-                  </div>
+                <div key={index} className="my-[20px] border-[1px] p-[15px]">
+                  <div className="w-full">{lectureStatus.student_nickname}</div>
                   <div className="w-full">{lectureStatus.student_email}</div>
-                  <ComponentUpdateStatus
-                    token={token}
-                    studentId={lectureStatus.student_id}
-                    lectureId={lectureStatus.lecture_id}
-                    status={lectureStatus.status}
-                    mutate={lectureStatusesMutate}
-                  />
+                  <div className="ml-auto mr-0">
+                    <ComponentUpdateStatus
+                      token={token}
+                      studentId={lectureStatus.student_id}
+                      lectureId={lectureStatus.lecture_id}
+                      status={lectureStatus.status}
+                      mutate={lectureStatusesMutate}
+                    />
+                  </div>
                 </div>
               );
             }
@@ -125,8 +124,11 @@ const ComponentContainerPermissionLecture: React.FC<
                   key={index}
                   className="border-[1px] border-black my-[20px] p-[10px]"
                 >
-                  <div className="w-full">{lectureStatus.title}</div>
-                  <div className="w-full">
+                  <div className="mb-[5px] w-full">{lectureStatus.title}</div>
+                  <div className="w-full text-xs">
+                    {'강사 이름 : ' + lectureStatus.teacher_nickname}
+                  </div>
+                  <div className="w-full text-xs">
                     {!!!lectureStatus.expired && (
                       <div>강의 만료 일시가 설정되어 있지 않습니다</div>
                     )}
@@ -139,13 +141,15 @@ const ComponentContainerPermissionLecture: React.FC<
                       </div>
                     )}
                   </div>
-                  <div className="flex flex-wrap items-center w-full justify-evenly">
+                  <div className="my-[10px] flex flex-wrap items-center w-full justify-evenly">
                     {lectureStatus.thumbnail && (
-                      <img src={lectureStatus.thumbnail} width="200" />
+                      <img
+                        className="w-full md:w-[600px] rounded-full border-[1px]"
+                        src={lectureStatus.thumbnail}
+                      />
                     )}
-                    <div>{lectureStatus.teacher_nickname}</div>
                   </div>
-                  <div className="w-full">
+                  <div className="ml-auto mr-0">
                     <ComponentUpdateStatus
                       token={token}
                       studentId={lectureStatus.student_id}

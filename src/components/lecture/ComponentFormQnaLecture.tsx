@@ -4,8 +4,8 @@ import moment from 'moment';
 import axios from 'axios';
 import { ILectureDetail } from '../../interfaces';
 import { useStringInput } from '../../hooks';
-import ImgEdit from '../../assets/images/Edit.svg';
-import ImgClose from '../../assets/images/Close.svg';
+import { ReactComponent as ImgEdit } from '../../assets/images/Edit.svg';
+import { ReactComponent as ImgClose } from '../../assets/images/Close.svg';
 import { showError } from '../../hooks/api';
 import { KeyedMutator } from 'swr';
 
@@ -225,13 +225,13 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
         >
           <div className="w-full flex items-center min-h-[41px] max-h-[41px]">
             <div className="flex-none min-w-[60px] max-w-[60px] flex justify-center items-center">
-              <div className="text-[14px] leading-[150%] text-[#DCDEE2]">
+              <div className="text-[0.875rem] text-[#DCDEE2]">
                 {array_index}
               </div>
             </div>
             {isShowQuestionEdit ? (
               <input
-                className="flex-1 flex justify-start overflow-x-hidden items-center border-[1px] rounded-[4px] my-[10px] px-[4px] text-[14px] leading-[150%] text-[#515A6E] ml-[8.5px] disabled:opacity-50"
+                className="flex-1 flex justify-start overflow-x-hidden items-center border-[1px] rounded-[4px] my-[10px] px-[4px] text-[0.875rem] text-[#515A6E] ml-[8.5px] disabled:opacity-50"
                 value={updateQuestionTitle}
                 onChange={onChangeUpdateQuestionTitle}
                 onClick={(event) => {
@@ -241,7 +241,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
               />
             ) : (
               <div className="flex-1 flex overflow-x-hidden justify-start items-stretch my-[10px] py-[4px]">
-                <div className="pl-[8.5px] text-[14px] leading-[150%] text-[#515A6E]">
+                <div className="pl-[8.5px] text-[0.875rem] text-[#515A6E] block whitespace-nowrap text-ellipsis overflow-hidden">
                   {token && userType === 'admin'
                     ? `[${creator_nickname}] `
                     : ''}{' '}
@@ -251,7 +251,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
             )}
             <div className="flex-none min-w-[126px] max-w-[126px] flex justify-end items-center mr-[20px]">
               <div
-                className="text-[14px] leading-[150%] text-[#DCDEE2]"
+                className="text-[0.875rem] text-[#DCDEE2]"
                 title={moment(question_created_at).format(
                   'YYYY년 MM월 DD일 HH시 mm분',
                 )}
@@ -265,20 +265,18 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
           <>
             <div className="w-full flex items-center min-h-[41px]">
               <div className="flex-none min-w-[60px] max-w-[60px] flex justify-center items-center">
-                <div className="text-[14px] leading-[150%] text-[#DCDEE2]">
-                  내용
-                </div>
+                <div className="text-[0.875rem] text-[#DCDEE2]">내용</div>
               </div>
               {isShowQuestionEdit ? (
                 <textarea
-                  className="flex-1 flex justify-start items-center border-[1px] rounded-[4px] my-[10px] px-[4px] text-[14px] leading-[150%] text-[#515A6E] ml-[8.5px] mr-[20px] disabled:opacity-50"
+                  className="flex-1 flex justify-start items-center border-[1px] rounded-[4px] my-[10px] px-[4px] text-[0.875rem] text-[#515A6E] ml-[8.5px] mr-[20px] disabled:opacity-50"
                   value={updateQuestionDescription}
                   onChange={onChangeUpdateQuestionDescription}
                   disabled={isLoadingSubmitUpdateQuestion}
                 />
               ) : (
                 <div className="flex-1 flex break-all justify-start items-stretch my-[10px] py-[4px]">
-                  <div className="pl-[8.5px] pr-[20px] text-[14px] leading-[150%] text-[#515A6E]">
+                  <div className="pl-[8.5px] pr-[20px] text-[0.875rem] text-[#515A6E]">
                     {question_description}
                   </div>
                 </div>
@@ -290,17 +288,17 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                     userType === 'admin') && (
                     <>
                       {isShowQuestionEdit ? (
-                        <div className="w-full min-h-[41px] bg-white flex xl:justify-center justify-start items-center">
+                        <div className="w-full min-h-[41px] bg-white flex justify-start xl:justify-center items-center">
                           <button
                             type="submit"
-                            className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
+                            className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[0.75rem] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
                             disabled={isLoadingSubmitUpdateQuestion}
                           >
                             완료
                           </button>
                           <button
                             type="button"
-                            className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] xl:ml-[10px] ml-[1px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
+                            className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[0.75rem] text-[#808695] xl:ml-[10px] ml-[1px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
                             onClick={() => {
                               setIsShowQuestionEdit(false);
                             }}
@@ -314,7 +312,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                           <div className="w-full min-h-[41px] bg-white flex xl:justify-center justify-start items-center">
                             <button
                               type="button"
-                              className="flex-none rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
+                              className="flex-none rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[0.75rem] text-[#808695] px-[10px] py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
                               onClick={(event) => {
                                 event.preventDefault();
                                 setIsShowQuestionEdit(true);
@@ -325,7 +323,11 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                             </button>
                             <button
                               type="button"
-                              className="flex-none rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] xl:ml-[10px] ml-[1px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
+                              className={`flex-none rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[0.75rem] text-[#808695]${
+                                !!answer_id
+                                  ? ' ml-[10px]'
+                                  : ' xl:ml-[10px] ml-[1px]'
+                              } mr-[18px] px-[10px] py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed`}
                               onClick={() => {
                                 onClickDeleteQuestionHandler();
                               }}
@@ -338,10 +340,10 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                       )}
                     </>
                   )}
-                {userType === 'admin' && !!!answer_id ? (
+                {userType === 'admin' && !!!answer_id && (
                   <button
                     type="button"
-                    className="absolute flex justify-center items-center xl:left-[133px] left-[90px] bottom-[6px] rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] min-w-max max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
+                    className="absolute h-[28px] flex justify-center items-center xl:left-[133px] left-[90px] bottom-[6px] rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] min-w-max max-w-max font-normal text-[0.75rem] text-[#808695] px-[4px] xl:px-[10px] py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
                     onClick={(event) => {
                       event.preventDefault();
                       setIsShowAddAnswer(!isShowAddAnswer);
@@ -350,28 +352,20 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                   >
                     {isShowAddAnswer ? (
                       <>
-                        <span className="m-auto mr-[4px] h-[18px] text-[12px] leading-[150%] font-medium text-[#808695]">
-                          응답사항
+                        <span className="hidden xl:block m-auto mr-[4px] h-[18px] text-[0.75rem] font-medium text-[#808695]">
+                          닫기
                         </span>
-                        <img
-                          className="w-[16px] h-[16px] m-auto object-fit"
-                          src={ImgClose}
-                        />
+                        <ImgClose className="w-[16px] h-[16px] m-auto object-fill fill-[black] hover:fill-[#4DBFF0]" />
                       </>
                     ) : (
                       <>
-                        <span className="m-auto mr-[4px] h-[18px] text-[12px] leading-[150%] font-medium text-[#808695]">
-                          응답사항
+                        <span className="hidden xl:block m-auto mr-[4px] h-[18px] text-[0.75rem] font-medium text-[#808695]">
+                          답변하기
                         </span>
-                        <img
-                          className="w-[16px] h-[16px] m-auto object-fit"
-                          src={ImgEdit}
-                        />
+                        <ImgEdit className="w-[16px] h-[16px] m-auto object-fill fill-[black] hover:fill-[#4DBFF0]" />
                       </>
                     )}
                   </button>
-                ) : (
-                  <></>
                 )}
               </div>
             </div>
@@ -396,13 +390,11 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
           >
             <div className="w-full flex items-center min-h-[41px] max-h-[41px]">
               <div className="flex-none min-w-[60px] max-w-[60px] flex justify-center items-center">
-                <div className="text-[14px] leading-[150%] text-[#DCDEE2]">
-                  응답
-                </div>
+                <div className="text-[0.875rem] text-[#b13636]">답변</div>
               </div>
               {isShowAnswerEdit ? (
                 <input
-                  className="flex-1 flex justify-start overflow-x-hidden items-center border-[1px] rounded-[4px] my-[10px] px-[4px] text-[14px] leading-[150%] text-[#515A6E] ml-[8.5px] disabled:opacity-50"
+                  className="flex-1 flex justify-start overflow-x-hidden items-center border-[1px] rounded-[4px] my-[10px] px-[4px] text-[0.875rem] text-[#515A6E] ml-[8.5px] disabled:opacity-50"
                   value={updateAnswerTitle}
                   onChange={onChangeUpdateAnswerTitle}
                   onClick={(event) => {
@@ -412,14 +404,14 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                 />
               ) : (
                 <div className="flex-1 flex overflow-x-hidden justify-start items-stretch my-[10px] py-[4px]">
-                  <div className="pl-[8.5px] pr-[20px] text-[14px] leading-[150%] text-[#515A6E]">
+                  <div className="pl-[8.5px] pr-[20px] text-[0.875rem] text-[#515A6E] block whitespace-nowrap text-ellipsis overflow-hidden">
                     {answer_title}
                   </div>
                 </div>
               )}
               <div className="flex-none min-w-[126px] max-w-[126px] flex justify-end items-center mr-[20px]">
                 <div
-                  className="text-[14px] leading-[150%] text-[#DCDEE2]"
+                  className="text-[0.875rem] text-[#DCDEE2]"
                   title={moment(answer_created_at).format(
                     'YYYY년 MM월 DD일 HH시 mm분',
                   )}
@@ -433,20 +425,18 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
             <>
               <div className="w-full flex items-center min-h-[41px]">
                 <div className="flex-none min-w-[60px] max-w-[60px] flex justify-center items-center">
-                  <div className="text-[14px] leading-[150%] text-[#DCDEE2]">
-                    내용
-                  </div>
+                  <div className="text-[0.875rem] text-[#DCDEE2]">내용</div>
                 </div>
                 {isShowAnswerEdit ? (
                   <textarea
-                    className="flex-1 flex justify-start items-stretch border-[1px] rounded-[4px] my-[10px] px-[4px] text-[14px] leading-[150%] text-[#515A6E] ml-[8.5px] mr-[20px] disabled:opacity-50"
+                    className="flex-1 flex justify-start items-stretch border-[1px] rounded-[4px] my-[10px] px-[4px] text-[0.875rem] text-[#515A6E] ml-[8.5px] mr-[20px] disabled:opacity-50"
                     value={updateAnswerDescription}
                     onChange={onChangeUpdateAnswerDescription}
                     disabled={isLoadingSubmitUpdateAnswer}
                   />
                 ) : (
                   <div className="flex-1 flex break-all justify-start items-stretch my-[10px] py-[4px]">
-                    <div className="pl-[8.5px] pr-[20px] text-[14px] leading-[150%] text-[#515A6E]">
+                    <div className="pl-[8.5px] pr-[20px] text-[0.875rem] text-[#515A6E]">
                       {answer_description}
                     </div>
                   </div>
@@ -458,14 +448,14 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                         <div className="w-full min-h-[41px] bg-white flex justify-center items-center">
                           <button
                             type="submit"
-                            className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
+                            className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[0.75rem] text-[#808695] px-[10px] py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
                             disabled={isLoadingSubmitUpdateAnswer}
                           >
                             완료
                           </button>
                           <button
                             type="button"
-                            className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] ml-[10px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
+                            className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[0.75rem] text-[#808695] ml-[10px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
                             onClick={() => {
                               setIsShowAnswerEdit(false);
                             }}
@@ -476,10 +466,10 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                         </div>
                       ) : (
                         <>
-                          <div className="w-full min-h-[41px] bg-white flex justify-center items-center">
+                          <div className="w-full min-h-[41px] bg-white flex justify-start xl:justify-center items-center">
                             <button
                               type="button"
-                              className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
+                              className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[0.75rem] text-[#808695] px-[10px] py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
                               onClick={(event) => {
                                 event.preventDefault();
                                 setIsShowAnswerEdit(true);
@@ -490,7 +480,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                             </button>
                             <button
                               type="button"
-                              className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[12px] leading-[150%] text-[#808695] ml-[10px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
+                              className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[0.75rem] text-[#808695] ml-[10px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
                               onClick={() => {
                                 onClickDeleteAnswerHandler();
                               }}
@@ -512,43 +502,46 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
         </form>
       )}
       {!!token && userType === 'admin' && !!!answer_id && isShowAddAnswer && (
-        <form
-          className="min-h-[491px] max-h-[491px] px-[98px] py-[68px] box-border border-[1px] rounded-[8px] border-[#DCDEE2] w-full"
-          onSubmit={(event) => {
-            event.preventDefault();
-            onSubmitAnswerHandler();
-          }}
-        >
-          <div className="mb-[28px] text-[#17233D] font-semibold text-[20px] leading-[150%]">
-            응답사항 등록
-          </div>
-          <div className="my-0">
-            <input
-              className="w-full border-[1px] min-h-[41px] max-h-[41px] border-[#DCDEE2] pl-[10px] py-[10px] text-[14px] leading-[150%] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
-              type="text"
-              value={newAnswerTitle}
-              onChange={onChangeNewAnswerTitle}
-              placeholder="제목을 입력하세요!"
-              disabled={isLoadingSubmitAnswer}
-            />
-          </div>
-          <div className="mt-0 mb-[20px]">
-            <textarea
-              className="w-full min-h-[204px] max-h-[204px] border-[1px] border-[#DCDEE2] pl-[10px] py-[10px] text-[14px] leading-[150%] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
-              value={newAnswerDescription}
-              onChange={onChangeNewAnswerDescription}
-              placeholder="내용을 입력하세요!"
-              disabled={isLoadingSubmitAnswer}
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full min-h-[41px] max-h-[41px] text-[14px] leading-[150%] font-semibold bg-[#8DC556] box-border border-[1px] border-[#8DC556] rounded-[4px] text-white my-0 disabled:opacity-50"
-            disabled={isLoadingSubmitAnswer}
+        <div className="p-[10px]">
+          <form
+            className="px-[20px] md:px-[98px] py-[30px] box-border border-[1px] rounded-[8px] border-[#DCDEE2] w-full"
+            onSubmit={(event) => {
+              event.preventDefault();
+              onSubmitAnswerHandler();
+            }}
           >
-            응답사항 등록
-          </button>
-        </form>
+            <div className="mb-[28px] text-[#17233D] font-semibold text-[1.25rem] leading-[150%]">
+              {creator_nickname + '님 '}
+              <span className="text-sm font-light"> 문의에 답변</span>
+            </div>
+            <div className="my-0">
+              <input
+                className="w-full border-[1px] min-h-[41px] max-h-[41px] border-[#DCDEE2] pl-[10px] py-[10px] text-[0.875rem] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
+                type="text"
+                value={newAnswerTitle}
+                onChange={onChangeNewAnswerTitle}
+                placeholder="제목을 입력하세요"
+                disabled={isLoadingSubmitAnswer}
+              />
+            </div>
+            <div className="mt-0 mb-[20px]">
+              <textarea
+                className="w-full min-h-[204px] max-h-[204px] border-[1px] border-[#DCDEE2] pl-[10px] py-[10px] text-[0.875rem] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
+                value={newAnswerDescription}
+                onChange={onChangeNewAnswerDescription}
+                placeholder="내용을 입력하세요"
+                disabled={isLoadingSubmitAnswer}
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full min-h-[41px] max-h-[41px] text-[0.875rem] font-semibold bg-[#8DC556] box-border border-[1px] border-[#8DC556] rounded-[4px] text-white my-0 disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
+              disabled={isLoadingSubmitAnswer}
+            >
+              답변 등록
+            </button>
+          </form>
+        </div>
       )}
     </>
   );

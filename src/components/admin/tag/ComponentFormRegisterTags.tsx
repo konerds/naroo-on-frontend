@@ -83,41 +83,36 @@ const ComponentFormRegisterTags: React.FC<IPropsComponentFormRegisterTags> = ({
     <>
       {updateToggle ? (
         <form
-          className="flex items-center py-[10px]"
+          className="mt-[10px] flex items-center"
           onSubmit={(event) => {
             event.preventDefault();
             onSubmitRegisterTag();
           }}
         >
-          <label htmlFor="tag" className="min-w-max mr-[10px]">
-            태그
-          </label>
-          <div className="w-full">
-            <Select
-              isMulti
-              isClearable
-              className="rounded-full w-full pl-[14px] pr-[14px] py-1 text-xs text-gray-200 bg-harp mr-1 disabled:opacity-50"
-              value={tagsOptions.map((tagOption) => {
-                for (const tag of registerTags) {
-                  if (tagOption.value === tag.id) {
-                    return tagOption;
-                  }
+          <Select
+            isMulti
+            isClearable
+            className="w-full text-xs text-gray-200 bg-harp disabled:opacity-50"
+            value={tagsOptions.map((tagOption) => {
+              for (const tag of registerTags) {
+                if (tagOption.value === tag.id) {
+                  return tagOption;
                 }
-              })}
-              options={tagsOptions}
-              onChange={onHandleTagsChange}
-              placeholder="태그를 추가하세요!"
-              isDisabled={isLoadingSubmit}
-            />
-          </div>
+              }
+            })}
+            options={tagsOptions}
+            onChange={onHandleTagsChange}
+            placeholder="태그를 추가하세요"
+            isDisabled={isLoadingSubmit}
+          />
           <input
-            className="rounded-[4px] min-w-max mx-[10px] disabled:opacity-50"
+            className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
             type="submit"
             value="수정"
             disabled={isLoadingSubmit}
           />
           <button
-            className="rounded-[4px] min-w-max disabled:opacity-50"
+            className="w-[65px] h-[32px] button-modify-cancel-admin"
             onClick={onClickUpdateToggle}
             disabled={isLoadingSubmit}
           >
@@ -125,8 +120,8 @@ const ComponentFormRegisterTags: React.FC<IPropsComponentFormRegisterTags> = ({
           </button>
         </form>
       ) : (
-        <div className="flex items-center justify-between">
-          <div className="flex flex-wrap items-center py-[10px] mt-5">
+        <div className="mt-[10px] flex items-center justify-between">
+          <div className="flex flex-wrap items-center">
             <>
               {tags &&
                 tags.length > 0 &&
@@ -143,7 +138,11 @@ const ComponentFormRegisterTags: React.FC<IPropsComponentFormRegisterTags> = ({
                 })}
             </>
           </div>
-          <FontAwesomeIcon icon={faEdit} onClick={onClickUpdateToggle} />
+          <FontAwesomeIcon
+            className="button-fa-icon-admin"
+            icon={faEdit}
+            onClick={onClickUpdateToggle}
+          />
         </div>
       )}
     </>

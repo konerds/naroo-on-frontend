@@ -24,17 +24,15 @@ const ComponentContainerEditResource: React.FC<
 }) => {
   console.log(carouselLectureResourcesData);
   return (
-    <div className="mt-[30px]">
+    <>
       {logoHeaderResourcesData.length > 0 ? (
         <>
           {logoHeaderResourcesData.map((resource, index) => {
             return (
-              <>
-                <div key={index}>
-                  {+index === 0 && (
-                    <div className="mt-[20px]">헤더 로고 이미지</div>
-                  )}
-                </div>
+              <React.Fragment key={index}>
+                {+index === 0 && (
+                  <div className="text-2xl mb-[10px]">헤더 로고 이미지</div>
+                )}
                 <div className="border-2 rounded">
                   {!!resource.content && (
                     <ComponentFormUpdateResource
@@ -47,7 +45,7 @@ const ComponentContainerEditResource: React.FC<
                     />
                   )}
                 </div>
-              </>
+              </React.Fragment>
             );
           })}
         </>
@@ -58,12 +56,12 @@ const ComponentContainerEditResource: React.FC<
         <>
           {logoFooterResourcesData.map((resource, index) => {
             return (
-              <>
-                <div key={index}>
-                  {+index === 0 && (
-                    <div className="mt-[20px]">푸터 로고 이미지</div>
-                  )}
-                </div>
+              <React.Fragment key={index}>
+                {+index === 0 && (
+                  <div className="mt-[20px] mb-[10px] text-2xl">
+                    푸터 로고 이미지
+                  </div>
+                )}
                 <div className="border-2 rounded">
                   {!!resource.content && (
                     <ComponentFormUpdateResource
@@ -76,7 +74,7 @@ const ComponentContainerEditResource: React.FC<
                     />
                   )}
                 </div>
-              </>
+              </React.Fragment>
             );
           })}
         </>
@@ -87,15 +85,13 @@ const ComponentContainerEditResource: React.FC<
         <>
           {carouselLectureResourcesData.map((resource, index) => {
             return (
-              <>
-                <div key={index}>
-                  {+index === 0 && (
-                    <div className="mt-[20px]">
-                      상단 서비스 소개 배너 이미지
-                    </div>
-                  )}
-                </div>
-                <div className="border-2 rounded">
+              <React.Fragment key={index}>
+                {+index === 0 && (
+                  <div className="mt-[20px] mb-[10px] text-2xl">
+                    상단 서비스 소개 배너 이미지
+                  </div>
+                )}
+                <div className="border-2 rounded my-[1px]">
                   {!!resource.content && (
                     <ComponentFormUpdateResource
                       index={index}
@@ -107,16 +103,16 @@ const ComponentContainerEditResource: React.FC<
                     />
                   )}
                 </div>
-              </>
+              </React.Fragment>
             );
           })}
         </>
       ) : (
         <>
-          <div>
-            <div className="mt-[20px]">상단 서비스 소개 배너 이미지</div>
+          <div className="mt-[20px] mb-[10px] text-2xl">
+            상단 서비스 소개 배너 이미지
           </div>
-          <div className="border-2 rounded">
+          <div className="border-2 rounded my-[1px]">
             <ComponentFormUpdateResource
               index={0}
               token={token}
@@ -132,13 +128,13 @@ const ComponentContainerEditResource: React.FC<
         <>
           {carouselOrgResourcesData.map((resource, index) => {
             return (
-              <>
-                <div key={index}>
-                  {+index === 0 && (
-                    <div className="mt-[20px]">하단 기관 슬라이더 이미지</div>
-                  )}
-                </div>
-                <div className="border-2 rounded">
+              <React.Fragment key={index}>
+                {+index === 0 && (
+                  <div className="mt-[20px] mb-[10px] text-2xl">
+                    하단 기관 슬라이더 이미지
+                  </div>
+                )}
+                <div className="border-2 rounded my-[1px]">
                   {!!resource.content && (
                     <ComponentFormUpdateResource
                       index={index}
@@ -150,16 +146,16 @@ const ComponentContainerEditResource: React.FC<
                     />
                   )}
                 </div>
-              </>
+              </React.Fragment>
             );
           })}
         </>
       ) : (
         <>
-          <div>
-            <div className="mt-[20px]">하단 기관 슬라이더 이미지</div>
+          <div className="mt-[20px] mb-[10px] text-2xl">
+            하단 기관 슬라이더 이미지
           </div>
-          <div className="border-2 rounded">
+          <div className="border-2 rounded my-[1px]">
             <ComponentFormUpdateResource
               index={0}
               token={token}
@@ -171,7 +167,7 @@ const ComponentContainerEditResource: React.FC<
           </div>
         </>
       )}
-    </div>
+    </>
   );
 };
 

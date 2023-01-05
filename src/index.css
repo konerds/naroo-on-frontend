@@ -60,13 +60,17 @@ body {
 }
 
 .slick-arrow {
-  opacity: 0.7;
+  opacity: 0.4;
   transition: all 0.25s ease-in-out;
   -moz-transition: all 0.25s ease-in-out;
   -webkit-transition: all 0.25s ease-in-out;
 }
 
-.slick-arrow:hover {
+.slick-disabled {
+  cursor: not-allowed !important;
+}
+
+.slick-arrow:not(.slick-disabled):hover {
   opacity: 1;
 }
 
@@ -99,4 +103,12 @@ body {
 
 .Toastify__toast-body {
   font-family: 'Noto Sans KR', sans-serif !important;
+}
+
+.button-fa-icon-admin {
+  @apply cursor-pointer text-xl text-black hover:text-[#4DBFF0];
+}
+
+.button-modify-cancel-admin {
+  @apply box-border rounded-[10px] border-[1px] border-[#4DBFF0] lg:text-[1rem] text-[0.8rem] font-semibold bg-[#4DBFF0] text-white disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed;
 }
