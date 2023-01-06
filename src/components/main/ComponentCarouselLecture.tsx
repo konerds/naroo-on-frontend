@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { isArray } from 'lodash';
-import Skeleton from 'react-loading-skeleton';
 import Slider, { CustomArrowProps, Settings } from 'react-slick';
 import useSWR from 'swr';
 import { IInfoMe, ILectureInList } from '../../interfaces';
@@ -11,6 +10,7 @@ import ContextToken from '../../store/ContextToken';
 import { axiosGetfetcher } from '../../hooks/api';
 import { useMediaQuery } from 'react-responsive';
 import MediaQuery from 'react-responsive';
+import ComponentSkeletonCustom from '../common/ui/ComponentSkeletonCustom';
 
 const ComponentArrowPrev = (props: CustomArrowProps) => {
   return (
@@ -193,7 +193,7 @@ const ComponentCarouselLecture: React.FC = () => {
               )}
             </>
           ) : (
-            <Skeleton className="w-full max-h-[300px]" />
+            <ComponentSkeletonCustom className="w-full min-h-[444px]" />
           )}
         </>
       )}
@@ -302,7 +302,7 @@ const ComponentCarouselLecture: React.FC = () => {
           )}
         </>
       ) : (
-        <Skeleton className="w-full max-h-[300px]" />
+        <ComponentSkeletonCustom className="w-full min-h-[444px]" />
       )}
     </div>
   );

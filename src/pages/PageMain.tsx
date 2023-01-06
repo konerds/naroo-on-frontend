@@ -7,13 +7,13 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import { IInfoMe, IResourceContent, IUserVerify } from '../interfaces';
 import { isArray } from 'lodash';
-import Skeleton from 'react-loading-skeleton';
 import useSWR from 'swr';
 import useSWRImmutable from 'swr/immutable';
 import ContextToken from '../store/ContextToken';
 import { ReactComponent as ImgPrevArrow } from '../assets/images/PrevArrow.svg';
 import { ReactComponent as ImgNextArrow } from '../assets/images/NextArrow.svg';
 import Slider, { CustomArrowProps, Settings } from 'react-slick';
+import ComponentSkeletonCustom from '../components/common/ui/ComponentSkeletonCustom';
 
 const ComponentArrowPrev = (props: CustomArrowProps) => {
   return (
@@ -52,6 +52,7 @@ const ComponentArrowNext = (props: CustomArrowProps) => {
 const settings: Settings | Readonly<Settings> = {
   arrows: true,
   dots: true,
+  adaptiveHeight: true,
   infinite: true,
   speed: 500,
   pauseOnHover: true,
@@ -115,14 +116,14 @@ const PageMain: React.FC = () => {
                 return (
                   <img
                     key={index}
-                    className="pointer-cursor w-[100vw] h-[380px] max-h-[380px] object-fill"
+                    className="pointer-cursor w-[100vw] max-h-[380px] object-cover"
                     src={element.content}
                   />
                 );
               })}
             </Slider>
           ) : (
-            <Skeleton className="w-full max-h-[380px]" />
+            <ComponentSkeletonCustom className="block-important w-full-vw-important min-h-[380px]" />
           )}
           <ComponentCarouselLecture />
           <div className="min-h-[200px] bg-[#F8F8F9]">

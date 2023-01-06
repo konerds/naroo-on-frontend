@@ -6,6 +6,7 @@ import { ReactComponent as ImgEdit } from '../../../assets/images/Edit.svg';
 import ContextToken from '../../../store/ContextToken';
 import { showError } from '../../../hooks/api';
 import { KeyedMutator } from 'swr';
+import { toast } from 'react-toastify';
 
 interface IPropsComponentFormUpdateUser {
   fieldType: string;
@@ -55,6 +56,7 @@ const ComponentFormUpdateUser: React.FC<IPropsComponentFormUpdateUser> = ({
 
       if (response.status === 200) {
         await mutate();
+        toast('성공적으로 정보를 업데이트하였습니다', { type: 'success' });
         setUpdateToggle(!updateToggle);
       }
     } catch (error: any) {

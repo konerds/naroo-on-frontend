@@ -6,6 +6,7 @@ import { IUserEdit } from '../../../interfaces';
 import ComponentFormUpdateUser from './ComponentFormUpdateUser';
 import { KeyedMutator } from 'swr';
 import { showError } from '../../../hooks/api';
+import { toast } from 'react-toastify';
 
 interface IPropsComponentElementEditUser {
   token: string;
@@ -33,6 +34,7 @@ const ComponentElementEditUser: React.FC<IPropsComponentElementEditUser> = ({
       );
       if (response.status === 200) {
         await mutate();
+        toast('성공적으로 사용자를 삭제하였습니다', { type: 'success' });
       }
     } catch (error: any) {
       showError(error);

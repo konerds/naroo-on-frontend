@@ -95,10 +95,12 @@ const PageAdmin: React.FC = () => {
       window.removeEventListener('click', handlerOnMousePositionMenu);
   }, [isVisibleMenu]);
   React.useEffect(() => {
-    if (!(!!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin')) {
+    if (
+      !(!!token && !!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin')
+    ) {
       navigate('/', { replace: true });
     }
-  }, [dataGetMe, errorGetMe]);
+  }, [token, dataGetMe, dataGetMe?.role, errorGetMe]);
   return (
     <div className="w-full bg-white mt-[20px] mb-auto">
       {!!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin' && (

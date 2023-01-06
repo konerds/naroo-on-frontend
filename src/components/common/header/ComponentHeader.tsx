@@ -51,7 +51,7 @@ const ComponentHeader: React.FC = () => {
     }
   };
   const logoutHandler = () => {
-    setToken('');
+    localStorage.setItem('token', '');
     navigate(0);
   };
   React.useEffect(() => {

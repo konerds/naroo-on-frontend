@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { getSavedIsRememberToken, getSavedToken } from '../hooks';
 
 interface IContextToken {
   token: string | null;
@@ -21,9 +22,15 @@ interface PropsContextTokenProvider {
 export const ContextTokenProvider = ({
   children,
 }: PropsContextTokenProvider) => {
-  const [token, setToken] = React.useState<string | null>(null);
+  const savedIsRememberTokenInLocalStorage =
+    getSavedIsRememberToken(localStorage);
   const [isRememberToken, setIsRememberToken] = React.useState<string | null>(
-    null,
+    savedIsRememberTokenInLocalStorage === 'true' ? 'true' : '',
+  );
+  const [token, setToken] = React.useState<string | null>(
+    savedIsRememberTokenInLocalStorage === 'true'
+      ? getSavedToken(localStorage)
+      : '',
   );
   return (
     <ContextToken.Provider

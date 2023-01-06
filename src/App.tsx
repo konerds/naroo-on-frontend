@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from 'react-router-dom';
 import ComponentHeader from './components/common/header/ComponentHeader';
 import ComponentFooter from './components/common/ComponentFooter';
 import PageMain from './pages/PageMain';
@@ -13,7 +19,6 @@ import PageInitPassword from './pages/PageInitPassword';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ContextToken, { ContextTokenProvider } from './store/ContextToken';
-import { getSavedIsRememberToken, getSavedToken } from './hooks';
 import MediaQuery from 'react-responsive';
 
 const AppRouterWrapper: React.FC = () => {
@@ -44,15 +49,12 @@ const AppRouterWrapper: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const { pathname } = useLocation();
   const tokenCtx = React.useContext(ContextToken);
-  const { token, setToken, isRememberToken, setIsRememberToken } = tokenCtx;
+  const { token, isRememberToken } = tokenCtx;
   React.useEffect(() => {
-    const savedIsRememberToken = getSavedIsRememberToken(localStorage);
-    setIsRememberToken(savedIsRememberToken);
-    if (savedIsRememberToken === 'true') {
-      setToken(getSavedToken(localStorage));
-    }
-  }, []);
+    window.scrollTo(0, 0);
+  }, [pathname]);
   React.useEffect(() => {
     localStorage.setItem(
       'token',
@@ -80,6 +82,7 @@ const App: React.FC = () => {
           <Route path="/myinfo" element={<PageProfile />} />
           <Route path="/lecture/:id" element={<PageDetailLecture />} />
           <Route path="/lecture-play/:id" element={<PagePlayLecture />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
       <ComponentFooter />

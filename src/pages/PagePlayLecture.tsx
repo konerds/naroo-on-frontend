@@ -43,10 +43,10 @@ const PagePlayLecture: React.FC = () => {
       { revalidateOnFocus: false, revalidateIfStale: false },
     );
   React.useEffect(() => {
-    if (token === '' || !!errorGetMe || !!!id) {
+    if (!!!token || !!errorGetMe || !!!id) {
       navigate('/', { replace: true });
     }
-  }, [token, dataGetMe, errorGetMe]);
+  }, [token, errorGetMe, id]);
   return (
     <div className="w-full bg-gray-500 min-h-[inherit] pt-[5px]">
       {!!token &&

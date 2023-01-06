@@ -39,9 +39,6 @@ const PageSignin: React.FC = () => {
       navigate('/', { replace: true });
     }
   }, [token]);
-  React.useEffect(() => {
-    setToken('');
-  }, []);
   return (
     <div className="py-[30px] xl:min-w-[554px] xl:max-w-[554px] lg:min-w-[472.75px] lg:max-w-[472.75px] md:min-w-[354.56px] md:max-w-[354.56px] sm:min-w-[295.47px] sm:max-w-[295.47px] xs:min-w-[295.47px] xs:max-w-[295.47px] box-border rounded-[8px] border-[1px] border-[#DCDEE2] m-auto xl:px-[98px] lg:px-[83.63px] md:px-[62.72px] sm:px-[52.27px] xs:px-[52.27px]">
       <form

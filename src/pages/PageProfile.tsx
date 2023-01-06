@@ -27,10 +27,14 @@ const PageProfile: React.FC = () => {
     { revalidateOnFocus: false, revalidateIfStale: false },
   );
   React.useEffect(() => {
-    if (token === '' || !!errorGetMe) {
+    if (
+      !!!token ||
+      !!errorGetMe ||
+      (!!token && !!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin')
+    ) {
       navigate('/', { replace: true });
     }
-  }, [errorGetMe]);
+  }, [token, dataGetMe, errorGetMe, dataGetMe?.role]);
   return (
     <div className="w-full flex justify-center items-center">
       <div className="xl:min-w-[554px] xl:max-w-[554px] md:min-w-[472.75px] md:max-w-[472.75px] min-w-[400px] max-w-[400px] box-border rounded-[8px] border-[1px] border-[#DCDEE2] mx-auto my-[120px] py-[30px] xl:px-[98px] px-[52.27px]">

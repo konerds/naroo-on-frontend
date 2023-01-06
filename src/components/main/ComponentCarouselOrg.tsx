@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { isArray } from 'lodash';
-import Skeleton from 'react-loading-skeleton';
 import Slider, { CustomArrowProps, Settings } from 'react-slick';
 import useSWRImmutable from 'swr/immutable';
 import { IResourceContent } from '../../interfaces';
@@ -9,6 +8,7 @@ import { ReactComponent as ImgNextArrow } from '../../assets/images/NextArrow.sv
 import { axiosGetfetcher } from '../../hooks/api';
 import { useMediaQuery } from 'react-responsive';
 import MediaQuery from 'react-responsive';
+import ComponentSkeletonCustom from '../common/ui/ComponentSkeletonCustom';
 
 const ComponentArrowPrev = (props: CustomArrowProps) => {
   return (
@@ -82,7 +82,7 @@ const ComponentCarouselOrg: React.FC = () => {
                   <div className="px-[10px]">
                     <img
                       key={index}
-                      className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-fill mx-auto"
+                      className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover mx-auto"
                       src={element.content}
                     />
                   </div>
@@ -100,7 +100,7 @@ const ComponentCarouselOrg: React.FC = () => {
                   <div className="px-[10px]">
                     <img
                       key={index}
-                      className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-fill"
+                      className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover"
                       src={element.content}
                     />
                   </div>
@@ -118,7 +118,7 @@ const ComponentCarouselOrg: React.FC = () => {
                   <div className="px-[10px]">
                     <img
                       key={index}
-                      className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-fill"
+                      className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover"
                       src={element.content}
                     />
                   </div>
@@ -136,7 +136,7 @@ const ComponentCarouselOrg: React.FC = () => {
                   <div className="px-[10px]">
                     <img
                       key={index}
-                      className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-fill"
+                      className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover"
                       src={element.content}
                     />
                   </div>
@@ -154,7 +154,7 @@ const ComponentCarouselOrg: React.FC = () => {
                   <div className="px-[10px]">
                     <img
                       key={index}
-                      className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-fill"
+                      className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover"
                       src={element.content}
                     />
                   </div>
@@ -164,7 +164,7 @@ const ComponentCarouselOrg: React.FC = () => {
           </MediaQuery>
         </>
       ) : (
-        <Skeleton className="w-full h-[96px]" />
+        <ComponentSkeletonCustom className="w-[100vw] min-h-[300px]" />
       )}
     </div>
   );

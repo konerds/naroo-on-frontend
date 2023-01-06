@@ -5,16 +5,19 @@ import { useStringInput } from '../hooks';
 import { toast } from 'react-toastify';
 import { showError } from '../hooks/api';
 import ContextToken from '../store/ContextToken';
+import { ThreeDots } from 'react-loader-spinner';
 
 const PageInitPassword: React.FC = () => {
   const navigate = useNavigate();
   const tokenCtx = React.useContext(ContextToken);
-  const { setToken } = tokenCtx;
+  const { token } = tokenCtx;
+  const [isRequesting, setIsRequesting] = React.useState<boolean>(false);
   const { value: email, onChange: onChangeEmail } = useStringInput('');
   const { value: nickname, onChange: onChangeNickname } = useStringInput('');
   const { value: phone, onChange: onChangePhone } = useStringInput('');
   const onSubmitHandler = async () => {
     try {
+      setIsRequesting(true);
       const response = await axios.post(
         `${process.env.REACT_APP_BACK_URL}/user/init`,
         {
@@ -31,17 +34,23 @@ const PageInitPassword: React.FC = () => {
             <br />
             {'보안을 위해 반드시 비밀번호를 변경하세요'}
           </p>,
-          { type: 'success' },
+          {
+            type: 'success',
+          },
         );
         navigate('/', { replace: true });
       }
     } catch (error: any) {
       showError(error);
+    } finally {
+      setIsRequesting(false);
     }
   };
   React.useEffect(() => {
-    setToken('');
-  }, []);
+    if (!!token) {
+      navigate('/', { replace: true });
+    }
+  }, [token]);
   return (
     <div className="min-h-[73vh] w-full flex justify-center items-center">
       <div className="xl:min-w-[554px] xl:max-w-[554px] lg:min-w-[472.75px] lg:max-w-[472.75px] md:min-w-[354.56px] md:max-w-[354.56px] sm:min-w-[295.47px] sm:max-w-[295.47px] xs:min-w-[295.47px] xs:max-w-[295.47px] box-border rounded-[8px] border-[1px] border-[#DCDEE2] mx-auto my-[120px] py-[30px] xl:px-[98px] lg:px-[83.63px] md:px-[62.72px] sm:px-[52.27px] xs:px-[52.27px]">
@@ -81,9 +90,27 @@ const PageInitPassword: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="w-full box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[41px] mt-[20px] text-[0.875rem] font-semibold bg-[#4DBFF0] text-white hover:opacity-50"
+            className={`flex justify-center items-center w-full box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[41px] mt-[20px] text-[0.875rem] font-semibold bg-[#4DBFF0] text-white hover:opacity-50 disabled:cursor-not-allowed${
+              isRequesting ? ' opacity-50' : ''
+            }`}
           >
-            비밀번호 재설정
+            <span
+              className={`relative text-[0.875rem] font-semibold${
+                isRequesting ? ' mr-[5px]' : ''
+              }`}
+            >
+              비밀번호 재설정
+            </span>
+            {isRequesting && (
+              <ThreeDots
+                height="16"
+                width="16"
+                radius="9"
+                color="#ffffff"
+                ariaLabel="three-dots-loading"
+                visible={true}
+              />
+            )}
           </button>
         </form>
       </div>

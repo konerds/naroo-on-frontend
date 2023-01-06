@@ -37,7 +37,7 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
   const [isBackdropShow, setIsBackdropShow] = React.useState<boolean>(false);
   return (
     <div
-      className={`cursor-pointer w-full min-h-[444px] max-h-[444px] mx-0 rounded-[8px] ${
+      className={`w-full min-h-[444px] max-h-[444px] mx-0 rounded-[8px] ${
         isBackdropShow
           ? 'lecture-card-container lecture-card-container-hover'
           : 'lecture-card-container'
@@ -50,6 +50,7 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
       }}
     >
       <Link
+        className="cursor-pointer"
         to={`/lecture/${id}`}
         onMouseDown={(event) => {
           event.stopPropagation();

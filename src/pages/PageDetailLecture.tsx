@@ -13,6 +13,7 @@ import ImgEdit from '../assets/images/Edit.svg';
 import ImgClose from '../assets/images/Close.svg';
 import ComponentFormQnaLecture from '../components/lecture/ComponentFormQnaLecture';
 import ContextToken from '../store/ContextToken';
+import ComponentViewImageExpand from '../components/common/ui/ComponentViewImageExpand';
 
 export const CONST_LECTURE_DETAIL_MENU = {
   LECTURE_INTRODUCE: 'lecture_introduce',
@@ -28,6 +29,8 @@ const PageDetailLecture: React.FC = () => {
   const navigate = useNavigate();
   const tokenCtx = React.useContext(ContextToken);
   const { token } = tokenCtx;
+  const [isShowImgThumbnail, setIsShowImgThumbnail] =
+    React.useState<boolean>(false);
   const [selectedMenu, setSelectedMenu] = React.useState<LECTURE_DETAIL_MENU>(
     CONST_LECTURE_DETAIL_MENU.LECTURE_INTRODUCE,
   );
@@ -177,7 +180,10 @@ const PageDetailLecture: React.FC = () => {
           <div className="w-full bg-gradient-to-br from-[#8DC556] to-[#00A0E9]">
             <div className="hidden lg:flex w-full xl:max-w-[1152px] lg:max-w-[864px] md:max-w-[680px] sm:max-w-[500px] xs:max-w-[400px] xl:min-h-[506px] xl:max-h-[506px] lg:min-h-[431.79px] lg:max-h-[431.79px] mx-auto items-center justify-center">
               <img
-                className="xl:mr-[150px] lg:mr-[128px] xl:min-w-[346px] xl:max-w-[346px] xl:min-h-[346px] xl:max-h-[346px] lg:min-w-[295.25px] lg:max-w-[295.25px] lg:min-h-[295.25px] lg:max-h-[295.25px] object-fill rounded-[4px] lecture-detail-thumbnail-container"
+                onClick={() => {
+                  setIsShowImgThumbnail(true);
+                }}
+                className="cursor-pointer xl:mr-[150px] lg:mr-[128px] xl:min-w-[346px] xl:max-w-[346px] xl:min-h-[346px] xl:max-h-[346px] lg:min-w-[295.25px] lg:max-w-[295.25px] lg:min-h-[295.25px] lg:max-h-[295.25px] object-cover rounded-[4px] lecture-detail-thumbnail-container"
                 src={
                   !!dataDetailLecture.thumbnail
                     ? dataDetailLecture.thumbnail
@@ -289,7 +295,10 @@ const PageDetailLecture: React.FC = () => {
             </div>
             <div className="w-full mx-auto md:max-w-[680px] sm:max-w-[500px] xs:max-w-[400px] lg:hidden bg-gradient-to-br from-[#8DC556] to-[#00A0E9] items-center justify-center pt-[2vh]">
               <img
-                className="mx-auto rounded-[4px] lecture-detail-thumbnail-container object-fill"
+                onClick={() => {
+                  setIsShowImgThumbnail(true);
+                }}
+                className="cursor-pointer mx-auto rounded-[4px] lecture-detail-thumbnail-container object-cover"
                 src={
                   dataDetailLecture.thumbnail ? dataDetailLecture.thumbnail : ''
                 }
@@ -730,6 +739,16 @@ const PageDetailLecture: React.FC = () => {
       {!(!!dataDetailLecture && !!!errorDetailLecture) && (
         <Skeleton className="w-full h-screen" />
       )}
+      {isShowImgThumbnail &&
+        !!dataDetailLecture &&
+        !!dataDetailLecture.thumbnail && (
+          <ComponentViewImageExpand
+            src={dataDetailLecture.thumbnail}
+            hideComponent={() => {
+              setIsShowImgThumbnail(false);
+            }}
+          />
+        )}
     </div>
   );
 };
