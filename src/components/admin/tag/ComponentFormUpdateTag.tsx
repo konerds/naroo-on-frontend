@@ -7,6 +7,7 @@ import { useStringInput } from '../../../hooks';
 import { showError } from '../../../hooks/api';
 import { ITags } from '../../../interfaces';
 import ComponentElementTag from '../../common/ComponentElementTag';
+import { toast } from 'react-toastify';
 
 interface IPropsComponentFormUpdateTag {
   token: string | null;
@@ -55,6 +56,7 @@ const ComponentFormUpdateTag: React.FC<IPropsComponentFormUpdateTag> = ({
       );
       if (response.status === 200) {
         await mutate();
+        toast('성공적으로 태그가 업데이트되었습니다', { type: 'success' });
         setUpdateToggle(!updateToggle);
       }
     } catch (error: any) {
@@ -75,6 +77,7 @@ const ComponentFormUpdateTag: React.FC<IPropsComponentFormUpdateTag> = ({
         },
       );
       if (response.status === 200) {
+        toast('성공적으로 태그가 삭제되었습니다', { type: 'success' });
         await mutate();
       }
     } catch (error: any) {

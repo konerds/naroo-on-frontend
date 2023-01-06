@@ -64,7 +64,7 @@ const ComponentCarouselOrg: React.FC = () => {
     { revalidateOnFocus: false, revalidateIfStale: false },
   );
   return (
-    <div className="mt-[30px] w-full md:max-w-[788px] lg:px-[10px] lg:max-w-[966px] xl:max-w-[1152px] px-[30px] mx-auto pt-[36px] pb-[32px]">
+    <div className="w-full md:max-w-[788px] lg:px-[10px] lg:max-w-[966px] xl:max-w-[1152px] px-[30px] py-[36px] mx-auto">
       <div className="text-center text-[#515A6E] sm:text-[1.5rem] text-[1.1875rem] font-semibold mb-[28px]">
         이미 다양한 기관들이 나루온과 함께하고 있어요
       </div>

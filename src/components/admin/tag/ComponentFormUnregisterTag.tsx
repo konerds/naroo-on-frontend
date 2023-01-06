@@ -6,6 +6,7 @@ import { ILectureInList, ITags } from '../../../interfaces';
 import ComponentElementTag from '../../common/ComponentElementTag';
 import { KeyedMutator } from 'swr';
 import { showError } from '../../../hooks/api';
+import { toast } from 'react-toastify';
 
 interface IPropsComponentFormUnregisterTag {
   token: string | null;
@@ -31,6 +32,9 @@ const ComponentFormUnregisterTag: React.FC<
         },
       );
       if (response.status === 200) {
+        toast('성공적으로 강의에 설정된 태그가 해제되었습니다', {
+          type: 'success',
+        });
         await mutate();
       }
     } catch (error: any) {

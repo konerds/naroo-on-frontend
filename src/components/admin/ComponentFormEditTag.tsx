@@ -40,8 +40,8 @@ const ComponentFormEditTag: React.FC<IPropsComponentFormEditTag> = ({
         },
       );
       if (response.status === 201) {
-        toast('성공적으로 태그가 등록되었습니다', { type: 'success' });
         await tagsMutate();
+        toast('성공적으로 태그가 등록되었습니다', { type: 'success' });
         setTagName('');
       }
     } catch (error: any) {

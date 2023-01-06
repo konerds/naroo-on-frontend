@@ -6,6 +6,7 @@ import { KeyedMutator } from 'swr';
 import { useStringInput } from '../../../../../hooks';
 import { ILectureInList } from '../../../../../interfaces';
 import { showError } from '../../../../../hooks/api';
+import { toast } from 'react-toastify';
 
 interface IPropsComponentFormUpdateLecture {
   token: string | null;
@@ -50,6 +51,7 @@ const ComponentFormUpdateLecture: React.FC<
       );
       if (response.status === 200) {
         await mutate();
+        toast('성공적으로 강의 정보가 업데이트되었습니다', { type: 'success' });
         setUpdateToggle(!updateToggle);
       }
     } catch (error: any) {

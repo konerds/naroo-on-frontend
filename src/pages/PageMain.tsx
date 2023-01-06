@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useParams, useLocation } from 'react-router';
 import { axiosGetfetcher, showError } from '../hooks/api';
-import ComponentCarouselLecture from '../components/main/ComponentCarouselLecture';
+import ComponentCarouselLectureAll from '../components/main/ComponentCarouselLectureAll';
 import ComponentOrgCarousel from '../components/main/ComponentCarouselOrg';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
@@ -14,6 +14,7 @@ import { ReactComponent as ImgPrevArrow } from '../assets/images/PrevArrow.svg';
 import { ReactComponent as ImgNextArrow } from '../assets/images/NextArrow.svg';
 import Slider, { CustomArrowProps, Settings } from 'react-slick';
 import ComponentSkeletonCustom from '../components/common/ui/ComponentSkeletonCustom';
+import ComponentCarouselLectureUser from '../components/main/ComponentCarouselLectureUser';
 
 const ComponentArrowPrev = (props: CustomArrowProps) => {
   return (
@@ -125,7 +126,10 @@ const PageMain: React.FC = () => {
           ) : (
             <ComponentSkeletonCustom className="block-important w-full-vw-important min-h-[380px]" />
           )}
-          <ComponentCarouselLecture />
+          <div className="py-[60px] w-full md:max-w-[788px] lg:max-w-[966px] xl:max-w-[1152px] px-[20px] lg:px-0 mx-auto">
+            <ComponentCarouselLectureUser />
+            <ComponentCarouselLectureAll />
+          </div>
           <div className="min-h-[200px] bg-[#F8F8F9]">
             <ComponentOrgCarousel />
           </div>

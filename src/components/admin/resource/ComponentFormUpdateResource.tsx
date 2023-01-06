@@ -6,6 +6,7 @@ import { KeyedMutator } from 'swr';
 import { IResources } from '../../../interfaces';
 import { showError } from '../../../hooks/api';
 import { useStringInput } from '../../../hooks';
+import { toast } from 'react-toastify';
 
 interface IPropsComponentFormUpdateResource {
   index: number;
@@ -52,6 +53,7 @@ const ComponentFormUpdateResource: React.FC<
       );
       if (response.status === 201) {
         await mutate();
+        toast('성공적으로 리소스가 등록되었습니다', { type: 'success' });
         setAddPreview('');
       }
     } catch (error: any) {
@@ -83,6 +85,7 @@ const ComponentFormUpdateResource: React.FC<
       );
       if (response.status === 200) {
         await mutate();
+        toast('성공적으로 리소스가 업데이트되었습니다', { type: 'success' });
         setUpdateToggle(!updateToggle);
       }
     } catch (error: any) {
@@ -104,6 +107,7 @@ const ComponentFormUpdateResource: React.FC<
       );
       if (response.status === 200) {
         await mutate();
+        toast('성공적으로 리소스가 삭제되었습니다', { type: 'success' });
       }
     } catch (error: any) {
       showError(error);

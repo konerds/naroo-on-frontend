@@ -16,6 +16,7 @@ import moment from 'moment';
 import { KeyedMutator } from 'swr';
 import { showError } from '../../../../hooks/api';
 import ComponentFormUpdateLecture from './form/ComponentFormUpdateLecture';
+import { toast } from 'react-toastify';
 
 interface IPropsComponentElementEditLecture {
   id: string;
@@ -94,6 +95,7 @@ const ComponentElementEditLecture: React.FC<
       );
       if (response.status === 200) {
         await mutate();
+        toast('성공적으로 강의가 삭제되었습니다', { type: 'success' });
       }
     } catch (error: any) {
       showError(error);
@@ -117,6 +119,9 @@ const ComponentElementEditLecture: React.FC<
       );
       if (response.status === 200) {
         await mutate();
+        toast('성공적으로 강의 만료 일시가 업데이트되었습니다', {
+          type: 'success',
+        });
         setUpdateExpiredToggle(!updateExpiredToggle);
       }
     } catch (error: any) {
@@ -141,6 +146,7 @@ const ComponentElementEditLecture: React.FC<
       );
       if (response.status === 200) {
         await mutate();
+        toast('성공적으로 강사 정보가 업데이트되었습니다', { type: 'success' });
         setUpdateTeacherToggle(!updateTeacherToggle);
       }
     } catch (error: any) {

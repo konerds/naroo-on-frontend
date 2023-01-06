@@ -77,8 +77,8 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
         },
       );
       if (response.status === 200) {
-        toast('성공적으로 문의가 삭제되었습니다', { type: 'success' });
         await mutate();
+        toast('성공적으로 문의가 삭제되었습니다', { type: 'success' });
       }
     } catch (error: any) {
       showError(error);
@@ -104,8 +104,8 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
         },
       );
       if (response.status === 200) {
-        toast('성공적으로 문의가 업데이트되었습니다', { type: 'success' });
         await mutate();
+        toast('성공적으로 문의가 업데이트되었습니다', { type: 'success' });
         setIsShowQuestionEdit(false);
       }
     } catch (error: any) {
@@ -158,8 +158,8 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
         },
       );
       if (response.status === 201) {
-        toast('성공적으로 답변 등록이 완료되었습니다', { type: 'success' });
         await mutate();
+        toast('성공적으로 답변이 등록되었습니다', { type: 'success' });
         setNewAnswerTitle('');
         setNewAnswerDescription('');
         setUpdateAnswerTitle(updateAnswerTitle);
@@ -185,8 +185,8 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
         },
       );
       if (response.status === 200) {
-        toast('성공적으로 답변이 삭제되었습니다', { type: 'success' });
         await mutate();
+        toast('성공적으로 답변이 삭제되었습니다', { type: 'success' });
       }
     } catch (error: any) {
       showError(error);
@@ -212,8 +212,8 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
         },
       );
       if (response.status === 200) {
-        toast('성공적으로 답변 등록이 완료되었습니다', { type: 'success' });
         await mutate();
+        toast('성공적으로 답변이 등록되었습니다', { type: 'success' });
         setIsShowAnswerEdit(false);
       }
     } catch (error: any) {

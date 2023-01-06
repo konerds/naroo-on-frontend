@@ -6,6 +6,7 @@ import { ILectureInListAdmin } from '../../../../interfaces';
 import Select from 'react-select';
 import { KeyedMutator } from 'swr';
 import { showError } from '../../../../hooks/api';
+import { toast } from 'react-toastify';
 
 interface IPropsComponentFormUpdateStatus {
   token: string | null;
@@ -65,6 +66,7 @@ const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
       );
       if (response.status === 200) {
         await mutate();
+        toast('성공적으로 수강 상태가 업데이트되었습니다', { type: 'success' });
         setUpdateToggle(!updateToggle);
       }
     } catch (error: any) {

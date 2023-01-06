@@ -7,6 +7,7 @@ import { KeyedMutator } from 'swr';
 import { ILectureInList, ITags } from '../../../interfaces';
 import ComponentFormUnregisterTag from './ComponentFormUnregisterTag';
 import { showError } from '../../../hooks/api';
+import { toast } from 'react-toastify';
 
 interface IPropsComponentFormRegisterTags {
   token: string | null;
@@ -71,6 +72,7 @@ const ComponentFormRegisterTags: React.FC<IPropsComponentFormRegisterTags> = ({
       );
       if (response.status === 200) {
         await mutate();
+        toast('성공적으로 강의에 태그가 설정되었습니다', { type: 'success' });
         setUpdateToggle(!updateToggle);
       }
     } catch (error: any) {

@@ -7,6 +7,7 @@ import { KeyedMutator } from 'swr';
 import { useStringInput } from '../../../../../hooks';
 import { showError } from '../../../../../hooks/api';
 import { ILectureInList } from '../../../../../interfaces';
+import { toast } from 'react-toastify';
 
 interface IPropsComponentFormUpdateImage {
   token: string | null;
@@ -59,6 +60,7 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
 
       if (response.status === 200) {
         await mutate();
+        toast('성공적으로 이미지가 업데이트되었습니다', { type: 'success' });
         setUpdateToggle(!updateToggle);
       }
     } catch (error: any) {

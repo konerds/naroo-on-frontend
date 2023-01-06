@@ -6,7 +6,7 @@ import Moment from 'react-moment';
 import 'moment/locale/ko';
 import axios from 'axios';
 import { useStringInput } from '../hooks';
-import { IInfoMe, ILectureDetail } from '../interfaces';
+import { IInfoMe, ILectureDetail, ILectureInList } from '../interfaces';
 import ComponentFormNoticeLecture from '../components/lecture/ComponentFormNoticeLecture';
 import ImgEdit from '../assets/images/Edit.svg';
 import ImgClose from '../assets/images/Close.svg';
@@ -68,6 +68,13 @@ const PageDetailLecture: React.FC = () => {
     () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/me`, token),
     { revalidateOnFocus: false, revalidateIfStale: false },
   );
+  const { mutate: mutateUserLectures } = useSWR<ILectureInList[]>(
+    !!token && !!dataGetMe && !!!errorGetMe
+      ? `${process.env.REACT_APP_BACK_URL}/lecture`
+      : null,
+    () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/lecture`, token),
+    { revalidateOnFocus: false, revalidateIfStale: false },
+  );
   const {
     data: dataDetailLecture,
     mutate: mutateDetailLecture,
@@ -112,10 +119,11 @@ const PageDetailLecture: React.FC = () => {
               },
             );
             if (response.status === 200) {
+              await mutateUserLectures();
+              await mutateDetailLecture();
               toast('성공적으로 수강 신청이 완료되었습니다', {
                 type: 'success',
               });
-              await mutateDetailLecture();
             }
           } catch (error: any) {
             showError(error);
@@ -143,7 +151,7 @@ const PageDetailLecture: React.FC = () => {
       );
       if (response.status === 200) {
         await mutateDetailLecture();
-        toast('성공적으로 공지사항 등록이 완료되었습니다', { type: 'success' });
+        toast('성공적으로 공지사항이 등록되었습니다', { type: 'success' });
         setNoticeTitle('');
         setNoticeDescription('');
       }
@@ -170,7 +178,7 @@ const PageDetailLecture: React.FC = () => {
       );
       if (response.status === 201) {
         await mutateDetailLecture();
-        toast('성공적으로 문의 등록이 완료되었습니다', { type: 'success' });
+        toast('성공적으로 문의가 등록되었습니다', { type: 'success' });
         setQuestionTitle('');
         setQuestionDescription('');
       }

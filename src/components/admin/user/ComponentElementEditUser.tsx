@@ -34,7 +34,7 @@ const ComponentElementEditUser: React.FC<IPropsComponentElementEditUser> = ({
       );
       if (response.status === 200) {
         await mutate();
-        toast('성공적으로 사용자를 삭제하였습니다', { type: 'success' });
+        toast('성공적으로 사용자가 삭제되었습니다', { type: 'success' });
       }
     } catch (error: any) {
       showError(error);

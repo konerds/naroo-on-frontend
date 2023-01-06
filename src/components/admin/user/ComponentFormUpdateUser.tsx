@@ -56,7 +56,9 @@ const ComponentFormUpdateUser: React.FC<IPropsComponentFormUpdateUser> = ({
 
       if (response.status === 200) {
         await mutate();
-        toast('성공적으로 정보를 업데이트하였습니다', { type: 'success' });
+        toast('성공적으로 사용자 정보가 업데이트되었습니다', {
+          type: 'success',
+        });
         setUpdateToggle(!updateToggle);
       }
     } catch (error: any) {

@@ -61,8 +61,8 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
         },
       );
       if (response.status === 200) {
-        toast('성공적으로 공지사항이 삭제되었습니다', { type: 'success' });
         await mutate();
+        toast('성공적으로 공지사항이 삭제되었습니다', { type: 'success' });
       }
     } catch (error: any) {
       showError(error);
@@ -86,8 +86,8 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
         },
       );
       if (response.status === 200) {
-        toast('성공적으로 공지사항이 업데이트되었습니다', { type: 'success' });
         await mutate();
+        toast('성공적으로 공지사항이 업데이트되었습니다', { type: 'success' });
         setIsShowEdit(false);
       }
     } catch (error: any) {

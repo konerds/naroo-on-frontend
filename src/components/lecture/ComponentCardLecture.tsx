@@ -89,7 +89,7 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
               : ''}
           </div>
         )}
-        <div className="w-full max-h-[48px] overflow-hidden px-[20px] text-[1rem] font-semibold text-[#17233D]">
+        <div className="w-full max-h-[3rem] overflow-hidden px-[20px] text-[1rem] font-semibold text-[#17233D]">
           {title}
         </div>
         <div className="w-full px-[20px] font-medium text-[0.75rem] text-[#808695]">
@@ -99,6 +99,7 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
           <>
             {tags.length > 0 ? (
               <div
+                className="max-w-full"
                 onMouseDown={(event) => {
                   event.stopPropagation();
                 }}
