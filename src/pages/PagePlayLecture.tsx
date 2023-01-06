@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import ContextToken from '../store/ContextToken';
 import useSWR from 'swr';
 import { isArray } from 'lodash';
-import Skeleton from 'react-loading-skeleton';
 import { useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import ComponentElementTag from '../components/common/ComponentElementTag';
 import { IInfoMe, ILectureVideoDetail } from '../interfaces';
 import { axiosGetfetcher } from '../hooks/api';
+import ComponentSkeletonCustom from '../components/common/ui/ComponentSkeletonCustom';
 
 const PagePlayLecture: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -81,7 +81,7 @@ const PagePlayLecture: React.FC = () => {
                     )}
                   </>
                 ) : (
-                  <Skeleton className="w-full h-[34px]" />
+                  <ComponentSkeletonCustom className="w-full-important min-h-[34px]" />
                 )}
                 <div className="w-[100vw] flex pl-[9px] pb-[9px] text-4xl text-white font-medium">
                   {dataLectureVideo.video_title}
@@ -105,7 +105,7 @@ const PagePlayLecture: React.FC = () => {
                 </div>
                 <div className="w-[100vw] flex">
                   <div className="flex-grow w-full min-h-[69.1vh] max-h-[69.1vh]">
-                    <Skeleton className="w-[80%] p-0 m-0 h-full" />
+                    <ComponentSkeletonCustom className="w-full-vw-important min-h-[100%] p-0 m-0" />
                   </div>
                 </div>
               </>

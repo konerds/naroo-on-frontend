@@ -7,13 +7,13 @@ import 'moment/locale/ko';
 import axios from 'axios';
 import { useStringInput } from '../hooks';
 import { IInfoMe, ILectureDetail } from '../interfaces';
-import Skeleton from 'react-loading-skeleton';
 import ComponentFormNoticeLecture from '../components/lecture/ComponentFormNoticeLecture';
 import ImgEdit from '../assets/images/Edit.svg';
 import ImgClose from '../assets/images/Close.svg';
 import ComponentFormQnaLecture from '../components/lecture/ComponentFormQnaLecture';
 import ContextToken from '../store/ContextToken';
 import ComponentViewImageExpand from '../components/common/ui/ComponentViewImageExpand';
+import ComponentSkeletonCustom from '../components/common/ui/ComponentSkeletonCustom';
 
 export const CONST_LECTURE_DETAIL_MENU = {
   LECTURE_INTRODUCE: 'lecture_introduce',
@@ -737,7 +737,7 @@ const PageDetailLecture: React.FC = () => {
         </>
       )}
       {!(!!dataDetailLecture && !!!errorDetailLecture) && (
-        <Skeleton className="w-full h-screen" />
+        <ComponentSkeletonCustom className="w-full-important min-h-screen" />
       )}
       {isShowImgThumbnail &&
         !!dataDetailLecture &&

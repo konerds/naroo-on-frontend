@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { isArray } from 'lodash';
-import Skeleton from 'react-loading-skeleton';
 import { Link } from 'react-router-dom';
 import Slider, { Settings } from 'react-slick';
 import { ITags } from '../../interfaces';
 import ComponentElementTag from '../common/ComponentElementTag';
 import PlayIcon from '../../assets/images/Play.svg';
+import ComponentSkeletonCustom from '../common/ui/ComponentSkeletonCustom';
 
 interface IPropsComponentCardLecture {
   id: string;
@@ -123,7 +123,7 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
             )}
           </>
         ) : (
-          <Skeleton className="w-full h-[34px]" />
+          <ComponentSkeletonCustom className="w-full-important min-h-[34px]" />
         )}
       </div>
     </div>
