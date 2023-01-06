@@ -173,7 +173,7 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
                     <div className="w-full min-h-[41px] bg-white flex justify-center items-center">
                       <button
                         type="submit"
-                        className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:max-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
+                        className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
                         disabled={isLoadingSubmit}
                       >
                         <MediaQuery maxWidth={639.98}>
@@ -186,7 +186,7 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
                       </button>
                       <button
                         type="button"
-                        className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:max-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] ml-[3px] mr-[10px] sm:ml-[10px] sm:mr-[18px] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
+                        className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] ml-[3px] mr-[10px] sm:ml-[10px] sm:mr-[18px] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
                         onClick={() => {
                           setIsShowEdit(false);
                         }}
@@ -205,7 +205,7 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
                     <div className="w-full sm:min-h-[41px] bg-white flex justify-center items-center">
                       <button
                         type="button"
-                        className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:max-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
+                        className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
                         onClick={(event) => {
                           event.preventDefault();
                           setIsShowEdit(true);
@@ -222,7 +222,7 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
                       </button>
                       <button
                         type="button"
-                        className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:max-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] ml-[3px] mr-[10px] sm:ml-[10px] sm:mr-[18px] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
+                        className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] ml-[3px] mr-[10px] sm:ml-[10px] sm:mr-[18px] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
                         onClick={() => {
                           onClickDeleteNoticeHandler(id);
                         }}
