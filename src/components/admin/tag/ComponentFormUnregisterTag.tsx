@@ -44,7 +44,7 @@ const ComponentFormUnregisterTag: React.FC<
     }
   };
   return (
-    <div key={tag.id} className="flex items-center">
+    <div className="flex items-center">
       <ComponentElementTag name={tag.name} />
       <FontAwesomeIcon
         className={`button-fa-icon-admin ${

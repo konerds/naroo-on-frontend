@@ -436,10 +436,10 @@ const PageDetailLecture: React.FC = () => {
                 {!!dataDetailLecture.images &&
                   Array.isArray(dataDetailLecture.images) &&
                   dataDetailLecture.images.length > 0 &&
-                  dataDetailLecture.images.map((url) => {
+                  dataDetailLecture.images.map((url, index) => {
                     return (
                       <img
-                        key={url}
+                        key={index}
                         className="mb-[20px] last:mb-0 w-full md:w-[512px] lg:w-[682.67px] xl:w-[800px]"
                         src={url}
                       />
@@ -571,7 +571,7 @@ const PageDetailLecture: React.FC = () => {
                         .map((notice, index) => {
                           return (
                             <ComponentFormNoticeLecture
-                              key={notice.id}
+                              key={index}
                               token={token}
                               userType={dataGetMe?.role}
                               mutate={mutateDetailLecture}
@@ -718,7 +718,7 @@ const PageDetailLecture: React.FC = () => {
                           .map((qna, index) => {
                             return dataDetailLecture ? (
                               <ComponentFormQnaLecture
-                                key={qna.question_id}
+                                key={index}
                                 token={token}
                                 userType={dataGetMe?.role}
                                 mutate={mutateDetailLecture}

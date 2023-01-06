@@ -79,9 +79,8 @@ const ComponentCarouselOrg: React.FC = () => {
             >
               {dataResourceContent.map((element, index) => {
                 return (
-                  <div className="px-[10px]">
+                  <div key={index} className="px-[10px]">
                     <img
-                      key={index}
                       className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover mx-auto"
                       src={element.content}
                     />
@@ -97,9 +96,8 @@ const ComponentCarouselOrg: React.FC = () => {
             >
               {dataResourceContent.map((element, index) => {
                 return (
-                  <div className="px-[10px]">
+                  <div key={index} className="px-[10px]">
                     <img
-                      key={index}
                       className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover"
                       src={element.content}
                     />
@@ -115,9 +113,8 @@ const ComponentCarouselOrg: React.FC = () => {
             >
               {dataResourceContent.map((element, index) => {
                 return (
-                  <div className="px-[10px]">
+                  <div key={index} className="px-[10px]">
                     <img
-                      key={index}
                       className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover"
                       src={element.content}
                     />
@@ -133,9 +130,8 @@ const ComponentCarouselOrg: React.FC = () => {
             >
               {dataResourceContent.map((element, index) => {
                 return (
-                  <div className="px-[10px]">
+                  <div key={index} className="px-[10px]">
                     <img
-                      key={index}
                       className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover"
                       src={element.content}
                     />
@@ -151,9 +147,8 @@ const ComponentCarouselOrg: React.FC = () => {
             >
               {dataResourceContent.map((element, index) => {
                 return (
-                  <div className="px-[10px]">
+                  <div key={index} className="px-[10px]">
                     <img
-                      key={index}
                       className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover"
                       src={element.content}
                     />

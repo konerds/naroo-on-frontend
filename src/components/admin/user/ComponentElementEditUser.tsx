@@ -43,7 +43,7 @@ const ComponentElementEditUser: React.FC<IPropsComponentElementEditUser> = ({
     }
   };
   return (
-    <React.Fragment key={!!user.id ? user.id : null}>
+    <React.Fragment>
       {!!user.id && (
         <div
           className={`w-auto sm border-[1px] rounded-[4px] p-[20px] my-[20px] ${

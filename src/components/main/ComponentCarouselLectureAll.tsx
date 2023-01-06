@@ -84,9 +84,8 @@ const ComponentCarouselLectureAll: React.FC = () => {
                 >
                   {dataAllLectures.map((lecture, index) => {
                     return (
-                      <div className="px-[10px]">
+                      <div key={index} className="px-[10px]">
                         <ComponentCardLecture
-                          key={index}
                           id={lecture.id}
                           title={lecture.title}
                           thumbnail={lecture.thumbnail}
@@ -105,9 +104,8 @@ const ComponentCarouselLectureAll: React.FC = () => {
                 >
                   {dataAllLectures.map((lecture, index) => {
                     return (
-                      <div className="px-[10px]">
+                      <div key={index} className="px-[10px]">
                         <ComponentCardLecture
-                          key={index}
                           id={lecture.id}
                           title={lecture.title}
                           thumbnail={lecture.thumbnail}
@@ -126,9 +124,8 @@ const ComponentCarouselLectureAll: React.FC = () => {
                 >
                   {dataAllLectures.map((lecture, index) => {
                     return (
-                      <div className="px-[10px]">
+                      <div key={index} className="px-[10px]">
                         <ComponentCardLecture
-                          key={index}
                           id={lecture.id}
                           title={lecture.title}
                           thumbnail={lecture.thumbnail}
@@ -147,9 +144,8 @@ const ComponentCarouselLectureAll: React.FC = () => {
                 >
                   {dataAllLectures.map((lecture, index) => {
                     return (
-                      <div className="px-[10px]">
+                      <div key={index} className="px-[10px]">
                         <ComponentCardLecture
-                          key={index}
                           id={lecture.id}
                           title={lecture.title}
                           thumbnail={lecture.thumbnail}

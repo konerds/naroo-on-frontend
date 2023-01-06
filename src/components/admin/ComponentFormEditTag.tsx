@@ -79,10 +79,10 @@ const ComponentFormEditTag: React.FC<IPropsComponentFormEditTag> = ({
         {!!tagsData &&
           isArray(tagsData) &&
           tagsData.length > 0 &&
-          tagsData.map((tag) => {
+          tagsData.map((tag, index) => {
             return (
               <ComponentFormUpdateTag
-                key={tag.id}
+                key={index}
                 token={token}
                 id={tag.id}
                 name={tag.name}

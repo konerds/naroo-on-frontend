@@ -266,10 +266,10 @@ const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
         <Slider {...settings}>
           {lectureImageOptions &&
             lectureImageOptions.length > 0 &&
-            lectureImageOptions.map((lectureImageOption) => {
+            lectureImageOptions.map((lectureImageOption, index) => {
               if (lectureImageOption.value) {
                 return (
-                  <div className="pr-[4px]">
+                  <div key={index} className="pr-[4px]">
                     <img
                       className="w-auto rounded-xl mb-[15px]"
                       src={lectureImageOption.value.toString()}

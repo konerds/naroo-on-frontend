@@ -66,9 +66,9 @@ const PagePlayLecture: React.FC = () => {
                         className="cursor-grab flex w-full px-[5px]"
                         {...settings}
                       >
-                        {dataLectureVideo.tags.map((tag) => {
+                        {dataLectureVideo.tags.map((tag, index) => {
                           return (
-                            <div className="max-w-max py-[5px]" key={tag.id}>
+                            <div className="max-w-max py-[5px]" key={index}>
                               <ComponentElementTag name={tag.name} />
                             </div>
                           );
