@@ -81,7 +81,7 @@ const ComponentCarouselLecture: React.FC = () => {
     { revalidateOnFocus: false, revalidateIfStale: false },
   );
   return (
-    <div className="mt-[60px] xl:max-w-[1152px] lg:max-w-[966px] md:max-w-[788px] xs:w-full px-[20px] lg:px-0 mx-auto">
+    <div className="mt-[60px] w-full md:max-w-[788px] lg:max-w-[966px] xl:max-w-[1152px] px-[20px] lg:px-0 mx-auto">
       {!!token && !!dataGetMe && !!!errorGetMe && (
         <>
           <div className="text-2xl font-semibold text-gray-400">

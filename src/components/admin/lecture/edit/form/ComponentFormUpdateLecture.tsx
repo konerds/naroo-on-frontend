@@ -62,7 +62,7 @@ const ComponentFormUpdateLecture: React.FC<
     <>
       {updateToggle ? (
         <form
-          className="mt-[10px] flex items-center"
+          className="mt-[10px] block sm:flex sm:items-center"
           onSubmit={(event) => {
             event.preventDefault();
             onSubmitUpdateField();
@@ -75,38 +75,41 @@ const ComponentFormUpdateLecture: React.FC<
             onChange={onChangeUpdateFieldName}
             disabled={isLoadingSubmit}
           />
-          <button
-            className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
-            type="submit"
-            disabled={isLoadingSubmit}
-          >
-            수정
-          </button>
-          <button
-            className="w-[65px] h-[32px] button-modify-cancel-admin"
-            onClick={onClickUpdateToggle}
-            disabled={isLoadingSubmit}
-          >
-            취소
-          </button>
+          <div className="flex justify-end sm:justify-start items-center mt-[5px] mb-[10px]">
+            <button
+              className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
+              type="submit"
+              disabled={isLoadingSubmit}
+            >
+              수정
+            </button>
+            <button
+              className="w-[65px] h-[32px] button-modify-cancel-admin"
+              onClick={onClickUpdateToggle}
+              disabled={isLoadingSubmit}
+            >
+              취소
+            </button>
+          </div>
         </form>
       ) : (
-        <div className="flex items-center">
-          <div className="flex rounded-[10px] text-gray-200 bg-harp w-full items-center p-[10px] text-xs">
-            {fieldType === 'thumbnail'
-              ? '썸네일 URL : '
-              : fieldType === 'expired'
-              ? '강의 만료 일시 : '
-              : fieldType === 'title'
-              ? '강의 제목 : '
-              : fieldType === 'description'
-              ? '강의 설명 : '
-              : fieldType === 'video_title'
-              ? '강의 영상 제목 : '
-              : fieldType === 'video_url'
-              ? '강의 영상 URL : '
-              : ''}
-            {userField && userField}
+        <div className="mt-[10px] flex items-center">
+          <div className="w-full flex items-center overflow-hidden rounded-[10px] text-gray-200 bg-harp p-[10px] text-xs">
+            {`${
+              (fieldType === 'thumbnail'
+                ? '썸네일 URL : '
+                : fieldType === 'expired'
+                ? '강의 만료 일시 : '
+                : fieldType === 'title'
+                ? '강의 제목 : '
+                : fieldType === 'description'
+                ? '강의 설명 : '
+                : fieldType === 'video_title'
+                ? '강의 영상 제목 : '
+                : fieldType === 'video_url'
+                ? '강의 영상 URL : '
+                : '') + (!!userField && userField)
+            }`}
           </div>
           <FontAwesomeIcon
             className="ml-[10px] button-fa-icon-admin"

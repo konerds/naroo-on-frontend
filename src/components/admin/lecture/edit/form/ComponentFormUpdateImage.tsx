@@ -71,7 +71,7 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
     <>
       {updateToggle ? (
         <form
-          className="w-full items-center p-[10px] border-[1px] border-[#C4C4C4]"
+          className="mt-[10px] w-full p-[10px] border-[1px] border-[#C4C4C4]"
           onSubmit={(event) => {
             event.preventDefault();
             onSubmitUpdateImage();
@@ -92,7 +92,7 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
               <img className="rounded-2xl m-auto" src={preview} />
             </div>
           )}
-          <div className="flex">
+          <div className="block sm:flex sm:items-center">
             <input
               className="w-full m-auto h-[32px] px-[10px] disabled:opacity-50 relative top-[5px]"
               type="file"
@@ -111,25 +111,27 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
                 };
               }}
             />
-            <button
-              className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
-              type="submit"
-              disabled={isLoadingSubmit}
-            >
-              수정
-            </button>
-            <button
-              type="button"
-              className="w-[65px] h-[32px] button-modify-cancel-admin"
-              onClick={onClickUpdateToggle}
-              disabled={isLoadingSubmit}
-            >
-              취소
-            </button>
+            <div className="flex justify-end sm:justify-start items-center mt-[5px] mb-[10px]">
+              <button
+                className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
+                type="submit"
+                disabled={isLoadingSubmit}
+              >
+                수정
+              </button>
+              <button
+                type="button"
+                className="w-[65px] h-[32px] button-modify-cancel-admin"
+                onClick={onClickUpdateToggle}
+                disabled={isLoadingSubmit}
+              >
+                취소
+              </button>
+            </div>
           </div>
         </form>
       ) : (
-        <div className="flex items-center p-[10px] w-full border-[1px] border-[#C4C4C4]">
+        <div className="mt-[10px] flex items-center p-[10px] w-full border-[1px] border-[#C4C4C4]">
           <div className="w-full overflow-x-hidden">
             <div className="text-xs bg-white text-shuttle-gray">
               {fieldType === 'thumbnail'

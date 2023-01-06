@@ -87,7 +87,7 @@ const ComponentFormUpdateTag: React.FC<IPropsComponentFormUpdateTag> = ({
     <>
       {updateToggle ? (
         <form
-          className="flex flex-wrap items-center"
+          className="block sm:flex sm:flex-wrap sm:items-center"
           onSubmit={(event) => {
             event.preventDefault();
             onSubmitUpdateTag();
@@ -100,20 +100,22 @@ const ComponentFormUpdateTag: React.FC<IPropsComponentFormUpdateTag> = ({
             onChange={onChangeUpdateTagName}
             disabled={isLoadingSubmit}
           />
-          <button
-            className="w-[40px] h-[24px] mx-[5px] box-border rounded-[10px] border-[1px] border-[#4DBFF0] lg:text-[0.8rem] text-[0.5rem] font-semibold bg-[#4DBFF0] text-white disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed;"
-            type="submit"
-            disabled={isLoadingSubmit}
-          >
-            수정
-          </button>
-          <button
-            className="mr-[10px] w-[40px] h-[24px] box-border rounded-[10px] border-[1px] border-[#4DBFF0] lg:text-[0.8rem] text-[0.5rem] font-semibold bg-[#4DBFF0] text-white disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed;"
-            onClick={onClickUpdateToggle}
-            disabled={isLoadingSubmit}
-          >
-            취소
-          </button>
+          <div className="flex justify-end sm:justify-start items-center mt-[5px] mb-[10px]">
+            <button
+              className="w-[40px] h-[24px] mx-[5px] box-border rounded-[10px] border-[1px] border-[#4DBFF0] lg:text-[0.8rem] text-[0.5rem] font-semibold bg-[#4DBFF0] text-white disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed;"
+              type="submit"
+              disabled={isLoadingSubmit}
+            >
+              수정
+            </button>
+            <button
+              className="mr-[10px] w-[40px] h-[24px] box-border rounded-[10px] border-[1px] border-[#4DBFF0] lg:text-[0.8rem] text-[0.5rem] font-semibold bg-[#4DBFF0] text-white disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed;"
+              onClick={onClickUpdateToggle}
+              disabled={isLoadingSubmit}
+            >
+              취소
+            </button>
+          </div>
         </form>
       ) : (
         <div className="flex items-center h-[30px] py-[20px]">

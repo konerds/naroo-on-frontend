@@ -24,34 +24,46 @@ body {
   box-shadow: 0 0 0 1px #fff;
   content: 'screen: _';
 }
+
+@screen xxs {
+  .debug-screens::before {
+    content: 'screen: xxs';
+  }
+}
+
+@screen xs {
+  .debug-screens::before {
+    content: 'screen: xs';
+  }
+}
+
 @screen sm {
   .debug-screens::before {
     content: 'screen: sm';
   }
 }
+
 @screen md {
   .debug-screens::before {
     content: 'screen: md';
   }
 }
+
 @screen lg {
   .debug-screens::before {
     content: 'screen: lg';
   }
 }
+
 @screen xl {
   .debug-screens::before {
     content: 'screen: xl';
   }
 }
+
 @screen 2xl {
   .debug-screens::before {
     content: 'screen: 2xl';
-  }
-}
-@screen xs {
-  .debug-screens::before {
-    content: 'screen: xs';
   }
 }
 
@@ -96,7 +108,13 @@ body {
 }
 
 .Toastify__toast-container {
-  width: 340px !important;
+  width: 100vw !important;
+}
+
+@media (min-width: 420px) {
+  .Toastify__toast-container {
+    width: 70vw !important;
+  }
 }
 
 @media (min-width: 640px) {
@@ -114,7 +132,7 @@ body {
 }
 
 .button-modify-cancel-admin {
-  @apply box-border rounded-[10px] border-[1px] border-[#4DBFF0] lg:text-[1rem] text-[0.8rem] font-semibold bg-[#4DBFF0] text-white disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed;
+  @apply box-border rounded-[10px] border-[1px] border-[#4DBFF0] text-[0.6rem] lg:text-[0.8rem] font-semibold bg-[#4DBFF0] text-white disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed;
 }
 
 .w-full-important {

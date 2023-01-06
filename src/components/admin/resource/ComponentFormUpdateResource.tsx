@@ -173,9 +173,9 @@ const ComponentFormUpdateResource: React.FC<
               <img className="rounded-xl" src={preview} />
             </div>
           )}
-          <div className="flex items-center w-full">
+          <div className="block max-w-[100vw] sm:flex sm:items-center sm:w-full">
             <input
-              className="ml-auto mr-0 border-[1px] h-[32px] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="max-w-full ml-auto mr-0 border-[1px] h-[32px] disabled:opacity-50 disabled:cursor-not-allowed"
               type="file"
               disabled={isLoadingSubmitUpdateResource}
               onChange={(event) => {
@@ -192,21 +192,23 @@ const ComponentFormUpdateResource: React.FC<
                 };
               }}
             />
-            <button
-              className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
-              type="submit"
-              disabled={isLoadingSubmitUpdateResource}
-            >
-              수정
-            </button>
-            <button
-              type="button"
-              className="w-[65px] h-[32px] button-modify-cancel-admin"
-              onClick={onClickUpdateToggle}
-              disabled={isLoadingSubmitUpdateResource}
-            >
-              취소
-            </button>
+            <div className="flex justify-end sm:justify-start items-center mt-[5px] mb-[10px]">
+              <button
+                className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
+                type="submit"
+                disabled={isLoadingSubmitUpdateResource}
+              >
+                수정
+              </button>
+              <button
+                type="button"
+                className="w-[65px] h-[32px] button-modify-cancel-admin"
+                onClick={onClickUpdateToggle}
+                disabled={isLoadingSubmitUpdateResource}
+              >
+                취소
+              </button>
+            </div>
           </div>
         </form>
       ) : (

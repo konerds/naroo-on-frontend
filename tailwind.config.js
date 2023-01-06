@@ -1,14 +1,18 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
   mode: 'jit',
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    screens: {
+      xxs: '0px',
+      xs: '420px',
+      lg: '1024px',
+      xl: '1200px',
+      ...defaultTheme.screens,
+    },
     extend: {
-      screens: {
-        xs: { min: '0px', max: '639.98px' },
-        lg: { min: '1024px' },
-        xl: { min: '1200px' },
-      },
       colors: {
         gray: {
           100: '#C4C4C4',

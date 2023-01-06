@@ -83,7 +83,7 @@ const ComponentFormRegisterTags: React.FC<IPropsComponentFormRegisterTags> = ({
     <>
       {updateToggle ? (
         <form
-          className="mt-[10px] flex items-center"
+          className="mt-[10px] block sm:flex sm:items-center"
           onSubmit={(event) => {
             event.preventDefault();
             onSubmitRegisterTag();
@@ -105,23 +105,25 @@ const ComponentFormRegisterTags: React.FC<IPropsComponentFormRegisterTags> = ({
             placeholder="태그를 추가하세요"
             isDisabled={isLoadingSubmit}
           />
-          <input
-            className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
-            type="submit"
-            value="수정"
-            disabled={isLoadingSubmit}
-          />
-          <button
-            className="w-[65px] h-[32px] button-modify-cancel-admin"
-            onClick={onClickUpdateToggle}
-            disabled={isLoadingSubmit}
-          >
-            취소
-          </button>
+          <div className="flex justify-end sm:justify-start items-center my-[10px]">
+            <input
+              className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
+              type="submit"
+              value="수정"
+              disabled={isLoadingSubmit}
+            />
+            <button
+              className="w-[65px] h-[32px] button-modify-cancel-admin"
+              onClick={onClickUpdateToggle}
+              disabled={isLoadingSubmit}
+            >
+              취소
+            </button>
+          </div>
         </form>
       ) : (
         <div className="mt-[10px] flex items-center justify-between">
-          <div className="flex flex-wrap items-center">
+          <div className="flex flex-wrap items-center gap-x-[10px] gap-y-[5px]">
             <>
               {tags &&
                 tags.length > 0 &&

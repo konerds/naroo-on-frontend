@@ -7,7 +7,7 @@ export function showError(error: any) {
   if (Array.isArray(messageData)) {
     toast(
       <div>
-        <p className="text-md sm:text-2xl text-[#e74c3c] mb-[10px] sm:mb-[20px]">
+        <p className="text-sm xs:text-md sm:text-2xl text-[#e74c3c] mb-[10px] sm:mb-[20px]">
           다음과 같은 오류가 발생하였습니다
         </p>
         {messageData.length > 0
@@ -15,7 +15,7 @@ export function showError(error: any) {
               return (
                 <p
                   key={index}
-                  className="text-sm sm:text-md ml-[20px] mt-[3px] sm:mt-[10px]"
+                  className="text-xs xs:text-sm sm:text-md ml-[20px] mt-[3px] sm:mt-[10px]"
                 >
                   {message}
                 </p>
@@ -30,11 +30,13 @@ export function showError(error: any) {
   } else {
     toast(
       <div>
-        <p className="text-md sm:text-2xl text-[#e74c3c]">
+        <p className="text-sm xs:text-md sm:text-2xl text-[#e74c3c]">
           다음과 같은 오류가 발생하였습니다
         </p>
         <br />
-        <p className="ml-[20px] mt-[5px]">{messageData || defaultMessage}</p>
+        <p className="text-xs xs:text-sm sm:text-md ml-[20px] mt-[5px] sm:mt-[10px]">
+          {messageData || defaultMessage}
+        </p>
       </div>,
       {
         type: 'error',

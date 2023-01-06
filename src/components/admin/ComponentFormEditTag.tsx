@@ -40,7 +40,7 @@ const ComponentFormEditTag: React.FC<IPropsComponentFormEditTag> = ({
         },
       );
       if (response.status === 201) {
-        toast('태그를 성공적으로 등록하였습니다', { type: 'success' });
+        toast('성공적으로 태그가 등록되었습니다', { type: 'success' });
         await tagsMutate();
         setTagName('');
       }
@@ -69,7 +69,7 @@ const ComponentFormEditTag: React.FC<IPropsComponentFormEditTag> = ({
           <button
             type="submit"
             disabled={isLoadingSubmit}
-            className="ml-[10px] mr-0 w-[100px] h-[30px] rounded-3xl text-[1rem] font-semibold bg-[#4DBFF0] text-white mb-[12px] disabled:opacity-50 hover:opacity-50"
+            className="ml-[10px] mr-0 w-[100px] h-[30px] rounded-3xl text-xs sm:text-[1rem] font-semibold bg-[#4DBFF0] text-white mb-[12px] disabled:opacity-50 hover:opacity-50"
           >
             태그 추가
           </button>

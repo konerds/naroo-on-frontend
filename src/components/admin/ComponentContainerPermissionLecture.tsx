@@ -97,8 +97,12 @@ const ComponentContainerPermissionLecture: React.FC<
             if (lectureFilter.value === lectureStatus.lecture_id) {
               return (
                 <div key={index} className="my-[20px] border-[1px] p-[15px]">
-                  <div className="w-full">{lectureStatus.student_nickname}</div>
-                  <div className="w-full">{lectureStatus.student_email}</div>
+                  <div className="w-full block overflow-hidden text-ellipsis whitespace-nowrap">
+                    {lectureStatus.student_nickname}
+                  </div>
+                  <div className="w-full block overflow-hidden text-ellipsis whitespace-nowrap">
+                    {lectureStatus.student_email}
+                  </div>
                   <div className="ml-auto mr-0">
                     <ComponentUpdateStatus
                       token={token}

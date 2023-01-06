@@ -69,7 +69,7 @@ const ComponentFormUpdateUser: React.FC<IPropsComponentFormUpdateUser> = ({
     <>
       {updateToggle ? (
         <form
-          className="flex items-center min-h-[41px] py-[10px]"
+          className="mt-[10px] block sm:flex sm:items-center sm:min-h-[41px]"
           onSubmit={(event) => {
             event.preventDefault();
             onSubmitUpdateField();
@@ -77,32 +77,34 @@ const ComponentFormUpdateUser: React.FC<IPropsComponentFormUpdateUser> = ({
         >
           <div className="w-full">
             <input
-              className="w-full h-[32px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white px-[20px] disabled:opacity-50"
+              className="w-full h-[32px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white pl-[5px] disabled:opacity-50"
               type="text"
               value={updateFieldName ? updateFieldName : ''}
               onChange={onChangeUpdateFieldName}
               disabled={isLoadingSubmit}
             />
           </div>
-          <button
-            className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
-            type="submit"
-            disabled={isLoadingSubmit}
-          >
-            수정
-          </button>
-          <button
-            className="w-[65px] h-[32px] button-modify-cancel-admin"
-            type="button"
-            onClick={onClickUpdateToggle}
-            disabled={isLoadingSubmit}
-          >
-            취소
-          </button>
+          <div className="flex justify-end sm:justify-start items-center mt-[5px] mb-[10px]">
+            <button
+              className="w-[65px] h-[32px] mx-[5px] sm:mx-[10px] button-modify-cancel-admin text-sm"
+              type="submit"
+              disabled={isLoadingSubmit}
+            >
+              수정
+            </button>
+            <button
+              className="w-[65px] h-[32px] button-modify-cancel-admin"
+              type="button"
+              onClick={onClickUpdateToggle}
+              disabled={isLoadingSubmit}
+            >
+              취소
+            </button>
+          </div>
         </form>
       ) : (
         <div className="flex items-center min-h-[41px] py-[10px] w-full">
-          <div className="w-full overflow-x-hidden">
+          <div className="w-full">
             <div>
               {fieldType === 'email'
                 ? '이메일 : '

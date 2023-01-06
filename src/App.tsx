@@ -32,7 +32,7 @@ const AppRouterWrapper: React.FC = () => {
         <Router>
           <App />
         </Router>
-        <MediaQuery maxWidth={639.98}>
+        <MediaQuery maxWidth={419.99}>
           <ToastContainer
             limit={6}
             autoClose={1500}
@@ -40,7 +40,7 @@ const AppRouterWrapper: React.FC = () => {
             position="bottom-center"
           />
         </MediaQuery>
-        <MediaQuery minWidth={640}>
+        <MediaQuery minWidth={420}>
           <ToastContainer limit={6} autoClose={1500} hideProgressBar={true} />
         </MediaQuery>
       </ContextTokenProvider>
@@ -70,8 +70,10 @@ const App: React.FC = () => {
   return (
     <>
       <ComponentHeader />
-      <div className="w-full min-h-[100px] h-[100px] max-h-[100px]">&nbsp;</div>
-      <div className="w-full min-h-[calc(100vh-257px)] flex justify-center items-center">
+      <div className="w-full min-h-[50px] h-[50px] max-h-[50px] sm:min-h-[100px] sm:h-[100px] sm:max-h-[100px]">
+        &nbsp;
+      </div>
+      <div className="w-full min-h-[calc(100vh-207px)] md:min-h-[calc(100vh-257px)] flex justify-center items-center">
         <Routes>
           <Route path="/" element={<PageMain />} />
           <Route path="/admin" element={<PageAdmin />} />

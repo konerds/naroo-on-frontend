@@ -105,7 +105,7 @@ const PageAdmin: React.FC = () => {
     <div className="w-full bg-white mt-[20px] mb-auto">
       {!!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin' && (
         <div className="mx-auto">
-          <div className="text-4xl font-semibold text-center text-gray-400 mb-[4vh] 2xl:max-w-[900px] xl:max-w-[750px] lg:max-w-[600px] md:max-w-[500px] sm:max-w-[400px] xs:max-w-[350px] mx-auto">
+          <div className="text-4xl font-semibold text-center text-gray-400 mb-[4vh] max-w-[100vw] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[600px] xl:max-w-[750px] 2xl:max-w-[900px] mx-auto">
             관리자 페이지
           </div>
           <div className="items-center hidden md:flex justify-evenly">
@@ -172,7 +172,7 @@ const PageAdmin: React.FC = () => {
               리소스 관리
             </button>
           </div>
-          <div className="h-full text-center max-w-[90%] mx-auto md:hidden">
+          <div className="h-full text-center max-w-[90vw] mx-auto md:hidden">
             <>
               <button
                 ref={refMenuElement}
@@ -266,7 +266,7 @@ const PageAdmin: React.FC = () => {
             </>
           </div>
           {selectedMenu === CONST_ADMIN_MENU.LECTURE_ADD && (
-            <div className="my-[45px] max-w-[90%] md:max-w-[600px] overflow-w-hidden mx-auto border-[1px] rounded-2xl p-[40px]">
+            <div className="my-[45px] max-w-[90vw] md:max-w-[600px] overflow-w-hidden mx-auto border-[1px] rounded-2xl p-[10px] sm:p-[40px]">
               <ComponentFormAddLecture
                 token={token}
                 setSelectedMenu={setSelectedMenu}
@@ -277,7 +277,7 @@ const PageAdmin: React.FC = () => {
           {selectedMenu === CONST_ADMIN_MENU.LECTURE_EDIT &&
             !!dataTags &&
             !!!errorTags && (
-              <div className="my-[45px] max-w-[90%] overflow-x-hidden mx-auto">
+              <div className="my-[45px] max-w-[90vw] overflow-x-hidden mx-auto">
                 <ComponentContainerEditLecture
                   token={token}
                   setToken={setToken}
@@ -292,7 +292,7 @@ const PageAdmin: React.FC = () => {
             !!!errorUsers &&
             !!dataAllLectures &&
             !!!errorAllLectures && (
-              <div className="my-[45px] xs:max-w-[90vw] sm:max-w-[500px] overflow-w-hidden mx-auto border-[1px] rounded-2xl p-[40px]">
+              <div className="my-[45px] max-w-[90vw] sm:max-w-[500px] overflow-w-hidden mx-auto border-[1px] rounded-2xl p-[10px] sm:p-[40px]">
                 <ComponentContainerPermissionLecture
                   token={token}
                   studentOptions={dataUsers
@@ -315,7 +315,7 @@ const PageAdmin: React.FC = () => {
               </div>
             )}
           {selectedMenu === CONST_ADMIN_MENU.STUDENT_EDIT && (
-            <div className="my-[45px] max-w-[90vw] overflow-w-hidden mx-auto border-[1px] rounded-2xl px-[40px] py-[20px]">
+            <div className="my-[45px] max-w-[90vw] overflow-w-hidden mx-auto border-[1px] rounded-2xl p-[10px] sm:px-[40px] sm:py-[20px]">
               <ComponentContainerEditUser
                 token={token}
                 dataUsers={dataUsers}
@@ -324,7 +324,7 @@ const PageAdmin: React.FC = () => {
             </div>
           )}
           {selectedMenu === CONST_ADMIN_MENU.TAG_EDIT && (
-            <div className="my-[45px] max-w-[90vw] md:max-w-[700px] overflow-w-hidden mx-auto border-[1px] rounded-2xl px-[40px] py-[20px]">
+            <div className="my-[45px] max-w-[90vw] md:max-w-[700px] overflow-w-hidden mx-auto border-[1px] rounded-2xl p-[10px] sm:px-[40px] sm:py-[20px]">
               <ComponentFormEditTag
                 token={token}
                 tagsData={dataTags}
@@ -335,7 +335,7 @@ const PageAdmin: React.FC = () => {
           {selectedMenu === CONST_ADMIN_MENU.RESOURCE_EDIT &&
             !!dataAllResource &&
             !!!errorAllResources && (
-              <div className="my-[45px] max-w-[90vw] overflow-w-hidden mx-auto border-[1px] rounded-2xl px-[40px] py-[20px]">
+              <div className="my-[45px] max-w-[90vw] overflow-w-hidden mx-auto border-[1px] rounded-2xl p-[10px] sm:px-[40px] sm:py-[20px]">
                 <ComponentContainerEditResource
                   token={token}
                   logoHeaderResourcesData={dataAllResource.filter(

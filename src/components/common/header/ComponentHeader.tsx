@@ -7,12 +7,17 @@ import ComponentEllipsisHeader from './ComponentEllipsisHeader';
 import { axiosGetfetcher } from '../../../hooks/api';
 import ContextToken from '../../../store/ContextToken';
 import MediaQuery from 'react-responsive';
+import {
+  faArrowRightToBracket,
+  faUserPlus,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ComponentHeader: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const tokenCtx = React.useContext(ContextToken);
-  const { token, setToken } = tokenCtx;
+  const { token } = tokenCtx;
   const [isVisibleEllipsis, setIsVisibleEllipsis] =
     React.useState<boolean>(false);
   const [isVisibleMenu, setIsVisibleMenu] = React.useState<boolean>(false);
@@ -67,16 +72,16 @@ const ComponentHeader: React.FC = () => {
   return (
     <div
       ref={refElementHeader}
-      className="fixed z-[1000] bg-white left-0 right-0 min-h-[100px] font-semibold text-gray-300 header-container"
+      className="max-w-[100vw] fixed z-[1000] bg-white left-0 right-0 min-h-[50px] sm:min-h-[100px] font-semibold text-gray-300 header-container"
     >
       <MediaQuery minWidth={768}>
-        <div className="hidden md:flex md:max-w-[788px] lg:max-w-[966px] xl:max-w-[1152px] h-[100px] mx-auto justify-between items-center">
+        <div className="hidden md:h-[100px] md:mx-auto md:flex md:justify-between md:items-center md:max-w-[788px] lg:max-w-[966px] xl:max-w-[1152px]">
           <div className="flex justify-between items-center">
             {!!dataHeaderLogo && dataHeaderLogo.length > 0 && (
               <Link
                 className="ml-[20px] lg:ml-0 mr-[45px] hover:opacity-50"
                 to="/"
-                onClick={(event) => {
+                onClick={() => {
                   setIsVisibleMenu(false);
                 }}
               >
@@ -151,11 +156,11 @@ const ComponentHeader: React.FC = () => {
                 </div>
               )}
             {!(!!token && !!dataGetMe && !!!errorGetMe) && (
-              <div className="xl:ml-[586px] lg:ml-[360px] md:ml-[230px]">
+              <div className="mr-[30px] xl:ml-[586px] lg:ml-[360px] md:ml-[230px]">
                 <Link
                   className="hover:opacity-50"
                   to="/signin"
-                  onClick={(event) => {
+                  onClick={() => {
                     setIsVisibleMenu(false);
                   }}
                 >
@@ -182,7 +187,7 @@ const ComponentHeader: React.FC = () => {
               dataGetMe.role === 'admin' && (
                 <button
                   type="button"
-                  className="flex justify-center items-center w-max xl:ml-[800px] lg:ml-[550px] md:ml-[400px] hover:opacity-50"
+                  className="mr-[30px] flex justify-center items-center w-max xl:ml-[800px] lg:ml-[550px] md:ml-[400px] hover:opacity-50"
                   onClick={logoutHandler}
                 >
                   로그아웃
@@ -192,17 +197,18 @@ const ComponentHeader: React.FC = () => {
         </div>
       </MediaQuery>
       <MediaQuery maxWidth={767.98}>
-        <div className="flex items-center justify-between h-[100px] mx-auto md:hidden">
+        <div className="flex items-center justify-between h-[50px] sm:h-[100px] mx-auto md:hidden">
           <div className="flex items-center justify-center w-full">
             <Link
-              className="ml-[20px] mr-auto hover:opacity-50"
+              className="ml-[20px] mr-0 hover:opacity-50"
               to="/"
-              onClick={(event) => {
+              onClick={() => {
                 setIsVisibleMenu(false);
               }}
             >
               {!!dataHeaderLogo && dataHeaderLogo.length > 0 && (
                 <img
+                  className="w-[60px] sm:w-[110.24px]"
                   src={dataHeaderLogo[0].content}
                   width="110.24"
                   alt="Logo"
@@ -218,16 +224,7 @@ const ComponentHeader: React.FC = () => {
             ) && (
               <button
                 type="button"
-                className={`rounded-[1px] min-w-max ${
-                  !!!token
-                    ? 'sm:mx-[112px] xs:mx-[63px]'
-                    : !!token &&
-                      !!dataGetMe &&
-                      !!!errorGetMe &&
-                      dataGetMe.role === 'student'
-                    ? 'sm:mx-[165px] xs:mx-[115px]'
-                    : ''
-                }`}
+                className="rounded-[1px] min-w-max mx-auto"
                 onClick={() => setIsVisibleMenu(!isVisibleMenu)}
               >
                 메뉴
@@ -241,7 +238,7 @@ const ComponentHeader: React.FC = () => {
                 <>
                   <button
                     ref={refElementEllipsis}
-                    className="ml-auto mr-[30px] rounded-full w-[40px] h-[40px] flex items-center justify-center bg-[#8dc556] text-white font-semibold"
+                    className="ml-0 mr-[30px] rounded-full text-xs sm:text-sm w-[30px] h-[30px] sm:w-[40px] sm:h-[40px] flex items-center justify-center bg-[#8dc556] text-white font-semibold"
                     onClick={() => {
                       setIsVisibleMenu(false);
                       setIsVisibleEllipsis(!isVisibleEllipsis);
@@ -260,26 +257,38 @@ const ComponentHeader: React.FC = () => {
                 </>
               )}
             {(!!!token || (!!token && !!!dataGetMe && !!errorGetMe)) && (
-              <div>
+              <div className="mr-[10px]">
                 <Link
                   to="/signin"
-                  onClick={(event) => {
+                  onClick={() => {
                     setIsVisibleMenu(false);
                   }}
                 >
-                  <button className="bg-white text-[0.625rem] leading-[0.625rem] font-semibold text-[#808695] border-[1px] border-[#DCDEE2] box-border rounded-[40px] w-[60px] h-[41px]">
-                    로그인
+                  <button className="bg-white text-[0.625rem] leading-[0.625rem] font-semibold text-[#808695] border-[1px] border-[#DCDEE2] box-border rounded-[40px] w-[30px] h-[30px] sm:w-[60px] sm:h-[41px] p-[5px]">
+                    <MediaQuery maxWidth={639.98}>
+                      <FontAwesomeIcon
+                        className="text-[0.7rem]"
+                        icon={faArrowRightToBracket}
+                      />
+                    </MediaQuery>
+                    <MediaQuery minWidth={640}>로그인</MediaQuery>
                   </button>
                 </Link>
                 <Link
                   className="ml-auto mr-[20px]"
                   to="/signup"
-                  onClick={(event) => {
+                  onClick={() => {
                     setIsVisibleMenu(false);
                   }}
                 >
-                  <button className="ml-[12px] text-[0.625rem] leading-[0.625rem] font-semibold text-white bg-[#8DC556] rounded-[40px] w-[70px] h-[41px]">
-                    회원가입
+                  <button className="ml-[8px] text-[0.625rem] leading-[0.625rem] font-semibold text-white bg-[#8DC556] rounded-[40px] w-[30px] h-[30px] sm:w-[70px] sm:h-[41px] p-[5px]">
+                    <MediaQuery maxWidth={639.98}>
+                      <FontAwesomeIcon
+                        className="text-[0.7rem]"
+                        icon={faUserPlus}
+                      />
+                    </MediaQuery>
+                    <MediaQuery minWidth={640}>회원가입</MediaQuery>
                   </button>
                 </Link>
               </div>

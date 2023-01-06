@@ -77,7 +77,7 @@ const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
     <>
       {updateToggle ? (
         <form
-          className="mt-[10px] flex items-center"
+          className="mt-[10px] block sm:flex sm:items-center"
           onSubmit={(event) => {
             event.preventDefault();
             onSubmitUpdateTag();
@@ -90,20 +90,22 @@ const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
             placeholder="수강 상태를 업데이트하세요"
             isDisabled={isLoadingSubmit}
           />
-          <button
-            className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
-            type="submit"
-            disabled={isLoadingSubmit}
-          >
-            수정
-          </button>
-          <button
-            className="w-[65px] h-[32px] button-modify-cancel-admin relative"
-            onClick={onClickUpdateToggle}
-            disabled={isLoadingSubmit}
-          >
-            취소
-          </button>
+          <div className="flex justify-end sm:justify-start items-center mt-[5px] mb-[10px]">
+            <button
+              className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
+              type="submit"
+              disabled={isLoadingSubmit}
+            >
+              수정
+            </button>
+            <button
+              className="w-[65px] h-[32px] button-modify-cancel-admin relative"
+              onClick={onClickUpdateToggle}
+              disabled={isLoadingSubmit}
+            >
+              취소
+            </button>
+          </div>
         </form>
       ) : (
         <div className="flex items-center w-full">

@@ -6,6 +6,15 @@ import { ILectureDetail } from '../../interfaces';
 import { useStringInput } from '../../hooks';
 import { KeyedMutator } from 'swr';
 import { showError } from '../../hooks/api';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faEdit,
+  faTrash,
+  faCheck,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
+import MediaQuery from 'react-responsive';
+import { toast } from 'react-toastify';
 
 interface LectureNoticeProps {
   token: string | null;
@@ -52,6 +61,7 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
         },
       );
       if (response.status === 200) {
+        toast('성공적으로 공지사항이 삭제되었습니다', { type: 'success' });
         await mutate();
       }
     } catch (error: any) {
@@ -76,6 +86,7 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
         },
       );
       if (response.status === 200) {
+        toast('성공적으로 공지사항이 업데이트되었습니다', { type: 'success' });
         await mutate();
         setIsShowEdit(false);
       }
@@ -93,15 +104,17 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
       }}
     >
       <div
-        className="min-h-[41px] max-h-[41px] bg-white flex"
+        className="min-h-[41px] bg-white flex"
         onClick={() => {
           setIsShowEdit(false);
           setIsShowDescription(!isShowDescription);
         }}
       >
-        <div className="w-full flex items-center min-h-[41px] max-h-[41px]">
-          <div className="flex-none min-w-[60px] max-w-[60px] flex justify-center items-center">
-            <div className="text-[0.875rem] text-[#DCDEE2]">{array_index}</div>
+        <div className="w-full flex items-center min-h-[41px]">
+          <div className="flex-none min-w-[20px] max-w-[20px] sm:min-w-[60px] sm:max-w-[60px] flex justify-center items-center">
+            <div className="text-[0.5rem] sm:text-[0.875rem] text-[#DCDEE2]">
+              {array_index}
+            </div>
           </div>
           {isShowEdit ? (
             <input
@@ -114,18 +127,21 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
               disabled={isLoadingSubmit}
             />
           ) : (
-            <div className="flex-1 flex overflow-x-hidden justify-start items-stretch my-[10px] py-[4px]">
-              <div className="pl-[8.5px] text-[0.875rem] text-[#515A6E]">
-                {title}
-              </div>
+            <div className="flex-1 flex break-all justify-start items-stretch my-[10px] py-[4px] pl-[8.5px] pr-[20px] text-[0.5rem] sm:text-[0.875rem] text-[#515A6E]">
+              {title}
             </div>
           )}
-          <div className="flex-none min-w-[126px] max-w-[126px] flex justify-end items-center mr-[20px]">
+          <div className="flex-none min-w-[40px] max-w-[40px] sm:min-w-[126px] sm:max-w-[126px] flex justify-end items-center mr-[10px] sm:mr-[20px]">
             <div
-              className="text-[0.875rem] text-[#DCDEE2]"
+              className="text-[0.5rem] sm:text-[0.875rem] text-[#DCDEE2]"
               title={moment(created_at).format('YYYY년 MM월 DD일 HH시 mm분')}
             >
-              {moment(created_at).format('YYYY년 MM월 DD일')}
+              <MediaQuery maxWidth={639.98}>
+                {moment(created_at).format('YYMMDD')}
+              </MediaQuery>
+              <MediaQuery minWidth={640}>
+                {moment(created_at).format('YYYY년 MM월 DD일')}
+              </MediaQuery>
             </div>
           </div>
         </div>
@@ -133,68 +149,92 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
       {isShowDescription ? (
         <>
           <div className="w-full flex items-center min-h-[41px]">
-            <div className="flex-none min-w-[60px] max-w-[60px] flex justify-center items-center">
-              <div className="text-[0.875rem] text-[#DCDEE2]">내용</div>
+            <div className="flex-none min-w-[20px] max-w-[20px] sm:min-w-[60px] sm:max-w-[60px] flex justify-center items-center">
+              <div className="text-[0.5rem] sm:text-[0.875rem] text-[#DCDEE2]">
+                내용
+              </div>
             </div>
             {isShowEdit ? (
               <textarea
-                className="flex-1 flex justify-start items-stretch border-[1px] rounded-[4px] my-[10px] px-[4px] text-[0.875rem] text-[#515A6E] ml-[8.5px] mr-[20px] disabled:opacity-50"
+                className="flex-1 flex justify-start items-stretch border-[1px] rounded-[4px] my-[10px] px-[4px] text-[0.875rem] text-[#515A6E] ml-[8.5px] mr-[10px] sm:mr-[20px] disabled:opacity-50"
                 value={updateDescription}
                 onChange={onChangeUpdateDescription}
                 disabled={isLoadingSubmit}
               />
             ) : (
-              <div className="flex-1 flex break-all justify-start items-stretch my-[10px] py-[4px]">
-                <div className="pl-[8.5px] pr-[20px] text-[0.875rem] text-[#515A6E]">
-                  {description}
-                </div>
+              <div className="flex-1 flex break-all justify-start items-stretch my-[10px] py-[4px] pl-[8.5px] pr-[20px] text-[0.5rem] sm:text-[0.875rem] text-[#515A6E]">
+                {description}
               </div>
             )}
-            <div className="flex-none min-w-[126px] max-w-[126px] flex justify-center items-start">
+            <div className="flex-none min-w-[40px] max-w-[40px] sm:min-w-[126px] sm:max-w-[126px] flex justify-center items-start">
               {token && userType === 'admin' && (
                 <>
                   {isShowEdit ? (
                     <div className="w-full min-h-[41px] bg-white flex justify-center items-center">
                       <button
                         type="submit"
-                        className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[0.75rem] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
+                        className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:max-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
                         disabled={isLoadingSubmit}
                       >
-                        완료
+                        <MediaQuery maxWidth={639.98}>
+                          <FontAwesomeIcon
+                            className="block text-[0.6rem]"
+                            icon={faCheck}
+                          />
+                        </MediaQuery>
+                        <MediaQuery minWidth={640}>완료</MediaQuery>
                       </button>
                       <button
                         type="button"
-                        className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[0.75rem] text-[#808695] ml-[10px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
+                        className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:max-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] ml-[3px] mr-[10px] sm:ml-[10px] sm:mr-[18px] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
                         onClick={() => {
                           setIsShowEdit(false);
                         }}
                         disabled={isLoadingSubmit}
                       >
-                        취소
+                        <MediaQuery maxWidth={639.98}>
+                          <FontAwesomeIcon
+                            className="block text-[0.6rem] ml-[2px]"
+                            icon={faXmark}
+                          />
+                        </MediaQuery>
+                        <MediaQuery minWidth={640}>취소</MediaQuery>
                       </button>
                     </div>
                   ) : (
-                    <div className="w-full min-h-[41px] bg-white flex justify-center items-center">
+                    <div className="w-full sm:min-h-[41px] bg-white flex justify-center items-center">
                       <button
                         type="button"
-                        className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[0.75rem] text-[#808695] px-[10px] py-[4px] disabled:opacity-50"
+                        className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:max-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
                         onClick={(event) => {
                           event.preventDefault();
                           setIsShowEdit(true);
                         }}
                         disabled={isLoadingClickDeleteNotice}
                       >
-                        수정
+                        <MediaQuery maxWidth={639.98}>
+                          <FontAwesomeIcon
+                            className="block text-[0.6rem]"
+                            icon={faEdit}
+                          />
+                        </MediaQuery>
+                        <MediaQuery minWidth={640}>수정</MediaQuery>
                       </button>
                       <button
                         type="button"
-                        className="flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] max-w-max font-normal text-[0.75rem] text-[#808695] ml-[10px] mr-[18px] px-[10px] py-[4px] disabled:opacity-50"
+                        className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:max-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] ml-[3px] mr-[10px] sm:ml-[10px] sm:mr-[18px] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
                         onClick={() => {
                           onClickDeleteNoticeHandler(id);
                         }}
                         disabled={isLoadingClickDeleteNotice}
                       >
-                        삭제
+                        <MediaQuery maxWidth={639.98}>
+                          <FontAwesomeIcon
+                            className="block text-[0.6rem]"
+                            icon={faTrash}
+                          />
+                        </MediaQuery>
+                        <MediaQuery minWidth={640}>삭제</MediaQuery>
                       </button>
                     </div>
                   )}

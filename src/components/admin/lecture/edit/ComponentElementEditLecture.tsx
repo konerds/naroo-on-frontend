@@ -150,7 +150,7 @@ const ComponentElementEditLecture: React.FC<
     }
   };
   return (
-    <div className="w-[560px] xs:w-[380px] justify-self-center border-[1px] p-[15px]">
+    <div className="w-[90vw] sm:w-[560px] justify-self-center border-[1px] p-[15px]">
       <button
         className="px-[15px] py-[5px] mx-auto border-[1px] border-black rounded-2xl w-max flex justify-center items-center hover:bg-black hover:text-white disabled:opacity-50"
         disabled={isLoadingClickDeleteLecture}
@@ -159,7 +159,7 @@ const ComponentElementEditLecture: React.FC<
         <div>강의 삭제하기</div>
         <FontAwesomeIcon className="ml-[20px]" icon={faTrash} />
       </button>
-      <div className="mt-[10px] text-xs bg-white text-shuttle-gray">
+      <div className="text-xs bg-white text-shuttle-gray">
         <ComponentFormUpdateImage
           token={token}
           fieldType="thumbnail"
@@ -169,11 +169,14 @@ const ComponentElementEditLecture: React.FC<
           imageIndex={null}
         />
       </div>
-      <div className="mt-[10px] text-xs bg-white text-shuttle-gray">
+      <div className="text-xs bg-white text-shuttle-gray">
         {updateExpiredToggle ? (
           <form
-            className="w-full flex items-center"
-            onSubmit={onSubmitUpdateExpired}
+            className="mt-[10px] block sm:flex sm:items-center"
+            onSubmit={(event) => {
+              event.preventDefault();
+              onSubmitUpdateExpired();
+            }}
           >
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDateTimePicker
@@ -185,23 +188,25 @@ const ComponentElementEditLecture: React.FC<
                 disabled={isLoadingSubmitUpdateExpired}
               />
             </MuiPickersUtilsProvider>
-            <button
-              className="mx-[10px] w-[65px] h-[32px] button-modify-cancel-admin"
-              disabled={isLoadingSubmitUpdateExpired}
-              type="submit"
-            >
-              수정
-            </button>
-            <button
-              className="w-[65px] h-[32px] button-modify-cancel-admin"
-              disabled={isLoadingSubmitUpdateExpired}
-              onClick={onClickUpdateExpiredToggle}
-            >
-              취소
-            </button>
+            <div className="flex justify-end sm:justify-start items-center mt-[5px] mb-[10px]">
+              <button
+                className="mx-[10px] w-[65px] h-[32px] button-modify-cancel-admin"
+                disabled={isLoadingSubmitUpdateExpired}
+                type="submit"
+              >
+                수정
+              </button>
+              <button
+                className="w-[65px] h-[32px] button-modify-cancel-admin"
+                disabled={isLoadingSubmitUpdateExpired}
+                onClick={onClickUpdateExpiredToggle}
+              >
+                취소
+              </button>
+            </div>
           </form>
         ) : (
-          <div className="flex items-center">
+          <div className="mt-[10px] flex items-center">
             <div className="flex items-center rounded-[10px] text-gray-200 bg-harp w-full p-[10px] text-xs">
               {!expired && <div>강의 만료 일시가 설정되어 있지 않습니다</div>}
               {expired && moment(expired).format('YYYY-MM-DD HH:mm:ss')}
@@ -214,7 +219,7 @@ const ComponentElementEditLecture: React.FC<
           </div>
         )}
       </div>
-      <div className="mt-[10px] text-xs bg-white text-shuttle-gray">
+      <div className="text-xs bg-white text-shuttle-gray">
         <ComponentFormUpdateLecture
           token={token}
           fieldType="title"
@@ -225,8 +230,11 @@ const ComponentElementEditLecture: React.FC<
       </div>
       {updateTeacherToggle ? (
         <form
-          className="mt-[10px] flex items-center"
-          onSubmit={onSubmitUpdateTeacher}
+          className="mt-[10px] block sm:flex sm:items-center"
+          onSubmit={(event) => {
+            event.preventDefault();
+            onSubmitUpdateTeacher();
+          }}
         >
           <input
             className="w-full h-[32px] border-[1px] box-border rounded-[10px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white px-[20px] disabled:opacity-50"
@@ -235,20 +243,22 @@ const ComponentElementEditLecture: React.FC<
             onChange={onChangeUpdateTeacherName}
             disabled={isLoadingSubmitUpdateTeacher}
           />
-          <button
-            className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
-            type="submit"
-            disabled={isLoadingSubmitUpdateTeacher}
-          >
-            수정
-          </button>
-          <button
-            className="w-[65px] h-[32px] button-modify-cancel-admin"
-            onClick={onClickUpdateTeacherToggle}
-            disabled={isLoadingSubmitUpdateTeacher}
-          >
-            취소
-          </button>
+          <div className="flex justify-end sm:justify-start items-center mt-[5px] mb-[10px]">
+            <button
+              className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
+              type="submit"
+              disabled={isLoadingSubmitUpdateTeacher}
+            >
+              수정
+            </button>
+            <button
+              className="w-[65px] h-[32px] button-modify-cancel-admin"
+              onClick={onClickUpdateTeacherToggle}
+              disabled={isLoadingSubmitUpdateTeacher}
+            >
+              취소
+            </button>
+          </div>
         </form>
       ) : (
         <div className="mt-[10px] flex items-center">
@@ -262,7 +272,7 @@ const ComponentElementEditLecture: React.FC<
           />
         </div>
       )}
-      <div className="mt-[10px] text-xs bg-white text-shuttle-gray">
+      <div className="text-xs bg-white text-shuttle-gray">
         <ComponentFormUpdateLecture
           token={token}
           fieldType="description"
@@ -271,7 +281,7 @@ const ComponentElementEditLecture: React.FC<
           mutate={mutate}
         />
       </div>
-      <div className="mt-[10px] text-xs bg-white text-shuttle-gray">
+      <div className="text-xs bg-white text-shuttle-gray">
         {images &&
           images.length > 0 &&
           images.map((image, index) => {
@@ -288,7 +298,7 @@ const ComponentElementEditLecture: React.FC<
             );
           })}
       </div>
-      <div className="mt-[10px] text-xs bg-white text-shuttle-gray">
+      <div className="text-xs bg-white text-shuttle-gray">
         <ComponentFormUpdateLecture
           token={token}
           fieldType="video_title"
@@ -297,7 +307,7 @@ const ComponentElementEditLecture: React.FC<
           mutate={mutate}
         />
       </div>
-      <div className="mt-[10px] text-xs bg-white text-shuttle-gray">
+      <div className="text-xs bg-white text-shuttle-gray">
         <ComponentFormUpdateLecture
           token={token}
           fieldType="video_url"
