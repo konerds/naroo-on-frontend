@@ -1,9 +1,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-  mode: 'jit',
-  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
-  darkMode: 'class', // or 'media' or 'class'
+  content: ['./public/index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     screens: {
       xxs: '0px',
@@ -27,11 +25,6 @@ module.exports = {
       fontFamily: {
         noto: 'Noto Sans KR',
       },
-    },
-  },
-  variants: {
-    extend: {
-      opacity: ['disabled'],
     },
   },
   plugins: [require('@tailwindcss/aspect-ratio')],
