@@ -22,7 +22,7 @@ body {
   -webkit-box-shadow: 0 0 0 1px #fff;
   box-shadow: 0 0 0 1px #fff;
   content: 'screen: _';
-  @apply fixed z-[2147483647] top-0 left-0 py-[0.3333333em] px-[0.5em] font-[12px] leading-[1] font-sans bg-black text-white;
+  @apply fixed z-[2147483647] top-0 left-0 py-[0.3333333em] px-[0.5em] text-[12px] leading-[1] font-sans bg-black text-white;
 }
 
 @screen xxs {
