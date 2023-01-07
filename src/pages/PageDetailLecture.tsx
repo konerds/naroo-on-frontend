@@ -298,10 +298,11 @@ const PageDetailLecture: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex items-center justify-between w-full min-h-[41px] max-h-[41px]">
-                    {((!!token &&
+                    {!(
+                      !!token &&
                       !!dataGetMe &&
-                      dataGetMe.role === 'student') ||
-                      !!!token) && (
+                      dataGetMe.role === 'admin'
+                    ) && (
                       <button
                         type="button"
                         onClick={onPlayLectureHandler}
@@ -324,7 +325,9 @@ const PageDetailLecture: React.FC = () => {
                           '수강 만료'
                         ) : (
                           <>
-                            {!!token ? (
+                            {!!token &&
+                            !!dataGetMe &&
+                            dataGetMe.role === 'student' ? (
                               <>
                                 {!!dataDetailLecture.status ? (
                                   <>
@@ -345,9 +348,7 @@ const PageDetailLecture: React.FC = () => {
                                 )}
                               </>
                             ) : (
-                              <>
-                                {!!!dataDetailLecture.status && '로그인 필요'}
-                              </>
+                              <>로그인 필요</>
                             )}
                           </>
                         )}
