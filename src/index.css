@@ -4,26 +4,25 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
 
+*,
+body,
+:root {
+  color-scheme: only light !important;
+}
+
 body {
-  font-family: 'Noto Sans KR', sans-serif;
-  max-width: 100vw;
-  overflow-x: hidden;
+  font-family: 'Noto Sans KR', ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  @apply max-w-[100vw] overflow-x-hidden;
 }
 
 .debug-screens::before {
-  position: fixed;
-  z-index: 2147483647;
-  top: 0;
-  left: 0;
-  padding: 0.3333333em 0.5em;
-  font-size: 12px;
-  line-height: 1;
-  font-family: sans-serif;
-  background-color: #000;
-  color: #fff;
   -webkit-box-shadow: 0 0 0 1px #fff;
   box-shadow: 0 0 0 1px #fff;
   content: 'screen: _';
+  @apply fixed z-[2147483647] top-0 left-0 py-[0.3333333em] px-[0.5em] font-[12px] leading-[1] font-sans bg-black text-white;
 }
 
 @screen xxs {
@@ -68,20 +67,16 @@ body {
   }
 }
 
-.font-semibold * {
-  font-weight: 600;
-}
-
 .slick-track {
   min-width: 100vw !important;
 }
 
 .slick-arrow {
-  opacity: 0.4;
-  -o-transition: all 0.25s ease-in-out;
-  transition: all 0.25s ease-in-out;
-  -moz-transition: all 0.25s ease-in-out;
-  -webkit-transition: all 0.25s ease-in-out;
+  opacity: 0.4 !important;
+  -o-transition: all 0.25s ease-in-out !important;
+  transition: all 0.25s ease-in-out !important;
+  -moz-transition: all 0.25s ease-in-out !important;
+  -webkit-transition: all 0.25s ease-in-out !important;
 }
 
 .slick-disabled {
@@ -89,7 +84,7 @@ body {
 }
 
 .slick-arrow:not(.slick-disabled):hover {
-  opacity: 1;
+  opacity: 1 !important;
 }
 
 .header-container {
@@ -132,7 +127,10 @@ body {
 }
 
 .Toastify__toast-body {
-  font-family: 'Noto Sans KR', sans-serif !important;
+  font-family: 'Noto Sans KR', ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
 }
 
 .button-fa-icon-admin {
