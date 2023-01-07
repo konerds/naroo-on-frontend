@@ -72,7 +72,7 @@ const PageMain: React.FC = () => {
   const { token } = tokenCtx;
   const location = useLocation();
   const { pathname: currentPathname } = location;
-  const { data: dataGetMe, error: errorGetMe } = useSWR<IInfoMe>(
+  const { data: dataGetMe } = useSWR<IInfoMe>(
     !!token ? `${process.env.REACT_APP_BACK_URL}/user/me` : null,
     () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/me`, token),
     { revalidateOnFocus: false, revalidateIfStale: false },
@@ -94,10 +94,10 @@ const PageMain: React.FC = () => {
     { revalidateOnFocus: false, revalidateIfStale: false },
   );
   React.useEffect(() => {
-    if (!!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin') {
+    if (!!token && !!dataGetMe && dataGetMe.role === 'admin') {
       navigate('/admin', { replace: true });
     }
-  }, [dataGetMe?.role, errorGetMe]);
+  }, [token, dataGetMe?.role]);
   React.useEffect(() => {
     if (!!errorVerify) {
       showError(errorVerify);
@@ -109,7 +109,7 @@ const PageMain: React.FC = () => {
   }, [dataVerify?.token, errorVerify]);
   return (
     <div className="max-w-full min-h-screen mx-auto bg-white">
-      {!(!!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin') && (
+      {!(!!token && !!dataGetMe && dataGetMe.role === 'admin') && (
         <>
           {!!infoBanner && isArray(infoBanner) && infoBanner.length > 0 ? (
             <Slider {...settings} className="bg-white text-center">

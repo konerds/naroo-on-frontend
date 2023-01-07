@@ -59,6 +59,7 @@ const PageSignin: React.FC = () => {
         </div>
         <div className="mb-[20px]">
           <input
+            autoComplete="off"
             className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] pl-[20px] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white"
             type="password"
             placeholder="비밀번호"

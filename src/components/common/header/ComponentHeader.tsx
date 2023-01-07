@@ -23,7 +23,7 @@ const ComponentHeader: React.FC = () => {
   const [isVisibleMenu, setIsVisibleMenu] = React.useState<boolean>(false);
   const refElementHeader = React.useRef<HTMLDivElement | null>(null);
   const refElementEllipsis = React.useRef<HTMLButtonElement | null>(null);
-  const { data: dataGetMe, error: errorGetMe } = useSWR<IInfoMe>(
+  const { data: dataGetMe } = useSWR<IInfoMe>(
     !!token ? `${process.env.REACT_APP_BACK_URL}/user/me` : null,
     () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/me`, token),
     { revalidateOnFocus: false, revalidateIfStale: false },
@@ -93,12 +93,7 @@ const ComponentHeader: React.FC = () => {
               </Link>
             )}
             <div className="flex flex-nowrap">
-              {!(
-                !!token &&
-                !!dataGetMe &&
-                !!!errorGetMe &&
-                dataGetMe.role === 'admin'
-              ) && (
+              {!(!!token && !!dataGetMe && dataGetMe.role === 'admin') && (
                 <>
                   <Link
                     to="/"
@@ -131,69 +126,63 @@ const ComponentHeader: React.FC = () => {
               )}
             </div>
           </div>
-          <div>
-            {!!token &&
-              !!dataGetMe &&
-              !!!errorGetMe &&
-              !!dataGetMe.nickname &&
-              dataGetMe.role === 'student' && (
-                <div
-                  className="ml-auto md:mr-[30px] lg:mr-[10px]"
-                  onMouseEnter={() => setIsVisibleEllipsis(true)}
-                  onMouseLeave={() => setIsVisibleEllipsis(false)}
-                >
-                  <button className="rounded-full w-[40px] h-[40px] flex items-center justify-center bg-[#8dc556] text-white font-semibold hover:opacity-50">
-                    {dataGetMe.nickname.charAt(0)}
-                  </button>
-                  {isVisibleEllipsis && (
-                    <div className="fixed z-[999] min-w-max">
-                      <ComponentEllipsisHeader
-                        logoutHandler={logoutHandler}
-                        setIsVisibleMenu={setIsVisibleMenu}
-                      />
-                    </div>
-                  )}
-                </div>
-              )}
-            {!(!!token && !!dataGetMe && !!!errorGetMe) && (
-              <div className="mr-[30px] xl:ml-[586px] lg:ml-[360px] md:ml-[230px]">
-                <Link
-                  className="hover:opacity-50"
-                  to="/signin"
-                  onClick={() => {
-                    setIsVisibleMenu(false);
-                  }}
-                >
-                  <button className="bg-white text-[0.875rem] leading-[1.3125rem] font-semibold text-[#808695] border-[1px] border-[#DCDEE2] box-border rounded-[40px] h-[41px] xl:w-[99px] lg:w-[84.48px] md:w-[63.36px]">
-                    로그인
-                  </button>
-                </Link>
-                <Link
-                  className="hover:opacity-50"
-                  to="/signup"
-                  onClick={(event) => {
-                    setIsVisibleMenu(false);
-                  }}
-                >
-                  <button className="ml-[12px] text-[0.875rem] leading-[1.3125rem] font-semibold text-white bg-[#8DC556] rounded-[40px] h-[41px] xl:w-[112px] lg:w-[95.57px] md:w-[71.68px]">
-                    회원가입
-                  </button>
-                </Link>
+          {!!token &&
+            !!dataGetMe &&
+            !!dataGetMe.nickname &&
+            dataGetMe.role === 'student' && (
+              <div
+                className="ml-auto md:mr-[30px] lg:mr-[10px]"
+                onMouseEnter={() => setIsVisibleEllipsis(true)}
+                onMouseLeave={() => setIsVisibleEllipsis(false)}
+              >
+                <button className="rounded-full w-[40px] h-[40px] flex items-center justify-center bg-[#8dc556] text-white font-semibold hover:opacity-50">
+                  {dataGetMe.nickname.charAt(0)}
+                </button>
+                {isVisibleEllipsis && (
+                  <div className="fixed z-[999] min-w-max">
+                    <ComponentEllipsisHeader
+                      logoutHandler={logoutHandler}
+                      setIsVisibleMenu={setIsVisibleMenu}
+                    />
+                  </div>
+                )}
               </div>
             )}
-            {!!token &&
-              !!dataGetMe &&
-              !!!errorGetMe &&
-              dataGetMe.role === 'admin' && (
-                <button
-                  type="button"
-                  className="mr-[30px] flex justify-center items-center w-max xl:ml-[800px] lg:ml-[550px] md:ml-[400px] hover:opacity-50"
-                  onClick={logoutHandler}
-                >
-                  로그아웃
+          {!(!!token && !!dataGetMe) && (
+            <div className="ml-auto md:mr-[30px] lg:mr-[10px]">
+              <Link
+                className="hover:opacity-50"
+                to="/signin"
+                onClick={() => {
+                  setIsVisibleMenu(false);
+                }}
+              >
+                <button className="bg-white text-[0.875rem] leading-[1.3125rem] font-semibold text-[#808695] border-[1px] border-[#DCDEE2] box-border rounded-[40px] h-[41px] md:w-[84.48px] xl:w-[99px]">
+                  로그인
                 </button>
-              )}
-          </div>
+              </Link>
+              <Link
+                className="hover:opacity-50"
+                to="/signup"
+                onClick={() => {
+                  setIsVisibleMenu(false);
+                }}
+              >
+                <button className="ml-[12px] text-[0.875rem] leading-[1.3125rem] font-semibold text-white bg-[#8DC556] rounded-[40px] h-[41px] md:w-[95.57px] xl:w-[112px]">
+                  회원가입
+                </button>
+              </Link>
+            </div>
+          )}
+          {!!token && !!dataGetMe && dataGetMe.role === 'admin' && (
+            <button
+              type="button"
+              className="ml-auto mr-0 flex justify-center items-center hover:opacity-50"
+              onClick={logoutHandler}
+            >
+              로그아웃
+            </button>
+          )}
         </div>
       </MediaQuery>
       <MediaQuery maxWidth={767.98}>
@@ -218,7 +207,6 @@ const ComponentHeader: React.FC = () => {
             {!(
               !!token &&
               !!dataGetMe &&
-              !!!errorGetMe &&
               !!dataGetMe.nickname &&
               dataGetMe.role === 'admin'
             ) && (
@@ -232,7 +220,6 @@ const ComponentHeader: React.FC = () => {
             )}
             {!!token &&
               !!dataGetMe &&
-              !!!errorGetMe &&
               !!dataGetMe.nickname &&
               dataGetMe.role === 'student' && (
                 <>
@@ -256,7 +243,7 @@ const ComponentHeader: React.FC = () => {
                   )}
                 </>
               )}
-            {(!!!token || (!!token && !!!dataGetMe && !!errorGetMe)) && (
+            {(!!!token || (!!token && !!!dataGetMe)) && (
               <div className="mr-[10px]">
                 <Link
                   to="/signin"
@@ -295,7 +282,6 @@ const ComponentHeader: React.FC = () => {
             )}
             {!!token &&
               !!dataGetMe &&
-              !!!errorGetMe &&
               !!dataGetMe.nickname &&
               dataGetMe.role === 'admin' && (
                 <button

@@ -1,6 +1,5 @@
 import * as ReactDOM from 'react-dom/client';
 import './index.css';
-
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import AppRouterWrapper from './App';
@@ -12,12 +11,11 @@ window.onload = function () {
     )
   ) {
     alert(
-      '인앱 브라우저는 지원되지 않으며, 크롬 브라우저로 실행을 권장드립니다!',
-    );
-    window.close();
-  } else {
-    ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-      <AppRouterWrapper />,
+      '본 웹사이트는 크롬 브라우저에 최적화되어 있으며, 인앱 브라우저 이용 시 예기치 않은 오류가 발생할 수 있습니다',
     );
   }
 };
+
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+  <AppRouterWrapper />,
+);

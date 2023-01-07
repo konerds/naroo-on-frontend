@@ -61,6 +61,9 @@ export const axiosGetfetcher = async (url: string, token?: string | null) => {
     );
     return response.data;
   } catch (error: any) {
+    if (url === `${process.env.REACT_APP_BACK_URL}/user/me`) {
+      localStorage.setItem('token', '');
+    }
     throw error;
   }
 };

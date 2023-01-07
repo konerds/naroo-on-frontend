@@ -25,14 +25,14 @@ const PagePlayLecture: React.FC = () => {
   const navigate = useNavigate();
   const tokenCtx = React.useContext(ContextToken);
   const { token } = tokenCtx;
-  const { data: dataGetMe, error: errorGetMe } = useSWR<IInfoMe>(
+  const { data: dataGetMe } = useSWR<IInfoMe>(
     !!token ? `${process.env.REACT_APP_BACK_URL}/user/me` : null,
     () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/me`, token),
     { revalidateOnFocus: false, revalidateIfStale: false },
   );
   const { data: dataLectureVideo, error: errorLectureVideo } =
     useSWR<ILectureVideoDetail>(
-      !!dataGetMe && !!!errorGetMe
+      !!token && !!dataGetMe
         ? `${process.env.REACT_APP_BACK_URL}/lecture/video/${id}`
         : null,
       () =>
@@ -43,15 +43,14 @@ const PagePlayLecture: React.FC = () => {
       { revalidateOnFocus: false, revalidateIfStale: false },
     );
   React.useEffect(() => {
-    if (!!!token || !!errorGetMe || !!!id) {
+    if (!!!token || !!!id) {
       navigate('/', { replace: true });
     }
-  }, [token, errorGetMe, id]);
+  }, [token, id]);
   return (
     <div className="w-full bg-gray-500 min-h-[inherit] pt-[5px]">
       {!!token &&
         !!dataGetMe &&
-        !!!errorGetMe &&
         !!dataLectureVideo &&
         !!!errorLectureVideo &&
         !!dataLectureVideo.video_url &&

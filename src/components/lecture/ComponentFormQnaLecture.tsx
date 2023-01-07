@@ -389,7 +389,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                 {userType === 'admin' && !!!answer_id && (
                   <button
                     type="button"
-                    className="absolute min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:w-max sm:min-w-[unset] sm:max-w-[unset] sm:min-h-[unset] sm:max-h-[unset] sm:h-[28px] flex justify-center items-center left-[44px] sm:left-[110px] xl:left-[133px] bottom-[10px] sm:bottom-[6px] rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] font-normal text-[0.75rem] text-[#808695] px-[4px] xl:px-[10px] py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
+                    className="absolute min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:w-max sm:min-w-[unset] sm:max-w-[unset] sm:min-h-[unset] sm:max-h-[unset] sm:h-[28px] flex justify-center items-center left-[44px] sm:left-[90px] xl:left-[133px] bottom-[10px] sm:bottom-[6px] rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] font-normal text-[0.75rem] text-[#808695] px-[4px] xl:px-[10px] py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
                     onClick={() => {
                       setIsShowAddAnswer(!isShowAddAnswer);
                     }}
@@ -400,14 +400,22 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                         <span className="hidden xl:block m-auto mr-[4px] h-[18px] sm:text-[0.75rem] font-medium text-[#808695]">
                           닫기
                         </span>
-                        <ImgClose className="w-[10px] h-[10px] sm:w-[16px] sm:h-[16px] m-auto object-fill fill-[black] hover:fill-[#4DBFF0]" />
+                        <ImgClose
+                          width={10}
+                          height={10}
+                          className="w-[10px] h-[10px] sm:w-[16px] sm:h-[16px] m-auto object-fill fill-[black] hover:fill-[#4DBFF0]"
+                        />
                       </>
                     ) : (
                       <>
                         <span className="hidden xl:block m-auto mr-[4px] h-[18px] sm:text-[0.75rem] font-medium text-[#808695]">
                           답변하기
                         </span>
-                        <ImgEdit className="w-[10px] h-[10px] sm:w-[16px] sm:h-[16px] m-auto object-fill fill-[black] hover:fill-[#4DBFF0]" />
+                        <ImgEdit
+                          width={10}
+                          height={10}
+                          className="w-[10px] h-[10px] sm:w-[16px] sm:h-[16px] m-auto object-fill fill-[black] hover:fill-[#4DBFF0]"
+                        />
                       </>
                     )}
                   </button>

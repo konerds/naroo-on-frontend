@@ -22,7 +22,6 @@ const ComponentContainerEditResource: React.FC<
   carouselOrgResourcesData,
   allResourcesMutate,
 }) => {
-  console.log(carouselLectureResourcesData);
   return (
     <>
       {logoHeaderResourcesData.length > 0 ? (

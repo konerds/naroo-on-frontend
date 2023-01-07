@@ -58,7 +58,7 @@ const settings: Settings | Readonly<Settings> = {
 const ComponentCarouselLectureUser: React.FC = () => {
   const tokenCtx = React.useContext(ContextToken);
   const { token } = tokenCtx;
-  const { data: dataGetMe, error: errorGetMe } = useSWR<IInfoMe>(
+  const { data: dataGetMe } = useSWR<IInfoMe>(
     !!token ? `${process.env.REACT_APP_BACK_URL}/user/me` : null,
     () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/me`, token),
     { revalidateOnFocus: false, revalidateIfStale: false },
@@ -66,15 +66,13 @@ const ComponentCarouselLectureUser: React.FC = () => {
   const { data: dataUserLectures, error: errorUserLectures } = useSWR<
     ILectureInList[]
   >(
-    !!token && !!dataGetMe && !!!errorGetMe
-      ? `${process.env.REACT_APP_BACK_URL}/lecture`
-      : null,
+    !!token && !!dataGetMe ? `${process.env.REACT_APP_BACK_URL}/lecture` : null,
     () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/lecture`, token),
     { revalidateOnFocus: false, revalidateIfStale: false },
   );
   return (
     <>
-      {!!token && !!dataGetMe && !!!errorGetMe && (
+      {!!token && !!dataGetMe && (
         <div className="mb-[60px]">
           <div className="text-2xl font-semibold text-gray-400">
             내가 신청한 강좌

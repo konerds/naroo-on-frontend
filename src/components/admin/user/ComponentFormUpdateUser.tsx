@@ -79,9 +79,10 @@ const ComponentFormUpdateUser: React.FC<IPropsComponentFormUpdateUser> = ({
         >
           <div className="w-full">
             <input
+              autoComplete={fieldType === 'password' ? 'off' : undefined}
               className="w-full h-[32px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white pl-[5px] disabled:opacity-50"
-              type="text"
-              value={updateFieldName ? updateFieldName : ''}
+              type={fieldType === 'password' ? 'password' : 'text'}
+              value={!!updateFieldName ? updateFieldName : ''}
               onChange={onChangeUpdateFieldName}
               disabled={isLoadingSubmit}
             />
@@ -115,8 +116,8 @@ const ComponentFormUpdateUser: React.FC<IPropsComponentFormUpdateUser> = ({
                 : fieldType === 'phone'
                 ? '휴대폰 번호 : '
                 : ''}
-              {userField && userField}
-              {userField === '' &&
+              {!!userField && userField}
+              {!!!userField &&
                 fieldType === 'password' &&
                 '보안을 위해 기존 비밀번호 확인은 불가능하며, 새로운 비밀번호를 설정하는 것은 가능합니다'}
             </div>

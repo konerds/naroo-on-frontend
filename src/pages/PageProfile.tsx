@@ -10,7 +10,7 @@ const PageProfile: React.FC = () => {
   const navigate = useNavigate();
   const tokenCtx = React.useContext(ContextToken);
   const { token } = tokenCtx;
-  const { data: dataGetMe, error: errorGetMe } = useSWR<IInfoMe>(
+  const { data: dataGetMe } = useSWR<IInfoMe>(
     !!token ? `${process.env.REACT_APP_BACK_URL}/user/me` : null,
     () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/me`, token),
     {
@@ -23,7 +23,7 @@ const PageProfile: React.FC = () => {
     mutate: mutateMyInfo,
     error: errorMyInfo,
   } = useSWR<IUserEdit>(
-    !!token && !!dataGetMe && !!!errorGetMe
+    !!token && !!dataGetMe
       ? `${process.env.REACT_APP_BACK_URL}/user/myinfo`
       : null,
     () =>
@@ -31,14 +31,10 @@ const PageProfile: React.FC = () => {
     { revalidateOnFocus: false, revalidateIfStale: false },
   );
   React.useEffect(() => {
-    if (
-      !!!token ||
-      !!errorGetMe ||
-      (!!token && !!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin')
-    ) {
+    if (!!!token || (!!token && !!dataGetMe && dataGetMe.role === 'admin')) {
       navigate('/', { replace: true });
     }
-  }, [token, dataGetMe, errorGetMe, dataGetMe?.role]);
+  }, [token, dataGetMe, dataGetMe?.role]);
   return (
     <div className="w-full flex justify-center items-center min-h-[530px]">
       <div className="min-w-[90vw] max-w-[90vw] sm:min-w-[70vw] sm:max-w-[70vw] md:min-w-[472.75px] md:max-w-[472.75px] xl:min-w-[554px] xl:max-w-[554px] box-border rounded-[8px] border-[1px] border-[#DCDEE2] m-auto py-[30px] px-[20px] sm:px-[55px] xl:px-[98px] ">

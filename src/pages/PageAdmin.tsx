@@ -23,7 +23,7 @@ const PageAdmin: React.FC = () => {
   const navigate = useNavigate();
   const tokenCtx = React.useContext(ContextToken);
   const { token, setToken } = tokenCtx;
-  const { data: dataGetMe, error: errorGetMe } = useSWR<IInfoMe>(
+  const { data: dataGetMe } = useSWR<IInfoMe>(
     !!token ? `${process.env.REACT_APP_BACK_URL}/user/me` : null,
     () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/me`, token),
     { revalidateOnFocus: false, revalidateIfStale: false },
@@ -33,7 +33,7 @@ const PageAdmin: React.FC = () => {
     mutate: mutateUsers,
     error: errorUsers,
   } = useSWR<IUserEdit[]>(
-    !!token && !!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin'
+    !!token && !!dataGetMe && dataGetMe.role === 'admin'
       ? `${process.env.REACT_APP_BACK_URL}/user/admin/user`
       : null,
     () =>
@@ -48,7 +48,7 @@ const PageAdmin: React.FC = () => {
     mutate: mutateTags,
     error: errorTags,
   } = useSWR<ITags[]>(
-    !!token && !!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin'
+    !!token && !!dataGetMe && dataGetMe.role === 'admin'
       ? `${process.env.REACT_APP_BACK_URL}/lecture/admin/tag`
       : null,
     () =>
@@ -95,20 +95,18 @@ const PageAdmin: React.FC = () => {
       window.removeEventListener('click', handlerOnMousePositionMenu);
   }, [isVisibleMenu]);
   React.useEffect(() => {
-    if (
-      !(!!token && !!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin')
-    ) {
+    if (!(!!token && !!dataGetMe && dataGetMe.role === 'admin')) {
       navigate('/', { replace: true });
     }
-  }, [token, dataGetMe, dataGetMe?.role, errorGetMe]);
+  }, [token, dataGetMe, dataGetMe?.role]);
   return (
     <div className="w-full bg-white mt-[20px] mb-auto">
-      {!!dataGetMe && !!!errorGetMe && dataGetMe.role === 'admin' && (
+      {!!dataGetMe && dataGetMe.role === 'admin' && (
         <div className="mx-auto">
           <div className="text-4xl font-semibold text-center text-gray-400 mb-[4vh] max-w-[100vw] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[600px] xl:max-w-[750px] 2xl:max-w-[900px] mx-auto">
             관리자 페이지
           </div>
-          <div className="items-center hidden md:flex justify-evenly">
+          <div className="hidden md:flex md:justify-evenly md:items-center">
             <button
               className={`hover:opacity-50 border-[1px] border-[#515A6E] rounded p-[10px] text-xl min-w-max ${
                 selectedMenu === CONST_ADMIN_MENU.LECTURE_ADD

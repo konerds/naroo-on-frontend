@@ -33,6 +33,8 @@ const ComponentViewImageExpand: React.FC<IPropsComponentViewImageExpand> = ({
             onClick={() => {
               hideComponent();
             }}
+            width={40}
+            height={40}
             className="cursor-pointer absolute top-[10px] right-[10px] w-[40px] h-[40px] m-auto object-fill fill-[black] hover:opacity-50"
           />
         </div>
