@@ -12,9 +12,6 @@ module.exports = {
       xl: '1200px',
     },
     extend: {
-      screens: {
-        hover: { ...defaultTheme },
-      },
       colors: {
         green: colors.emerald,
         yellow: colors.amber,
