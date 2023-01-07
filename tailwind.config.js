@@ -12,6 +12,9 @@ module.exports = {
       xl: '1200px',
     },
     extend: {
+      screens: {
+        hover: { ...defaultTheme },
+      },
       colors: {
         green: colors.emerald,
         yellow: colors.amber,
@@ -27,6 +30,9 @@ module.exports = {
         harp: '#E9EFF1',
       },
     },
+  },
+  future: {
+    hoverOnlyWhenSupported: true,
   },
   plugins: [require('@tailwindcss/aspect-ratio')],
 };
