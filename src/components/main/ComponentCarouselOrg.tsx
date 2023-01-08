@@ -7,7 +7,6 @@ import { ReactComponent as ImgPrevArrow } from '../../assets/images/PrevArrow.sv
 import { ReactComponent as ImgNextArrow } from '../../assets/images/NextArrow.svg';
 import { axiosGetfetcher } from '../../hooks/api';
 import { useMediaQuery } from 'react-responsive';
-import MediaQuery from 'react-responsive';
 import ComponentSkeletonCustom from '../common/ui/ComponentSkeletonCustom';
 
 const ComponentArrowPrev = (props: CustomArrowProps) => {
@@ -50,6 +49,31 @@ const settings: Settings | Readonly<Settings> = {
   infinite: false,
   speed: 500,
   pauseOnHover: true,
+  slidesToShow: 4,
+  slidesToScroll: 1,
+  responsive: [
+    {
+      breakpoint: 1536,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 1,
+      },
+    },
+    {
+      breakpoint: 1200,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 1,
+      },
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+      },
+    },
+  ],
   prevArrow: <ComponentArrowPrev />,
   nextArrow: <ComponentArrowNext />,
 };
@@ -72,91 +96,18 @@ const ComponentCarouselOrg: React.FC = () => {
       isArray(dataResourceContent) &&
       dataResourceContent.length > 0 ? (
         <>
-          <MediaQuery maxWidth={767.98}>
-            <Slider
-              {...{ ...settings, slidesToShow: 1, slidesToScroll: 1 }}
-              className="bg-white text-center"
-            >
-              {dataResourceContent.map((element, index) => {
-                return (
-                  <div key={index} className="px-[10px]">
-                    <img
-                      className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover mx-auto"
-                      src={element.content}
-                    />
-                  </div>
-                );
-              })}
-            </Slider>
-          </MediaQuery>
-          <MediaQuery minWidth={768} maxWidth={1023.98}>
-            <Slider
-              {...{ ...settings, slidesToShow: 2, slidesToScroll: 1 }}
-              className="bg-white text-center"
-            >
-              {dataResourceContent.map((element, index) => {
-                return (
-                  <div key={index} className="px-[10px]">
-                    <img
-                      className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover"
-                      src={element.content}
-                    />
-                  </div>
-                );
-              })}
-            </Slider>
-          </MediaQuery>
-          <MediaQuery minWidth={1024} maxWidth={1199.98}>
-            <Slider
-              {...{ ...settings, slidesToShow: 2, slidesToScroll: 1 }}
-              className="bg-white text-center"
-            >
-              {dataResourceContent.map((element, index) => {
-                return (
-                  <div key={index} className="px-[10px]">
-                    <img
-                      className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover"
-                      src={element.content}
-                    />
-                  </div>
-                );
-              })}
-            </Slider>
-          </MediaQuery>
-          <MediaQuery minWidth={1200} maxWidth={1535.98}>
-            <Slider
-              {...{ ...settings, slidesToShow: 3, slidesToScroll: 1 }}
-              className="bg-white text-center"
-            >
-              {dataResourceContent.map((element, index) => {
-                return (
-                  <div key={index} className="px-[10px]">
-                    <img
-                      className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover"
-                      src={element.content}
-                    />
-                  </div>
-                );
-              })}
-            </Slider>
-          </MediaQuery>
-          <MediaQuery minWidth={1536}>
-            <Slider
-              {...{ ...settings, slidesToShow: 4, slidesToScroll: 1 }}
-              className="bg-white text-center"
-            >
-              {dataResourceContent.map((element, index) => {
-                return (
-                  <div key={index} className="px-[10px]">
-                    <img
-                      className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover"
-                      src={element.content}
-                    />
-                  </div>
-                );
-              })}
-            </Slider>
-          </MediaQuery>
+          <Slider {...settings} className="bg-white text-center">
+            {dataResourceContent.map((element, index) => {
+              return (
+                <div key={index} className="px-[10px]">
+                  <img
+                    className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover mx-auto"
+                    src={element.content}
+                  />
+                </div>
+              );
+            })}
+          </Slider>
         </>
       ) : (
         <ComponentSkeletonCustom className="w-[100vw] min-h-[300px]" />

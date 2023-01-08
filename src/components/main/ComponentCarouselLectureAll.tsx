@@ -8,7 +8,6 @@ import { ReactComponent as ImgPrevArrow } from '../../assets/images/PrevArrow.sv
 import { ReactComponent as ImgNextArrow } from '../../assets/images/NextArrow.svg';
 import { axiosGetfetcher } from '../../hooks/api';
 import { useMediaQuery } from 'react-responsive';
-import MediaQuery from 'react-responsive';
 import ComponentSkeletonCustom from '../common/ui/ComponentSkeletonCustom';
 
 const ComponentArrowPrev = (props: CustomArrowProps) => {
@@ -51,6 +50,31 @@ const settings: Settings | Readonly<Settings> = {
   infinite: false,
   speed: 500,
   pauseOnHover: true,
+  slidesToShow: 4,
+  slidesToScroll: 1,
+  responsive: [
+    {
+      breakpoint: 1200,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 1,
+      },
+    },
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 1,
+      },
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+      },
+    },
+  ],
   prevArrow: <ComponentArrowPrev />,
   nextArrow: <ComponentArrowNext />,
 };
@@ -78,86 +102,22 @@ const ComponentCarouselLectureAll: React.FC = () => {
         <>
           {dataAllLectures.length > 0 ? (
             <>
-              <MediaQuery maxWidth={767.98}>
-                <Slider
-                  {...{ ...settings, slidesToShow: 1, slidesToScroll: 1 }}
-                >
-                  {dataAllLectures.map((lecture, index) => {
-                    return (
-                      <div key={index} className="px-[10px]">
-                        <ComponentCardLecture
-                          id={lecture.id}
-                          title={lecture.title}
-                          thumbnail={lecture.thumbnail}
-                          teacherNickname={lecture.teacher_nickname}
-                          status={null}
-                          tags={lecture.tags}
-                        />
-                      </div>
-                    );
-                  })}
-                </Slider>
-              </MediaQuery>
-              <MediaQuery minWidth={768} maxWidth={1023.98}>
-                <Slider
-                  {...{ ...settings, slidesToShow: 2, slidesToScroll: 1 }}
-                >
-                  {dataAllLectures.map((lecture, index) => {
-                    return (
-                      <div key={index} className="px-[10px]">
-                        <ComponentCardLecture
-                          id={lecture.id}
-                          title={lecture.title}
-                          thumbnail={lecture.thumbnail}
-                          teacherNickname={lecture.teacher_nickname}
-                          status={null}
-                          tags={lecture.tags}
-                        />
-                      </div>
-                    );
-                  })}
-                </Slider>
-              </MediaQuery>
-              <MediaQuery minWidth={1024} maxWidth={1199.98}>
-                <Slider
-                  {...{ ...settings, slidesToShow: 3, slidesToScroll: 1 }}
-                >
-                  {dataAllLectures.map((lecture, index) => {
-                    return (
-                      <div key={index} className="px-[10px]">
-                        <ComponentCardLecture
-                          id={lecture.id}
-                          title={lecture.title}
-                          thumbnail={lecture.thumbnail}
-                          teacherNickname={lecture.teacher_nickname}
-                          status={null}
-                          tags={lecture.tags}
-                        />
-                      </div>
-                    );
-                  })}
-                </Slider>
-              </MediaQuery>
-              <MediaQuery minWidth={1200}>
-                <Slider
-                  {...{ ...settings, slidesToShow: 4, slidesToScroll: 1 }}
-                >
-                  {dataAllLectures.map((lecture, index) => {
-                    return (
-                      <div key={index} className="px-[10px]">
-                        <ComponentCardLecture
-                          id={lecture.id}
-                          title={lecture.title}
-                          thumbnail={lecture.thumbnail}
-                          teacherNickname={lecture.teacher_nickname}
-                          status={null}
-                          tags={lecture.tags}
-                        />
-                      </div>
-                    );
-                  })}
-                </Slider>
-              </MediaQuery>
+              <Slider {...settings}>
+                {dataAllLectures.map((lecture, index) => {
+                  return (
+                    <div key={index} className="px-[10px]">
+                      <ComponentCardLecture
+                        id={lecture.id}
+                        title={lecture.title}
+                        thumbnail={lecture.thumbnail}
+                        teacherNickname={lecture.teacher_nickname}
+                        status={null}
+                        tags={lecture.tags}
+                      />
+                    </div>
+                  );
+                })}
+              </Slider>
             </>
           ) : (
             <div className="flex w-full h-[300px] justify-center items-center">
