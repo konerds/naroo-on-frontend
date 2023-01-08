@@ -17,7 +17,7 @@ const ComponentHeader: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const tokenCtx = React.useContext(ContextToken);
-  const { token } = tokenCtx;
+  const { token, setToken } = tokenCtx;
   const [isVisibleEllipsis, setIsVisibleEllipsis] =
     React.useState<boolean>(false);
   const [isVisibleMenu, setIsVisibleMenu] = React.useState<boolean>(false);
@@ -56,7 +56,7 @@ const ComponentHeader: React.FC = () => {
     }
   };
   const logoutHandler = () => {
-    localStorage.setItem('token', '');
+    setToken(null);
     navigate(0);
   };
   React.useEffect(() => {

@@ -58,7 +58,7 @@ const App: React.FC = () => {
   React.useEffect(() => {
     localStorage.setItem(
       'token',
-      !!token && token !== 'undefined' && token !== 'null' ? token : '',
+      token === null || token === 'undefined' || token === 'null' ? '' : token,
     );
   }, [token]);
   React.useEffect(() => {
