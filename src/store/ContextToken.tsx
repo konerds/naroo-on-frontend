@@ -32,6 +32,18 @@ export const ContextTokenProvider = ({
       ? getSavedToken(localStorage)
       : '',
   );
+  React.useEffect(() => {
+    localStorage.setItem(
+      'token',
+      token === null || token === 'undefined' || token === 'null' ? '' : token,
+    );
+  }, [token]);
+  React.useEffect(() => {
+    localStorage.setItem(
+      'isRememberToken',
+      isRememberToken === 'false' ? 'false' : 'true',
+    );
+  }, [isRememberToken]);
   return (
     <ContextToken.Provider
       value={{

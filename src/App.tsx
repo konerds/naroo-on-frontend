@@ -18,7 +18,7 @@ import PageProfile from './pages/PageProfile';
 import PageInitPassword from './pages/PageInitPassword';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ContextToken, { ContextTokenProvider } from './store/ContextToken';
+import { ContextTokenProvider } from './store/ContextToken';
 import MediaQuery from 'react-responsive';
 
 const AppRouterWrapper: React.FC = () => {
@@ -50,23 +50,9 @@ const AppRouterWrapper: React.FC = () => {
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
-  const tokenCtx = React.useContext(ContextToken);
-  const { token, isRememberToken } = tokenCtx;
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
-  React.useEffect(() => {
-    localStorage.setItem(
-      'token',
-      token === null || token === 'undefined' || token === 'null' ? '' : token,
-    );
-  }, [token]);
-  React.useEffect(() => {
-    localStorage.setItem(
-      'isRememberToken',
-      isRememberToken === 'false' ? 'false' : 'true',
-    );
-  }, [isRememberToken]);
   return (
     <>
       <ComponentHeader />
