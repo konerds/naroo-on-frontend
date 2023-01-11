@@ -104,21 +104,21 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
       }}
     >
       <div
-        className="min-h-[41px] bg-white flex"
+        className="flex min-h-[41px] bg-white"
         onClick={() => {
           setIsShowEdit(false);
           setIsShowDescription(!isShowDescription);
         }}
       >
-        <div className="w-full flex items-center min-h-[41px]">
-          <div className="flex-none min-w-[20px] max-w-[20px] sm:min-w-[60px] sm:max-w-[60px] flex justify-center items-center">
-            <div className="text-[0.5rem] sm:text-[0.875rem] text-[#DCDEE2]">
+        <div className="flex min-h-[41px] w-full items-center">
+          <div className="flex min-w-[20px] max-w-[20px] flex-none items-center justify-center sm:min-w-[60px] sm:max-w-[60px]">
+            <div className="text-[0.5rem] text-[#DCDEE2] sm:text-[0.875rem]">
               {array_index}
             </div>
           </div>
           {isShowEdit ? (
             <input
-              className="flex-1 flex justify-start overflow-x-hidden items-center border-[1px] rounded-[4px] my-[10px] px-[4px] text-[0.875rem] text-[#515A6E] ml-[8.5px] disabled:opacity-50"
+              className="my-[10px] ml-[8.5px] flex flex-1 items-center justify-start overflow-x-hidden rounded-[4px] border-[1px] px-[4px] text-[0.875rem] text-[#515A6E] disabled:opacity-50"
               value={updateTitle}
               onChange={onChangeUpdateTitle}
               onClick={(event) => {
@@ -127,13 +127,13 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
               disabled={isLoadingSubmit}
             />
           ) : (
-            <div className="flex-1 flex break-all justify-start items-stretch my-[10px] py-[4px] pl-[8.5px] pr-[20px] text-[0.5rem] sm:text-[0.875rem] text-[#515A6E]">
+            <div className="my-[10px] flex flex-1 items-stretch justify-start break-all py-[4px] pl-[8.5px] pr-[20px] text-[0.5rem] text-[#515A6E] sm:text-[0.875rem]">
               {title}
             </div>
           )}
-          <div className="flex-none min-w-[40px] max-w-[40px] sm:min-w-[126px] sm:max-w-[126px] flex justify-end items-center mr-[10px] sm:mr-[20px]">
+          <div className="mr-[10px] flex min-w-[40px] max-w-[40px] flex-none items-center justify-end sm:mr-[20px] sm:min-w-[126px] sm:max-w-[126px]">
             <div
-              className="text-[0.5rem] sm:text-[0.875rem] text-[#DCDEE2]"
+              className="text-[0.5rem] text-[#DCDEE2] sm:text-[0.875rem]"
               title={moment(created_at).format('YYYY년 MM월 DD일 HH시 mm분')}
             >
               <MediaQuery maxWidth={639.98}>
@@ -148,32 +148,32 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
       </div>
       {isShowDescription ? (
         <>
-          <div className="w-full flex items-center min-h-[41px]">
-            <div className="flex-none min-w-[20px] max-w-[20px] sm:min-w-[60px] sm:max-w-[60px] flex justify-center items-center">
-              <div className="text-[0.5rem] sm:text-[0.875rem] text-[#DCDEE2]">
+          <div className="flex min-h-[41px] w-full items-center">
+            <div className="flex min-w-[20px] max-w-[20px] flex-none items-center justify-center sm:min-w-[60px] sm:max-w-[60px]">
+              <div className="text-[0.5rem] text-[#DCDEE2] sm:text-[0.875rem]">
                 내용
               </div>
             </div>
             {isShowEdit ? (
               <textarea
-                className="flex-1 flex justify-start items-stretch border-[1px] rounded-[4px] my-[10px] px-[4px] text-[0.875rem] text-[#515A6E] ml-[8.5px] mr-[10px] sm:mr-[20px] disabled:opacity-50"
+                className="my-[10px] ml-[8.5px] mr-[10px] flex flex-1 items-stretch justify-start rounded-[4px] border-[1px] px-[4px] text-[0.875rem] text-[#515A6E] disabled:opacity-50 sm:mr-[20px]"
                 value={updateDescription}
                 onChange={onChangeUpdateDescription}
                 disabled={isLoadingSubmit}
               />
             ) : (
-              <div className="flex-1 flex break-all justify-start items-stretch my-[10px] py-[4px] pl-[8.5px] pr-[20px] text-[0.5rem] sm:text-[0.875rem] text-[#515A6E]">
+              <div className="my-[10px] flex flex-1 items-stretch justify-start break-all py-[4px] pl-[8.5px] pr-[20px] text-[0.5rem] text-[#515A6E] sm:text-[0.875rem]">
                 {description}
               </div>
             )}
-            <div className="flex-none min-w-[40px] max-w-[40px] sm:min-w-[126px] sm:max-w-[126px] flex justify-center items-start">
+            <div className="flex min-w-[40px] max-w-[40px] flex-none items-start justify-center sm:min-w-[126px] sm:max-w-[126px]">
               {token && userType === 'admin' && (
                 <>
                   {isShowEdit ? (
-                    <div className="w-full min-h-[41px] bg-white flex justify-center items-center">
+                    <div className="flex min-h-[41px] w-full items-center justify-center bg-white">
                       <button
                         type="submit"
-                        className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
+                        className="max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] p-[5px] font-normal text-[#808695] hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:max-h-[unset] sm:min-h-[unset] sm:min-w-[unset] sm:max-w-max sm:px-[10px] sm:py-[4px] sm:text-[0.75rem]"
                         disabled={isLoadingSubmit}
                       >
                         <MediaQuery maxWidth={639.98}>
@@ -186,7 +186,7 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
                       </button>
                       <button
                         type="button"
-                        className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] ml-[3px] mr-[10px] sm:ml-[10px] sm:mr-[18px] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
+                        className="ml-[3px] mr-[10px] max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] p-[5px] font-normal text-[#808695] hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:ml-[10px] sm:mr-[18px] sm:max-h-[unset] sm:min-h-[unset] sm:min-w-[unset] sm:max-w-max sm:px-[10px] sm:py-[4px] sm:text-[0.75rem]"
                         onClick={() => {
                           setIsShowEdit(false);
                         }}
@@ -194,7 +194,7 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
                       >
                         <MediaQuery maxWidth={639.98}>
                           <FontAwesomeIcon
-                            className="block text-[0.6rem] ml-[2px]"
+                            className="ml-[2px] block text-[0.6rem]"
                             icon={faXmark}
                           />
                         </MediaQuery>
@@ -202,10 +202,10 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
                       </button>
                     </div>
                   ) : (
-                    <div className="w-full sm:min-h-[41px] bg-white flex justify-center items-center">
+                    <div className="flex w-full items-center justify-center bg-white sm:min-h-[41px]">
                       <button
                         type="button"
-                        className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
+                        className="max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] p-[5px] font-normal text-[#808695] hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:max-h-[unset] sm:min-h-[unset] sm:min-w-[unset] sm:max-w-max sm:px-[10px] sm:py-[4px] sm:text-[0.75rem]"
                         onClick={(event) => {
                           event.preventDefault();
                           setIsShowEdit(true);
@@ -222,7 +222,7 @@ const LectureNotice: React.FC<LectureNoticeProps> = ({
                       </button>
                       <button
                         type="button"
-                        className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] ml-[3px] mr-[10px] sm:ml-[10px] sm:mr-[18px] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
+                        className="ml-[3px] mr-[10px] max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] p-[5px] font-normal text-[#808695] hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:ml-[10px] sm:mr-[18px] sm:max-h-[unset] sm:min-h-[unset] sm:min-w-[unset] sm:max-w-max sm:px-[10px] sm:py-[4px] sm:text-[0.75rem]"
                         onClick={() => {
                           onClickDeleteNoticeHandler(id);
                         }}

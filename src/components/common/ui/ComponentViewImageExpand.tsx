@@ -15,14 +15,14 @@ const ComponentViewImageExpand: React.FC<IPropsComponentViewImageExpand> = ({
       onClick={() => {
         hideComponent();
       }}
-      className="cursor-pointer fixed w-[100vw] h-[100vh] top-0 left-0 bg-[#000000bb] z-[1001] flex flex-col align-middle justify-center"
+      className="fixed top-0 left-0 z-[1001] flex h-[100vh] w-[100vw] cursor-pointer flex-col justify-center bg-[#000000bb] align-middle"
     >
-      <div className="flex justify-center items-center relative">
+      <div className="relative flex items-center justify-center">
         <div
           onClick={(event) => {
             event.stopPropagation();
           }}
-          className="cursor-default z-[1002] relative"
+          className="relative z-[1002] cursor-default"
         >
           <img
             className="w-[60vw] md:w-[40vw]"
@@ -35,7 +35,7 @@ const ComponentViewImageExpand: React.FC<IPropsComponentViewImageExpand> = ({
             }}
             width={40}
             height={40}
-            className="cursor-pointer absolute top-[10px] right-[10px] w-[40px] h-[40px] m-auto object-fill fill-[black] hover:opacity-50"
+            className="absolute top-[10px] right-[10px] m-auto h-[40px] w-[40px] cursor-pointer fill-[black] object-fill hover:opacity-50"
           />
         </div>
       </div>

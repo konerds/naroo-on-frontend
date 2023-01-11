@@ -48,7 +48,7 @@ const PagePlayLecture: React.FC = () => {
     }
   }, [token, id]);
   return (
-    <div className="w-full bg-gray-500 min-h-[inherit] pt-[5px]">
+    <div className="min-h-[inherit] w-full bg-gray-500 pt-[5px]">
       {!!token &&
         !!dataGetMe &&
         !!dataLectureVideo &&
@@ -62,7 +62,7 @@ const PagePlayLecture: React.FC = () => {
                   <>
                     {dataLectureVideo.tags.length > 0 ? (
                       <Slider
-                        className="cursor-grab flex w-full px-[5px]"
+                        className="flex w-full cursor-grab px-[5px]"
                         {...settings}
                       >
                         {dataLectureVideo.tags.map((tag, index) => {
@@ -82,7 +82,7 @@ const PagePlayLecture: React.FC = () => {
                 ) : (
                   <ComponentSkeletonCustom className="w-full-important min-h-[34px]" />
                 )}
-                <div className="w-[100vw] flex pl-[9px] pb-[9px] text-4xl text-white font-medium">
+                <div className="flex w-[100vw] pl-[9px] pb-[9px] text-4xl font-medium text-white">
                   {dataLectureVideo.video_title}
                 </div>
                 <div className="aspect-w-16 aspect-h-9">
@@ -97,14 +97,14 @@ const PagePlayLecture: React.FC = () => {
             )}
             {dataLectureVideo.status !== 'accept' && (
               <>
-                <div className="flex p-[10px] items-center">
+                <div className="flex items-center p-[10px]">
                   <div className="py-1 text-xs text-white">
                     잘못된 접근입니다
                   </div>
                 </div>
-                <div className="w-[100vw] flex">
-                  <div className="flex-grow w-full min-h-[69.1vh] max-h-[69.1vh]">
-                    <ComponentSkeletonCustom className="w-full-vw-important min-h-[100%] p-0 m-0" />
+                <div className="flex w-[100vw]">
+                  <div className="max-h-[69.1vh] min-h-[69.1vh] w-full flex-grow">
+                    <ComponentSkeletonCustom className="w-full-vw-important m-0 min-h-[100%] p-0" />
                   </div>
                 </div>
               </>

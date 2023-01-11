@@ -71,7 +71,7 @@ const ComponentFormUpdateUser: React.FC<IPropsComponentFormUpdateUser> = ({
     <>
       {updateToggle ? (
         <form
-          className="mt-[10px] block sm:flex sm:items-center sm:min-h-[41px]"
+          className="mt-[10px] block sm:flex sm:min-h-[41px] sm:items-center"
           onSubmit={(event) => {
             event.preventDefault();
             onSubmitUpdateField();
@@ -80,23 +80,23 @@ const ComponentFormUpdateUser: React.FC<IPropsComponentFormUpdateUser> = ({
           <div className="w-full">
             <input
               autoComplete={fieldType === 'password' ? 'off' : undefined}
-              className="w-full h-[32px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white pl-[5px] disabled:opacity-50"
+              className="box-border h-[32px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] py-[10px] pl-[5px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none disabled:opacity-50"
               type={fieldType === 'password' ? 'password' : 'text'}
               value={!!updateFieldName ? updateFieldName : ''}
               onChange={onChangeUpdateFieldName}
               disabled={isLoadingSubmit}
             />
           </div>
-          <div className="flex justify-end sm:justify-start items-center mt-[5px] mb-[10px]">
+          <div className="mt-[5px] mb-[10px] flex items-center justify-end sm:justify-start">
             <button
-              className="w-[65px] h-[32px] mx-[5px] sm:mx-[10px] button-modify-cancel-admin text-sm"
+              className="button-modify-cancel-admin mx-[5px] h-[32px] w-[65px] text-sm sm:mx-[10px]"
               type="submit"
               disabled={isLoadingSubmit}
             >
               수정
             </button>
             <button
-              className="w-[65px] h-[32px] button-modify-cancel-admin"
+              className="button-modify-cancel-admin h-[32px] w-[65px]"
               type="button"
               onClick={onClickUpdateToggle}
               disabled={isLoadingSubmit}
@@ -106,7 +106,7 @@ const ComponentFormUpdateUser: React.FC<IPropsComponentFormUpdateUser> = ({
           </div>
         </form>
       ) : (
-        <div className="flex items-center min-h-[41px] py-[10px] w-full">
+        <div className="flex min-h-[41px] w-full items-center py-[10px]">
           <div className="w-full">
             <div>
               {fieldType === 'email'

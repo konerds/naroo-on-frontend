@@ -94,7 +94,7 @@ const ComponentFormRegisterTags: React.FC<IPropsComponentFormRegisterTags> = ({
           <Select
             isMulti
             isClearable
-            className="w-full text-xs text-gray-200 bg-harp disabled:opacity-50"
+            className="w-full bg-harp text-xs text-gray-200 disabled:opacity-50"
             value={tagsOptions.map((tagOption) => {
               for (const tag of registerTags) {
                 if (tagOption.value === tag.id) {
@@ -107,15 +107,15 @@ const ComponentFormRegisterTags: React.FC<IPropsComponentFormRegisterTags> = ({
             placeholder="태그를 추가하세요"
             isDisabled={isLoadingSubmit}
           />
-          <div className="flex justify-end sm:justify-start items-center my-[10px]">
+          <div className="my-[10px] flex items-center justify-end sm:justify-start">
             <input
-              className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
+              className="button-modify-cancel-admin mx-[10px] h-[32px] w-[65px]"
               type="submit"
               value="수정"
               disabled={isLoadingSubmit}
             />
             <button
-              className="w-[65px] h-[32px] button-modify-cancel-admin"
+              className="button-modify-cancel-admin h-[32px] w-[65px]"
               onClick={onClickUpdateToggle}
               disabled={isLoadingSubmit}
             >

@@ -12,9 +12,9 @@ const ComponentEllipsisHeader: React.FC<IPropsComponentEllipsisHeader> = ({
   setIsVisibleMenu,
 }) => {
   return (
-    <div className="absolute md:right-[-46px] right-[-6px] top-[-6px]">
+    <div className="absolute right-[-6px] top-[-6px] md:right-[-46px]">
       <div
-        className="min-w-[210px] max-w-[210px] min-h-[128px] max-h-[128px] px-[12px] pt-[21px] pb-[11px]"
+        className="max-h-[128px] min-h-[128px] min-w-[210px] max-w-[210px] px-[12px] pt-[21px] pb-[11px]"
         style={{
           backgroundImage: `url(${ImgEllipsisVector})`,
         }}
@@ -26,7 +26,7 @@ const ComponentEllipsisHeader: React.FC<IPropsComponentEllipsisHeader> = ({
           }}
         >
           <button
-            className={`block pl-[26px] py-[10px] text-[1.125rem] font-medium hover:opacity-50 ${
+            className={`block py-[10px] pl-[26px] text-[1.125rem] font-medium hover:opacity-50 ${
               location.pathname === '/myinfo'
                 ? 'text-[#8DC556]'
                 : 'text-[#515A6E]'
@@ -36,7 +36,7 @@ const ComponentEllipsisHeader: React.FC<IPropsComponentEllipsisHeader> = ({
           </button>
         </Link>
         <button
-          className="block pl-[26px] py-[10px] text-[1.125rem] font-medium text-[#515A6E] hover:opacity-50"
+          className="block py-[10px] pl-[26px] text-[1.125rem] font-medium text-[#515A6E] hover:opacity-50"
           onClick={() => {
             setIsVisibleMenu(false);
             logoutHandler();

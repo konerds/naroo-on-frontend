@@ -18,7 +18,7 @@ const ComponentContainerEditLecture: React.FC<
     <div className="flex items-center justify-center">
       <div>
         {allLecturesData && (
-          <div className="grid grid-flow-row 2xl:grid-cols-2 2xl:gap-6 xl:grid-cols-2 xl:gap-6 lg:grid-cols-1 lg:gap-6 md:grid-cols-1 md:gap-3 gap-y-10">
+          <div className="grid grid-flow-row gap-y-10 md:grid-cols-1 md:gap-3 lg:grid-cols-1 lg:gap-6 xl:grid-cols-2 xl:gap-6 2xl:grid-cols-2 2xl:gap-6">
             {allLecturesData.map((lecture, index) => {
               return (
                 <ComponentElementEditLecture

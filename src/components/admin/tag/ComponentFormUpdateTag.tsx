@@ -97,22 +97,22 @@ const ComponentFormUpdateTag: React.FC<IPropsComponentFormUpdateTag> = ({
           }}
         >
           <input
-            className="w-[100px] h-[24px] border-[1px] box-border rounded-[10px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white pl-[10px] disabled:opacity-50"
+            className="box-border h-[24px] w-[100px] rounded-[10px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] py-[10px] pl-[10px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none disabled:opacity-50"
             type="text"
             value={updateTagName}
             onChange={onChangeUpdateTagName}
             disabled={isLoadingSubmit}
           />
-          <div className="flex justify-end sm:justify-start items-center mt-[5px] mb-[10px]">
+          <div className="mt-[5px] mb-[10px] flex items-center justify-end sm:justify-start">
             <button
-              className="w-[40px] h-[24px] mx-[5px] box-border rounded-[10px] border-[1px] border-[#4DBFF0] lg:text-[0.8rem] text-[0.5rem] font-semibold bg-[#4DBFF0] text-white disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed;"
+              className="disabled:cursor-not-allowed; mx-[5px] box-border h-[24px] w-[40px] rounded-[10px] border-[1px] border-[#4DBFF0] bg-[#4DBFF0] text-[0.5rem] font-semibold text-white hover:opacity-50 disabled:opacity-50 lg:text-[0.8rem]"
               type="submit"
               disabled={isLoadingSubmit}
             >
               수정
             </button>
             <button
-              className="mr-[10px] w-[40px] h-[24px] box-border rounded-[10px] border-[1px] border-[#4DBFF0] lg:text-[0.8rem] text-[0.5rem] font-semibold bg-[#4DBFF0] text-white disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed;"
+              className="disabled:cursor-not-allowed; mr-[10px] box-border h-[24px] w-[40px] rounded-[10px] border-[1px] border-[#4DBFF0] bg-[#4DBFF0] text-[0.5rem] font-semibold text-white hover:opacity-50 disabled:opacity-50 lg:text-[0.8rem]"
               onClick={onClickUpdateToggle}
               disabled={isLoadingSubmit}
             >
@@ -121,23 +121,23 @@ const ComponentFormUpdateTag: React.FC<IPropsComponentFormUpdateTag> = ({
           </div>
         </form>
       ) : (
-        <div className="flex items-center h-[30px] py-[20px]">
+        <div className="flex h-[30px] items-center py-[20px]">
           <div className="overflow-x-hidden">
             <ComponentElementTag name={name} />
           </div>
           <FontAwesomeIcon
-            className={`mx-[5px] button-fa-icon-admin ${
+            className={`button-fa-icon-admin mx-[5px] ${
               isLoadingDeleteTag
-                ? 'opacity-50 cursor-not-allowed pointer-events-none'
+                ? 'pointer-events-none cursor-not-allowed opacity-50'
                 : ''
             }`}
             icon={faEdit}
             onClick={onClickUpdateToggle}
           />
           <FontAwesomeIcon
-            className={`mr-[20px] button-fa-icon-admin ${
+            className={`button-fa-icon-admin mr-[20px] ${
               isLoadingDeleteTag
-                ? 'opacity-50 cursor-not-allowed pointer-events-none'
+                ? 'pointer-events-none cursor-not-allowed opacity-50'
                 : ''
             }`}
             icon={faTrash}

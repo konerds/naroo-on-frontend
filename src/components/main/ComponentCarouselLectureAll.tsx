@@ -95,7 +95,7 @@ const ComponentCarouselLectureAll: React.FC = () => {
           ? ` (${dataAllLectures.length})`
           : ''}
       </div>
-      <div className="mt-2 text-gray-300 mb-7">
+      <div className="mt-2 mb-7 text-gray-300">
         완료 혹은 진행중인 전체 강좌를 살펴보세요
       </div>
       {!!dataAllLectures && !!!errorAllLectures && isArray(dataAllLectures) ? (
@@ -120,13 +120,13 @@ const ComponentCarouselLectureAll: React.FC = () => {
               </Slider>
             </>
           ) : (
-            <div className="flex w-full h-[300px] justify-center items-center">
+            <div className="flex h-[300px] w-full items-center justify-center">
               강좌가 존재하지 않습니다
             </div>
           )}
         </>
       ) : (
-        <ComponentSkeletonCustom className="w-full min-h-[444px]" />
+        <ComponentSkeletonCustom className="min-h-[444px] w-full" />
       )}
     </>
   );

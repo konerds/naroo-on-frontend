@@ -54,8 +54,8 @@ const PageSignup: React.FC = () => {
     }
   }, [token]);
   return (
-    <div className="min-h-[605px] flex justify-center items-center">
-      <div className="py-[30px] min-w-[90vw] max-w-[90vw] xs:min-w-[295.47px] xs:max-w-[295.47px] sm:min-w-[295.47px] sm:max-w-[295.47px] md:min-w-[354.56px] md:max-w-[354.56px] lg:min-w-[472.75px] lg:max-w-[472.75px] xl:min-w-[554px] xl:max-w-[554px] box-border rounded-[8px] border-[1px] border-[#DCDEE2] m-auto px-[10px] xs:px-[52.27px] sm:px-[52.27px] md:px-[62.72px] lg:px-[83.63px] xl:px-[98px]">
+    <div className="flex min-h-[605px] items-center justify-center">
+      <div className="m-auto box-border min-w-[90vw] max-w-[90vw] rounded-[8px] border-[1px] border-[#DCDEE2] py-[30px] px-[10px] xs:min-w-[295.47px] xs:max-w-[295.47px] xs:px-[52.27px] sm:min-w-[295.47px] sm:max-w-[295.47px] sm:px-[52.27px] md:min-w-[354.56px] md:max-w-[354.56px] md:px-[62.72px] lg:min-w-[472.75px] lg:max-w-[472.75px] lg:px-[83.63px] xl:min-w-[554px] xl:max-w-[554px] xl:px-[98px]">
         <form
           onSubmit={(event) => {
             event.preventDefault();
@@ -65,7 +65,7 @@ const PageSignup: React.FC = () => {
           <div className="text-[1.5rem] font-semibold">회원가입</div>
           <div className="mt-[32px] mb-[20px]">
             <input
-              className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] pl-[20px] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white"
+              className="box-border h-[41px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] py-[10px] pl-[20px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none"
               type="text"
               placeholder="이메일을 입력해주세요"
               value={email}
@@ -75,7 +75,7 @@ const PageSignup: React.FC = () => {
           <div className="mb-[20px]">
             <input
               autoComplete="off"
-              className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] pl-[20px] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white"
+              className="box-border h-[41px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] py-[10px] pl-[20px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none"
               type="password"
               placeholder="비밀번호를 입력해주세요"
               value={password}
@@ -85,7 +85,7 @@ const PageSignup: React.FC = () => {
           <div className="mb-[20px]">
             <input
               autoComplete="off"
-              className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] pl-[20px] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white"
+              className="box-border h-[41px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] py-[10px] pl-[20px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none"
               type="password"
               placeholder="비밀번호 확인"
               value={passwordCheck}
@@ -94,7 +94,7 @@ const PageSignup: React.FC = () => {
           </div>
           <div className="mb-[20px]">
             <input
-              className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] pl-[20px] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white"
+              className="box-border h-[41px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] py-[10px] pl-[20px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none"
               type="text"
               placeholder="이름을 입력해주세요"
               value={nickname}
@@ -103,7 +103,7 @@ const PageSignup: React.FC = () => {
           </div>
           <div className="mb-[19px]">
             <input
-              className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] pl-[20px] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white"
+              className="box-border h-[41px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] py-[10px] pl-[20px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none"
               type="text"
               placeholder="010-1234-5678"
               value={phone}
@@ -115,7 +115,7 @@ const PageSignup: React.FC = () => {
             <span className="text-[#007CC8]">이용약관, 개인정보취급방침</span>에
             동의합니다.
           </div>
-          <div className="text-[0.6rem] md:text-[0.75rem] leading-[1.5rem] text-[#515A6E] flex items-center">
+          <div className="flex items-center text-[0.6rem] leading-[1.5rem] text-[#515A6E] md:text-[0.75rem]">
             <input
               className="mr-[5px]"
               type="checkbox"
@@ -126,7 +126,7 @@ const PageSignup: React.FC = () => {
           </div>
           <button
             type="submit"
-            className={`flex justify-center items-center w-full box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[41px] mt-[20px] bg-[#4DBFF0] text-white hover:opacity-50 disabled:opacity-50 disabled:cursor-not-allowed${
+            className={`mt-[20px] box-border flex h-[41px] w-full items-center justify-center rounded-[4px] border-[1px] border-[#4DBFF0] bg-[#4DBFF0] text-white hover:opacity-50 disabled:opacity-50 disabled:cursor-not-allowed${
               isRequesting ? ' opacity-50' : ''
             }`}
           >

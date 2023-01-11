@@ -88,8 +88,8 @@ const ComponentCarouselOrg: React.FC = () => {
     { revalidateOnFocus: false, revalidateIfStale: false },
   );
   return (
-    <div className="w-full md:max-w-[788px] lg:px-[10px] lg:max-w-[966px] xl:max-w-[1152px] px-[30px] py-[36px] mx-auto">
-      <div className="text-center text-[#515A6E] sm:text-[1.5rem] text-[1.1875rem] font-semibold mb-[28px]">
+    <div className="mx-auto w-full px-[30px] py-[36px] md:max-w-[788px] lg:max-w-[966px] lg:px-[10px] xl:max-w-[1152px]">
+      <div className="mb-[28px] text-center text-[1.1875rem] font-semibold text-[#515A6E] sm:text-[1.5rem]">
         이미 다양한 기관들이 나루온과 함께하고 있어요
       </div>
       {!!dataResourceContent &&
@@ -101,7 +101,7 @@ const ComponentCarouselOrg: React.FC = () => {
               return (
                 <div key={index} className="px-[10px]">
                   <img
-                    className="pointer-events-none min-w-[289px] max-w-[289px] min-h-[68px] max-h-[68px] object-cover mx-auto"
+                    className="pointer-events-none mx-auto max-h-[68px] min-h-[68px] min-w-[289px] max-w-[289px] object-cover"
                     src={element.content}
                   />
                 </div>
@@ -110,7 +110,7 @@ const ComponentCarouselOrg: React.FC = () => {
           </Slider>
         </>
       ) : (
-        <ComponentSkeletonCustom className="w-[100vw] min-h-[300px]" />
+        <ComponentSkeletonCustom className="min-h-[300px] w-[100vw]" />
       )}
     </div>
   );

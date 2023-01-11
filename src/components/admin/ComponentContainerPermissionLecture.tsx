@@ -97,10 +97,10 @@ const ComponentContainerPermissionLecture: React.FC<
             if (lectureFilter.value === lectureStatus.lecture_id) {
               return (
                 <div key={index} className="my-[20px] border-[1px] p-[15px]">
-                  <div className="w-full block overflow-hidden text-ellipsis whitespace-nowrap">
+                  <div className="block w-full overflow-hidden text-ellipsis whitespace-nowrap">
                     {lectureStatus.student_nickname}
                   </div>
-                  <div className="w-full block overflow-hidden text-ellipsis whitespace-nowrap">
+                  <div className="block w-full overflow-hidden text-ellipsis whitespace-nowrap">
                     {lectureStatus.student_email}
                   </div>
                   <div className="ml-auto mr-0">
@@ -126,7 +126,7 @@ const ComponentContainerPermissionLecture: React.FC<
               return (
                 <div
                   key={index}
-                  className="border-[1px] border-black my-[20px] p-[10px]"
+                  className="my-[20px] border-[1px] border-black p-[10px]"
                 >
                   <div className="mb-[5px] w-full">{lectureStatus.title}</div>
                   <div className="w-full text-xs">
@@ -145,10 +145,10 @@ const ComponentContainerPermissionLecture: React.FC<
                       </div>
                     )}
                   </div>
-                  <div className="my-[10px] flex flex-wrap items-center w-full justify-evenly">
+                  <div className="my-[10px] flex w-full flex-wrap items-center justify-evenly">
                     {lectureStatus.thumbnail && (
                       <img
-                        className="w-full md:w-[600px] rounded-full border-[1px]"
+                        className="w-full rounded-full border-[1px] md:w-[600px]"
                         src={lectureStatus.thumbnail}
                       />
                     )}

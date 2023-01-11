@@ -156,16 +156,16 @@ const ComponentElementEditLecture: React.FC<
     }
   };
   return (
-    <div className="w-[90vw] sm:w-[560px] justify-self-center border-[1px] p-[15px]">
+    <div className="w-[90vw] justify-self-center border-[1px] p-[15px] sm:w-[560px]">
       <button
-        className="px-[15px] py-[5px] mx-auto border-[1px] border-black rounded-2xl w-max flex justify-center items-center hover:bg-black hover:text-white disabled:opacity-50"
+        className="mx-auto flex w-max items-center justify-center rounded-2xl border-[1px] border-black px-[15px] py-[5px] hover:bg-black hover:text-white disabled:opacity-50"
         disabled={isLoadingClickDeleteLecture}
         onClick={onClickDeleteLecture}
       >
         <div>강의 삭제하기</div>
         <FontAwesomeIcon className="ml-[20px]" icon={faTrash} />
       </button>
-      <div className="text-xs bg-white text-shuttle-gray">
+      <div className="bg-white text-xs text-shuttle-gray">
         <ComponentFormUpdateImage
           token={token}
           fieldType="thumbnail"
@@ -175,7 +175,7 @@ const ComponentElementEditLecture: React.FC<
           imageIndex={null}
         />
       </div>
-      <div className="text-xs bg-white text-shuttle-gray">
+      <div className="bg-white text-xs text-shuttle-gray">
         {updateExpiredToggle ? (
           <form
             className="mt-[10px] block sm:flex sm:items-center"
@@ -186,7 +186,7 @@ const ComponentElementEditLecture: React.FC<
           >
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDateTimePicker
-                className="w-full h-[32px]"
+                className="h-[32px] w-full"
                 format="yyyy년 MM월 dd일 hh시 mm분 ss초"
                 value={expiredAt}
                 margin="none"
@@ -194,16 +194,16 @@ const ComponentElementEditLecture: React.FC<
                 disabled={isLoadingSubmitUpdateExpired}
               />
             </MuiPickersUtilsProvider>
-            <div className="flex justify-end sm:justify-start items-center mt-[5px] mb-[10px]">
+            <div className="mt-[5px] mb-[10px] flex items-center justify-end sm:justify-start">
               <button
-                className="mx-[10px] w-[65px] h-[32px] button-modify-cancel-admin"
+                className="button-modify-cancel-admin mx-[10px] h-[32px] w-[65px]"
                 disabled={isLoadingSubmitUpdateExpired}
                 type="submit"
               >
                 수정
               </button>
               <button
-                className="w-[65px] h-[32px] button-modify-cancel-admin"
+                className="button-modify-cancel-admin h-[32px] w-[65px]"
                 disabled={isLoadingSubmitUpdateExpired}
                 onClick={onClickUpdateExpiredToggle}
               >
@@ -213,27 +213,25 @@ const ComponentElementEditLecture: React.FC<
           </form>
         ) : (
           <div className="mt-[10px] flex items-center">
-            <div className="flex items-center rounded-[10px] text-gray-200 bg-harp w-full p-[10px] text-xs">
-              {!expired && <div>강의 만료 일시가 설정되어 있지 않습니다</div>}
-              {expired && moment(expired).format('YYYY-MM-DD HH:mm:ss')}
+            <div className="flex w-full items-center rounded-[10px] bg-harp p-[10px] text-xs text-gray-200">
+              {!!!expired && <div>강의 만료 일시가 설정되어 있지 않습니다</div>}
+              {!!expired && moment(expired).format('YYYY-MM-DD HH:mm:ss')}
             </div>
             <FontAwesomeIcon
-              className="ml-[10px] button-fa-icon-admin"
+              className="button-fa-icon-admin ml-[10px]"
               icon={faEdit}
               onClick={onClickUpdateExpiredToggle}
             />
           </div>
         )}
       </div>
-      <div className="text-xs bg-white text-shuttle-gray">
-        <ComponentFormUpdateLecture
-          token={token}
-          fieldType="title"
-          lectureId={id}
-          userField={title}
-          mutate={mutate}
-        />
-      </div>
+      <ComponentFormUpdateLecture
+        token={token}
+        fieldType="title"
+        lectureId={id}
+        userField={title}
+        mutate={mutate}
+      />
       {updateTeacherToggle ? (
         <form
           className="mt-[10px] block sm:flex sm:items-center"
@@ -243,22 +241,22 @@ const ComponentElementEditLecture: React.FC<
           }}
         >
           <input
-            className="w-full h-[32px] border-[1px] box-border rounded-[10px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white px-[20px] disabled:opacity-50"
+            className="box-border h-[32px] w-full rounded-[10px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] py-[10px] px-[20px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none disabled:opacity-50"
             type="text"
             value={updateTeacherName}
             onChange={onChangeUpdateTeacherName}
             disabled={isLoadingSubmitUpdateTeacher}
           />
-          <div className="flex justify-end sm:justify-start items-center mt-[5px] mb-[10px]">
+          <div className="mt-[5px] mb-[10px] flex items-center justify-end sm:justify-start">
             <button
-              className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
+              className="button-modify-cancel-admin mx-[10px] h-[32px] w-[65px]"
               type="submit"
               disabled={isLoadingSubmitUpdateTeacher}
             >
               수정
             </button>
             <button
-              className="w-[65px] h-[32px] button-modify-cancel-admin"
+              className="button-modify-cancel-admin h-[32px] w-[65px]"
               onClick={onClickUpdateTeacherToggle}
               disabled={isLoadingSubmitUpdateTeacher}
             >
@@ -268,27 +266,25 @@ const ComponentElementEditLecture: React.FC<
         </form>
       ) : (
         <div className="mt-[10px] flex items-center">
-          <div className="flex items-center rounded-[10px] text-gray-200 bg-harp w-full p-[10px] text-xs">
+          <div className="flex w-full items-center rounded-[10px] bg-harp p-[10px] text-xs text-gray-200">
             {'강사 이름 : ' + teacherNickname}
           </div>
           <FontAwesomeIcon
-            className="ml-[10px] button-fa-icon-admin"
+            className="button-fa-icon-admin ml-[10px]"
             icon={faEdit}
             onClick={onClickUpdateTeacherToggle}
           />
         </div>
       )}
-      <div className="text-xs bg-white text-shuttle-gray">
-        <ComponentFormUpdateLecture
-          token={token}
-          fieldType="description"
-          lectureId={id}
-          userField={description}
-          mutate={mutate}
-        />
-      </div>
-      <div className="text-xs bg-white text-shuttle-gray">
-        {images &&
+      <ComponentFormUpdateLecture
+        token={token}
+        fieldType="description"
+        lectureId={id}
+        userField={description}
+        mutate={mutate}
+      />
+      <div className="bg-white text-xs text-shuttle-gray">
+        {!!images &&
           images.length > 0 &&
           images.map((image, index) => {
             return (
@@ -304,24 +300,20 @@ const ComponentElementEditLecture: React.FC<
             );
           })}
       </div>
-      <div className="text-xs bg-white text-shuttle-gray">
-        <ComponentFormUpdateLecture
-          token={token}
-          fieldType="video_title"
-          lectureId={id}
-          userField={videoTitle}
-          mutate={mutate}
-        />
-      </div>
-      <div className="text-xs bg-white text-shuttle-gray">
-        <ComponentFormUpdateLecture
-          token={token}
-          fieldType="video_url"
-          lectureId={id}
-          userField={videoUrl}
-          mutate={mutate}
-        />
-      </div>
+      <ComponentFormUpdateLecture
+        token={token}
+        fieldType="video_title"
+        lectureId={id}
+        userField={videoTitle}
+        mutate={mutate}
+      />
+      <ComponentFormUpdateLecture
+        token={token}
+        fieldType="video_url"
+        lectureId={id}
+        userField={videoUrl}
+        mutate={mutate}
+      />
       <ComponentFormRegisterTags
         token={token}
         lectureId={id}

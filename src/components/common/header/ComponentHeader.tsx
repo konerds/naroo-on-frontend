@@ -72,11 +72,11 @@ const ComponentHeader: React.FC = () => {
   return (
     <div
       ref={refElementHeader}
-      className="max-w-[100vw] fixed z-[1000] bg-white left-0 right-0 min-h-[50px] sm:min-h-[100px] font-semibold text-gray-300 header-container"
+      className="header-container fixed left-0 right-0 z-[1000] min-h-[50px] max-w-[100vw] bg-white font-semibold text-gray-300 sm:min-h-[100px]"
     >
       <MediaQuery maxWidth={767.98}>
-        <div className="flex items-center justify-between h-[50px] sm:h-[100px] mx-auto md:hidden">
-          <div className="flex items-center justify-center w-full">
+        <div className="mx-auto flex h-[50px] items-center justify-between sm:h-[100px] md:hidden">
+          <div className="flex w-full items-center justify-center">
             <Link
               className="ml-[20px] mr-0 hover:opacity-50"
               to="/"
@@ -101,7 +101,7 @@ const ComponentHeader: React.FC = () => {
             ) && (
               <button
                 type="button"
-                className="rounded-[1px] min-w-max mx-auto"
+                className="mx-auto min-w-max rounded-[1px]"
                 onClick={() => setIsVisibleMenu(!isVisibleMenu)}
               >
                 메뉴
@@ -114,7 +114,7 @@ const ComponentHeader: React.FC = () => {
                 <>
                   <button
                     ref={refElementEllipsis}
-                    className="ml-0 mr-[30px] rounded-full text-xs sm:text-sm w-[30px] h-[30px] sm:w-[40px] sm:h-[40px] flex items-center justify-center bg-[#8dc556] text-white font-semibold"
+                    className="ml-0 mr-[30px] flex h-[30px] w-[30px] items-center justify-center rounded-full bg-[#8dc556] text-xs font-semibold text-white sm:h-[40px] sm:w-[40px] sm:text-sm"
                     onClick={() => {
                       setIsVisibleMenu(false);
                       setIsVisibleEllipsis(!isVisibleEllipsis);
@@ -140,7 +140,7 @@ const ComponentHeader: React.FC = () => {
                     setIsVisibleMenu(false);
                   }}
                 >
-                  <button className="bg-white text-[0.625rem] leading-[0.625rem] font-semibold text-[#808695] border-[1px] border-[#DCDEE2] box-border rounded-[40px] w-[30px] h-[30px] sm:w-[60px] sm:h-[41px] p-[5px]">
+                  <button className="box-border h-[30px] w-[30px] rounded-[40px] border-[1px] border-[#DCDEE2] bg-white p-[5px] text-[0.625rem] font-semibold leading-[0.625rem] text-[#808695] sm:h-[41px] sm:w-[60px]">
                     <MediaQuery maxWidth={639.98}>
                       <FontAwesomeIcon
                         className="text-[0.7rem]"
@@ -157,7 +157,7 @@ const ComponentHeader: React.FC = () => {
                     setIsVisibleMenu(false);
                   }}
                 >
-                  <button className="ml-[8px] text-[0.625rem] leading-[0.625rem] font-semibold text-white bg-[#8DC556] rounded-[40px] w-[30px] h-[30px] sm:w-[70px] sm:h-[41px] p-[5px]">
+                  <button className="ml-[8px] h-[30px] w-[30px] rounded-[40px] bg-[#8DC556] p-[5px] text-[0.625rem] font-semibold leading-[0.625rem] text-white sm:h-[41px] sm:w-[70px]">
                     <MediaQuery maxWidth={639.98}>
                       <FontAwesomeIcon
                         className="text-[0.7rem]"
@@ -174,7 +174,7 @@ const ComponentHeader: React.FC = () => {
               !!dataGetMe.nickname &&
               dataGetMe.role === 'admin' && (
                 <button
-                  className="flex items-center justify-center ml-auto mr-[20px] hover:opacity-50"
+                  className="ml-auto mr-[20px] flex items-center justify-center hover:opacity-50"
                   onClick={logoutHandler}
                 >
                   로그아웃
@@ -183,7 +183,7 @@ const ComponentHeader: React.FC = () => {
           </div>
         </div>
         {isVisibleMenu && (
-          <div className="block relative border-[1px] border-[#DCDEE2] box-border rounded-[10px] bg-white min-w-full z-[999]">
+          <div className="relative z-[999] box-border block min-w-full rounded-[10px] border-[1px] border-[#DCDEE2] bg-white">
             <Link
               to="/"
               onClick={(event) => {
@@ -214,11 +214,11 @@ const ComponentHeader: React.FC = () => {
         )}
       </MediaQuery>
       <MediaQuery minWidth={768}>
-        <div className="hidden md:h-[100px] md:mx-auto md:flex md:justify-between md:items-center md:max-w-[788px] lg:max-w-[966px] xl:max-w-[1152px]">
-          <div className="flex justify-between items-center">
+        <div className="hidden md:mx-auto md:flex md:h-[100px] md:max-w-[788px] md:items-center md:justify-between lg:max-w-[966px] xl:max-w-[1152px]">
+          <div className="flex items-center justify-between">
             {!!dataHeaderLogo && dataHeaderLogo.length > 0 && (
               <Link
-                className="ml-[20px] lg:ml-0 mr-[45px] hover:opacity-50"
+                className="ml-[20px] mr-[45px] hover:opacity-50 lg:ml-0"
                 to="/"
                 onClick={() => {
                   setIsVisibleMenu(false);
@@ -274,7 +274,7 @@ const ComponentHeader: React.FC = () => {
                 onMouseEnter={() => setIsVisibleEllipsis(true)}
                 onMouseLeave={() => setIsVisibleEllipsis(false)}
               >
-                <button className="rounded-full w-[40px] h-[40px] flex items-center justify-center bg-[#8dc556] text-white font-semibold hover:opacity-50">
+                <button className="flex h-[40px] w-[40px] items-center justify-center rounded-full bg-[#8dc556] font-semibold text-white hover:opacity-50">
                   {dataGetMe.nickname.charAt(0)}
                 </button>
                 {isVisibleEllipsis && (
@@ -296,7 +296,7 @@ const ComponentHeader: React.FC = () => {
                   setIsVisibleMenu(false);
                 }}
               >
-                <button className="bg-white text-[0.875rem] leading-[1.3125rem] font-semibold text-[#808695] border-[1px] border-[#DCDEE2] box-border rounded-[40px] h-[41px] md:w-[84.48px] xl:w-[99px]">
+                <button className="box-border h-[41px] rounded-[40px] border-[1px] border-[#DCDEE2] bg-white text-[0.875rem] font-semibold leading-[1.3125rem] text-[#808695] md:w-[84.48px] xl:w-[99px]">
                   로그인
                 </button>
               </Link>
@@ -307,7 +307,7 @@ const ComponentHeader: React.FC = () => {
                   setIsVisibleMenu(false);
                 }}
               >
-                <button className="ml-[12px] text-[0.875rem] leading-[1.3125rem] font-semibold text-white bg-[#8DC556] rounded-[40px] h-[41px] md:w-[95.57px] xl:w-[112px]">
+                <button className="ml-[12px] h-[41px] rounded-[40px] bg-[#8DC556] text-[0.875rem] font-semibold leading-[1.3125rem] text-white md:w-[95.57px] xl:w-[112px]">
                   회원가입
                 </button>
               </Link>
@@ -316,7 +316,7 @@ const ComponentHeader: React.FC = () => {
           {!!token && !!dataGetMe && dataGetMe.role === 'admin' && (
             <button
               type="button"
-              className="ml-auto mr-0 flex justify-center items-center hover:opacity-50"
+              className="ml-auto mr-0 flex items-center justify-center hover:opacity-50"
               onClick={logoutHandler}
             >
               로그아웃

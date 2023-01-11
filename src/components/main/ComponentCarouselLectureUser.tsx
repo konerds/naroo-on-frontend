@@ -107,7 +107,7 @@ const ComponentCarouselLectureUser: React.FC = () => {
               ? ` (${dataUserLectures.length})`
               : ''}
           </div>
-          <div className="mt-2 text-gray-300 mb-7">
+          <div className="mt-2 mb-7 text-gray-300">
             내가 신청한 강좌를 복습해보세요
           </div>
           {!!dataUserLectures &&
@@ -134,13 +134,13 @@ const ComponentCarouselLectureUser: React.FC = () => {
                   </Slider>
                 </>
               ) : (
-                <div className="flex w-full h-[300px] justify-center items-center">
+                <div className="flex h-[300px] w-full items-center justify-center">
                   신청한 강좌가 존재하지 않습니다
                 </div>
               )}
             </>
           ) : (
-            <ComponentSkeletonCustom className="w-full min-h-[444px]" />
+            <ComponentSkeletonCustom className="min-h-[444px] w-full" />
           )}
         </div>
       )}

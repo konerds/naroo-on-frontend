@@ -108,7 +108,7 @@ const PageMain: React.FC = () => {
     }
   }, [dataVerify?.token, errorVerify]);
   return (
-    <div className="max-w-full min-h-screen mx-auto bg-white">
+    <div className="mx-auto min-h-screen max-w-full bg-white">
       {!(!!token && !!dataGetMe && dataGetMe.role === 'admin') && (
         <>
           {!!infoBanner && isArray(infoBanner) && infoBanner.length > 0 ? (
@@ -117,7 +117,7 @@ const PageMain: React.FC = () => {
                 return (
                   <img
                     key={index}
-                    className="pointer-cursor w-[100vw] max-h-[380px] object-cover"
+                    className="pointer-cursor max-h-[380px] w-[100vw] object-cover"
                     src={element.content}
                   />
                 );
@@ -126,7 +126,7 @@ const PageMain: React.FC = () => {
           ) : (
             <ComponentSkeletonCustom className="block-important w-full-vw-important min-h-[380px]" />
           )}
-          <div className="py-[60px] w-full md:max-w-[788px] lg:max-w-[966px] xl:max-w-[1152px] px-[20px] lg:px-0 mx-auto">
+          <div className="mx-auto w-full py-[60px] px-[20px] md:max-w-[788px] lg:max-w-[966px] lg:px-0 xl:max-w-[1152px]">
             <ComponentCarouselLectureUser />
             <ComponentCarouselLectureAll />
           </div>

@@ -40,17 +40,17 @@ const PageSignin: React.FC = () => {
     }
   }, [token]);
   return (
-    <div className="py-[30px] min-w-[90vw] max-w-[90vw] xs:min-w-[295.47px] xs:max-w-[295.47px] sm:min-w-[295.47px] sm:max-w-[295.47px] md:min-w-[354.56px] md:max-w-[354.56px] lg:min-w-[472.75px] lg:max-w-[472.75px] xl:min-w-[554px] xl:max-w-[554px] box-border rounded-[8px] border-[1px] border-[#DCDEE2] m-auto px-[10px] xs:px-[52.27px] sm:px-[52.27px] md:px-[62.72px] lg:px-[83.63px] xl:px-[98px]">
+    <div className="m-auto box-border min-w-[90vw] max-w-[90vw] rounded-[8px] border-[1px] border-[#DCDEE2] py-[30px] px-[10px] xs:min-w-[295.47px] xs:max-w-[295.47px] xs:px-[52.27px] sm:min-w-[295.47px] sm:max-w-[295.47px] sm:px-[52.27px] md:min-w-[354.56px] md:max-w-[354.56px] md:px-[62.72px] lg:min-w-[472.75px] lg:max-w-[472.75px] lg:px-[83.63px] xl:min-w-[554px] xl:max-w-[554px] xl:px-[98px]">
       <form
         onSubmit={(event) => {
           event.preventDefault();
           onSubmitHandler();
         }}
       >
-        <div className="text-[1.5rem] text-[#17233D] font-semibold">로그인</div>
+        <div className="text-[1.5rem] font-semibold text-[#17233D]">로그인</div>
         <div className="mt-[32px] mb-[20px]">
           <input
-            className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] pl-[20px] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white"
+            className="box-border h-[41px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] py-[10px] pl-[20px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none"
             type="text"
             placeholder="아이디"
             value={email}
@@ -60,14 +60,14 @@ const PageSignin: React.FC = () => {
         <div className="mb-[20px]">
           <input
             autoComplete="off"
-            className="w-full h-[41px] border-[1px] box-border rounded-[4px] border-[#DCDEE2] bg-[#F3FBFE] placeholder-[#DCDEE2] font-medium text-[0.875rem] pl-[20px] py-[10px] focus:border-[#00A0E9] focus:outline-none focus:bg-white"
+            className="box-border h-[41px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] py-[10px] pl-[20px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none"
             type="password"
             placeholder="비밀번호"
             value={password}
             onChange={onChangePassword}
           />
         </div>
-        <div className="text-[0.75rem] leading-[1rem] flex items-center">
+        <div className="flex items-center text-[0.75rem] leading-[1rem]">
           <input
             className="mr-[5px]"
             type="checkbox"
@@ -80,7 +80,7 @@ const PageSignin: React.FC = () => {
         </div>
         <button
           type="submit"
-          className={`flex justify-center items-center w-full box-border rounded-[4px] border-[1px] border-[#4DBFF0] h-[41px] my-[20px] bg-[#4DBFF0] text-white hover:opacity-50 disabled:opacity-50 disabled:cursor-not-allowed${
+          className={`my-[20px] box-border flex h-[41px] w-full items-center justify-center rounded-[4px] border-[1px] border-[#4DBFF0] bg-[#4DBFF0] text-white hover:opacity-50 disabled:opacity-50 disabled:cursor-not-allowed${
             isRequesting ? ' opacity-50' : ''
           }`}
         >
@@ -102,11 +102,11 @@ const PageSignin: React.FC = () => {
             />
           )}
         </button>
-        <div className="flex justify-between w-full">
-          <div className="text-[0.7rem] xs:text-[0.875rem] text-[#515A6E] font-normal underline hover:opacity-50">
+        <div className="flex w-full justify-between">
+          <div className="text-[0.7rem] font-normal text-[#515A6E] underline hover:opacity-50 xs:text-[0.875rem]">
             <Link to="/signup">회원가입</Link>
           </div>
-          <div className="text-[0.7rem] xs:text-[0.875rem] text-[#515A6E] font-normal underline  hover:opacity-50">
+          <div className="text-[0.7rem] font-normal text-[#515A6E] underline hover:opacity-50  xs:text-[0.875rem]">
             <Link to="/forgot">비밀번호 재설정</Link>
           </div>
         </div>

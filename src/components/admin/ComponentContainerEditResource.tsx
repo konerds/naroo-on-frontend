@@ -30,9 +30,9 @@ const ComponentContainerEditResource: React.FC<
             return (
               <React.Fragment key={index}>
                 {+index === 0 && (
-                  <div className="text-2xl mb-[10px]">헤더 로고 이미지</div>
+                  <div className="mb-[10px] text-2xl">헤더 로고 이미지</div>
                 )}
-                <div className="border-2 rounded">
+                <div className="rounded border-2">
                   {!!resource.content && (
                     <ComponentFormUpdateResource
                       index={index}
@@ -61,7 +61,7 @@ const ComponentContainerEditResource: React.FC<
                     푸터 로고 이미지
                   </div>
                 )}
-                <div className="border-2 rounded">
+                <div className="rounded border-2">
                   {!!resource.content && (
                     <ComponentFormUpdateResource
                       index={index}
@@ -90,7 +90,7 @@ const ComponentContainerEditResource: React.FC<
                     상단 서비스 소개 배너 이미지
                   </div>
                 )}
-                <div className="border-2 rounded my-[1px]">
+                <div className="my-[1px] rounded border-2">
                   {!!resource.content && (
                     <ComponentFormUpdateResource
                       index={index}
@@ -111,7 +111,7 @@ const ComponentContainerEditResource: React.FC<
           <div className="mt-[20px] mb-[10px] text-2xl">
             상단 서비스 소개 배너 이미지
           </div>
-          <div className="border-2 rounded my-[1px]">
+          <div className="my-[1px] rounded border-2">
             <ComponentFormUpdateResource
               index={0}
               token={token}
@@ -133,7 +133,7 @@ const ComponentContainerEditResource: React.FC<
                     하단 기관 슬라이더 이미지
                   </div>
                 )}
-                <div className="border-2 rounded my-[1px]">
+                <div className="my-[1px] rounded border-2">
                   {!!resource.content && (
                     <ComponentFormUpdateResource
                       index={index}
@@ -154,7 +154,7 @@ const ComponentContainerEditResource: React.FC<
           <div className="mt-[20px] mb-[10px] text-2xl">
             하단 기관 슬라이더 이미지
           </div>
-          <div className="border-2 rounded my-[1px]">
+          <div className="my-[1px] rounded border-2">
             <ComponentFormUpdateResource
               index={0}
               token={token}

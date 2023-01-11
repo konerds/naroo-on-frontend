@@ -231,21 +231,21 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
         }}
       >
         <div
-          className="min-h-[41px] bg-white flex"
+          className="flex min-h-[41px] bg-white"
           onClick={() => {
             setIsShowQuestionEdit(false);
             setIsShowQuestionDescription(!isShowQuestionDescription);
           }}
         >
-          <div className="w-full flex items-center min-h-[41px]">
-            <div className="flex-none min-w-[20px] max-w-[20px] sm:min-w-[60px] sm:max-w-[60px] flex justify-center items-center">
-              <div className="text-[0.5rem] sm:text-[0.875rem] text-[#DCDEE2]">
+          <div className="flex min-h-[41px] w-full items-center">
+            <div className="flex min-w-[20px] max-w-[20px] flex-none items-center justify-center sm:min-w-[60px] sm:max-w-[60px]">
+              <div className="text-[0.5rem] text-[#DCDEE2] sm:text-[0.875rem]">
                 {array_index}
               </div>
             </div>
             {isShowQuestionEdit ? (
               <input
-                className="flex-1 flex justify-start overflow-x-hidden items-center border-[1px] rounded-[4px] my-[10px] px-[4px] text-[0.875rem] text-[#515A6E] ml-[8.5px] disabled:opacity-50"
+                className="my-[10px] ml-[8.5px] flex flex-1 items-center justify-start overflow-x-hidden rounded-[4px] border-[1px] px-[4px] text-[0.875rem] text-[#515A6E] disabled:opacity-50"
                 value={updateQuestionTitle}
                 onChange={onChangeUpdateQuestionTitle}
                 onClick={(event) => {
@@ -254,7 +254,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                 disabled={isLoadingSubmitUpdateQuestion}
               />
             ) : (
-              <div className="flex-1 flex break-all justify-start items-stretch my-[10px] py-[4px] pl-[8.5px] pr-[20px] text-[0.5rem] sm:text-[0.875rem] text-[#515A6E]">
+              <div className="my-[10px] flex flex-1 items-stretch justify-start break-all py-[4px] pl-[8.5px] pr-[20px] text-[0.5rem] text-[#515A6E] sm:text-[0.875rem]">
                 {`${
                   token && userType === 'admin'
                     ? '[' + creator_nickname + '] '
@@ -262,9 +262,9 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                 } ${question_title}`}
               </div>
             )}
-            <div className="flex-none min-w-[40px] max-w-[40px] sm:min-w-[126px] sm:max-w-[126px] flex justify-end items-center mr-[10px] sm:mr-[20px]">
+            <div className="mr-[10px] flex min-w-[40px] max-w-[40px] flex-none items-center justify-end sm:mr-[20px] sm:min-w-[126px] sm:max-w-[126px]">
               <div
-                className="text-[0.5rem] sm:text-[0.875rem] text-[#DCDEE2]"
+                className="text-[0.5rem] text-[#DCDEE2] sm:text-[0.875rem]"
                 title={moment(question_created_at).format(
                   'YYYY년 MM월 DD일 HH시 mm분',
                 )}
@@ -281,35 +281,35 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
         </div>
         {isShowQuestionDescription ? (
           <>
-            <div className="w-full flex items-center min-h-[41px]">
-              <div className="flex-none min-w-[20px] max-w-[20px] sm:min-w-[60px] sm:max-w-[60px] flex justify-center items-center">
-                <div className="text-[0.5rem] sm:text-[0.875rem] text-[#DCDEE2]">
+            <div className="flex min-h-[41px] w-full items-center">
+              <div className="flex min-w-[20px] max-w-[20px] flex-none items-center justify-center sm:min-w-[60px] sm:max-w-[60px]">
+                <div className="text-[0.5rem] text-[#DCDEE2] sm:text-[0.875rem]">
                   내용
                 </div>
               </div>
               {isShowQuestionEdit ? (
                 <textarea
-                  className="flex-1 flex justify-start items-center border-[1px] rounded-[4px] my-[10px] px-[4px] text-[0.875rem] text-[#515A6E] ml-[8.5px] mr-[10px] sm:mr-[20px] disabled:opacity-50"
+                  className="my-[10px] ml-[8.5px] mr-[10px] flex flex-1 items-center justify-start rounded-[4px] border-[1px] px-[4px] text-[0.875rem] text-[#515A6E] disabled:opacity-50 sm:mr-[20px]"
                   value={updateQuestionDescription}
                   onChange={onChangeUpdateQuestionDescription}
                   disabled={isLoadingSubmitUpdateQuestion}
                 />
               ) : (
-                <div className="flex-1 flex break-all justify-start items-stretch my-[10px] py-[4px] pl-[8.5px] pr-[20px] text-[0.5rem] sm:text-[0.875rem] text-[#515A6E]">
+                <div className="my-[10px] flex flex-1 items-stretch justify-start break-all py-[4px] pl-[8.5px] pr-[20px] text-[0.5rem] text-[#515A6E] sm:text-[0.875rem]">
                   {question_description}
                 </div>
               )}
-              <div className="flex-none min-w-[40px] max-w-[40px] sm:min-w-[126px] sm:max-w-[126px] flex justify-center items-start relative right-[4px]">
+              <div className="relative right-[4px] flex min-w-[40px] max-w-[40px] flex-none items-start justify-center sm:min-w-[126px] sm:max-w-[126px]">
                 {token &&
                   ((userType === 'student' &&
                     userNickname === creator_nickname) ||
                     userType === 'admin') && (
                     <>
                       {isShowQuestionEdit ? (
-                        <div className="w-full min-h-[41px] bg-white flex justify-start xl:justify-center items-center">
+                        <div className="flex min-h-[41px] w-full items-center justify-start bg-white xl:justify-center">
                           <button
                             type="submit"
-                            className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50"
+                            className="max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] p-[5px] font-normal text-[#808695] disabled:opacity-50 sm:max-h-[unset] sm:min-h-[unset] sm:min-w-[unset] sm:max-w-max sm:px-[10px] sm:py-[4px] sm:text-[0.75rem]"
                             disabled={isLoadingSubmitUpdateQuestion}
                           >
                             <MediaQuery maxWidth={639.98}>
@@ -322,7 +322,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                           </button>
                           <button
                             type="button"
-                            className={`min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] mr-[10px] sm:mr-[18px] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed${
+                            className={`mr-[10px] max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] p-[5px] font-normal text-[#808695] hover:opacity-50 disabled:opacity-50 sm:mr-[18px] sm:max-h-[unset] sm:min-h-[unset] sm:min-w-[unset] sm:max-w-max sm:px-[10px] sm:py-[4px] sm:text-[0.75rem] disabled:cursor-not-allowed${
                               !!answer_id && userType !== 'admin'
                                 ? ' ml-[3px] sm:ml-[10px]'
                                 : ' ml-[1px] xl:ml-[10px]'
@@ -334,7 +334,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                           >
                             <MediaQuery maxWidth={639.98}>
                               <FontAwesomeIcon
-                                className="block text-[0.6rem] ml-[2px]"
+                                className="ml-[2px] block text-[0.6rem]"
                                 icon={faXmark}
                               />
                             </MediaQuery>
@@ -343,10 +343,10 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                         </div>
                       ) : (
                         <>
-                          <div className="w-full min-h-[41px] bg-white flex xl:justify-center justify-start items-center">
+                          <div className="flex min-h-[41px] w-full items-center justify-start bg-white xl:justify-center">
                             <button
                               type="button"
-                              className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
+                              className="max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] p-[5px] font-normal text-[#808695] hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:max-h-[unset] sm:min-h-[unset] sm:min-w-[unset] sm:max-w-max sm:px-[10px] sm:py-[4px] sm:text-[0.75rem]"
                               onClick={(event) => {
                                 event.preventDefault();
                                 setIsShowQuestionEdit(true);
@@ -363,7 +363,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                             </button>
                             <button
                               type="button"
-                              className={`min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] mr-[10px] sm:mr-[18px] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed${
+                              className={`mr-[10px] max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] p-[5px] font-normal text-[#808695] hover:opacity-50 disabled:opacity-50 sm:mr-[18px] sm:max-h-[unset] sm:min-h-[unset] sm:min-w-[unset] sm:max-w-max sm:px-[10px] sm:py-[4px] sm:text-[0.75rem] disabled:cursor-not-allowed${
                                 !!answer_id && userType !== 'admin'
                                   ? ' ml-[3px] sm:ml-[10px]'
                                   : ' ml-[1px] xl:ml-[10px]'
@@ -389,7 +389,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                 {userType === 'admin' && !!!answer_id && (
                   <button
                     type="button"
-                    className="absolute min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:w-max sm:min-w-[unset] sm:max-w-[unset] sm:min-h-[unset] sm:max-h-[unset] sm:h-[28px] flex justify-center items-center left-[44px] sm:left-[90px] xl:left-[133px] bottom-[10px] sm:bottom-[6px] rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] font-normal text-[0.75rem] text-[#808695] px-[4px] xl:px-[10px] py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
+                    className="absolute left-[44px] bottom-[10px] flex max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] items-center justify-center rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] px-[4px] py-[4px] text-[0.75rem] font-normal text-[#808695] hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:left-[90px] sm:bottom-[6px] sm:h-[28px] sm:max-h-[unset] sm:min-h-[unset] sm:w-max sm:min-w-[unset] sm:max-w-[unset] xl:left-[133px] xl:px-[10px]"
                     onClick={() => {
                       setIsShowAddAnswer(!isShowAddAnswer);
                     }}
@@ -397,24 +397,24 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                   >
                     {isShowAddAnswer ? (
                       <>
-                        <span className="hidden xl:block m-auto mr-[4px] h-[18px] sm:text-[0.75rem] font-medium text-[#808695]">
+                        <span className="m-auto mr-[4px] hidden h-[18px] font-medium text-[#808695] sm:text-[0.75rem] xl:block">
                           닫기
                         </span>
                         <ImgClose
                           width={10}
                           height={10}
-                          className="w-[10px] h-[10px] sm:w-[16px] sm:h-[16px] m-auto object-fill fill-[black] hover:fill-[#4DBFF0]"
+                          className="m-auto h-[10px] w-[10px] fill-[black] object-fill hover:fill-[#4DBFF0] sm:h-[16px] sm:w-[16px]"
                         />
                       </>
                     ) : (
                       <>
-                        <span className="hidden xl:block m-auto mr-[4px] h-[18px] sm:text-[0.75rem] font-medium text-[#808695]">
+                        <span className="m-auto mr-[4px] hidden h-[18px] font-medium text-[#808695] sm:text-[0.75rem] xl:block">
                           답변하기
                         </span>
                         <ImgEdit
                           width={10}
                           height={10}
-                          className="w-[10px] h-[10px] sm:w-[16px] sm:h-[16px] m-auto object-fill fill-[black] hover:fill-[#4DBFF0]"
+                          className="m-auto h-[10px] w-[10px] fill-[black] object-fill hover:fill-[#4DBFF0] sm:h-[16px] sm:w-[16px]"
                         />
                       </>
                     )}
@@ -435,21 +435,21 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
           }}
         >
           <div
-            className="min-h-[41px] bg-white flex"
+            className="flex min-h-[41px] bg-white"
             onClick={() => {
               setIsShowAnswerEdit(false);
               setIsShowAnswerDescription(!isShowAnswerDescription);
             }}
           >
-            <div className="w-full flex items-center min-h-[41px]">
-              <div className="flex-none min-w-[20px] max-w-[20px] sm:min-w-[60px] sm:max-w-[60px] flex justify-center items-center">
-                <div className="text-[0.5rem] sm:text-[0.875rem] text-[#b13636]">
+            <div className="flex min-h-[41px] w-full items-center">
+              <div className="flex min-w-[20px] max-w-[20px] flex-none items-center justify-center sm:min-w-[60px] sm:max-w-[60px]">
+                <div className="text-[0.5rem] text-[#b13636] sm:text-[0.875rem]">
                   답변
                 </div>
               </div>
               {isShowAnswerEdit ? (
                 <input
-                  className="flex-1 flex justify-start overflow-x-hidden items-center border-[1px] rounded-[4px] my-[10px] px-[4px] text-[0.875rem] text-[#515A6E] ml-[8.5px] disabled:opacity-50"
+                  className="my-[10px] ml-[8.5px] flex flex-1 items-center justify-start overflow-x-hidden rounded-[4px] border-[1px] px-[4px] text-[0.875rem] text-[#515A6E] disabled:opacity-50"
                   value={updateAnswerTitle}
                   onChange={onChangeUpdateAnswerTitle}
                   onClick={(event) => {
@@ -458,13 +458,13 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                   disabled={isLoadingSubmitUpdateAnswer}
                 />
               ) : (
-                <div className="flex-1 flex break-all justify-start items-stretch my-[10px] py-[4px] pl-[8.5px] pr-[20px] text-[0.5rem] sm:text-[0.875rem] text-[#515A6E]">
+                <div className="my-[10px] flex flex-1 items-stretch justify-start break-all py-[4px] pl-[8.5px] pr-[20px] text-[0.5rem] text-[#515A6E] sm:text-[0.875rem]">
                   {answer_title}
                 </div>
               )}
-              <div className="flex-none min-w-[40px] max-w-[40px] sm:min-w-[126px] sm:max-w-[126px] flex justify-end items-center mr-[10px] sm:mr-[20px]">
+              <div className="mr-[10px] flex min-w-[40px] max-w-[40px] flex-none items-center justify-end sm:mr-[20px] sm:min-w-[126px] sm:max-w-[126px]">
                 <div
-                  className="text-[0.5rem] sm:text-[0.875rem] text-[#DCDEE2]"
+                  className="text-[0.5rem] text-[#DCDEE2] sm:text-[0.875rem]"
                   title={moment(answer_created_at).format(
                     'YYYY년 MM월 DD일 HH시 mm분',
                   )}
@@ -481,32 +481,32 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
           </div>
           {isShowAnswerDescription ? (
             <>
-              <div className="w-full flex items-center min-h-[41px]">
-                <div className="flex-none min-w-[20px] max-w-[20px] sm:min-w-[60px] sm:max-w-[60px] flex justify-center items-center">
-                  <div className="text-[0.5rem] sm:text-[0.875rem] text-[#DCDEE2]">
+              <div className="flex min-h-[41px] w-full items-center">
+                <div className="flex min-w-[20px] max-w-[20px] flex-none items-center justify-center sm:min-w-[60px] sm:max-w-[60px]">
+                  <div className="text-[0.5rem] text-[#DCDEE2] sm:text-[0.875rem]">
                     내용
                   </div>
                 </div>
                 {isShowAnswerEdit ? (
                   <textarea
-                    className="flex-1 flex justify-start items-stretch border-[1px] rounded-[4px] my-[10px] px-[4px] text-[0.875rem] text-[#515A6E] ml-[8.5px] mr-[10px] sm:mr-[20px] disabled:opacity-50"
+                    className="my-[10px] ml-[8.5px] mr-[10px] flex flex-1 items-stretch justify-start rounded-[4px] border-[1px] px-[4px] text-[0.875rem] text-[#515A6E] disabled:opacity-50 sm:mr-[20px]"
                     value={updateAnswerDescription}
                     onChange={onChangeUpdateAnswerDescription}
                     disabled={isLoadingSubmitUpdateAnswer}
                   />
                 ) : (
-                  <div className="flex-1 flex break-all justify-start items-stretch my-[10px] py-[4px] pl-[8.5px] pr-[20px] text-[0.5rem] sm:text-[0.875rem] text-[#515A6E]">
+                  <div className="my-[10px] flex flex-1 items-stretch justify-start break-all py-[4px] pl-[8.5px] pr-[20px] text-[0.5rem] text-[#515A6E] sm:text-[0.875rem]">
                     {answer_description}
                   </div>
                 )}
-                <div className="flex-none min-w-[40px] max-w-[40px] sm:min-w-[126px] sm:max-w-[126px] flex justify-center items-start relative right-[4px]">
+                <div className="relative right-[4px] flex min-w-[40px] max-w-[40px] flex-none items-start justify-center sm:min-w-[126px] sm:max-w-[126px]">
                   {!!token && userType === 'admin' && (
                     <>
                       {isShowAnswerEdit ? (
-                        <div className="w-full min-h-[41px] bg-white flex justify-center items-center">
+                        <div className="flex min-h-[41px] w-full items-center justify-center bg-white">
                           <button
                             type="submit"
-                            className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
+                            className="max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] p-[5px] font-normal text-[#808695] hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:max-h-[unset] sm:min-h-[unset] sm:min-w-[unset] sm:max-w-max sm:px-[10px] sm:py-[4px] sm:text-[0.75rem]"
                             disabled={isLoadingSubmitUpdateAnswer}
                           >
                             <MediaQuery maxWidth={639.98}>
@@ -519,7 +519,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                           </button>
                           <button
                             type="button"
-                            className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] mr-[10px] sm:mr-[18px] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed ml-[1px] xl:ml-[10px]"
+                            className="mr-[10px] ml-[1px] max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] p-[5px] font-normal text-[#808695] hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:mr-[18px] sm:max-h-[unset] sm:min-h-[unset] sm:min-w-[unset] sm:max-w-max sm:px-[10px] sm:py-[4px] sm:text-[0.75rem] xl:ml-[10px]"
                             onClick={() => {
                               setIsShowAnswerEdit(false);
                             }}
@@ -527,7 +527,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                           >
                             <MediaQuery maxWidth={639.98}>
                               <FontAwesomeIcon
-                                className="block text-[0.6rem] ml-[2px]"
+                                className="ml-[2px] block text-[0.6rem]"
                                 icon={faXmark}
                               />
                             </MediaQuery>
@@ -536,10 +536,10 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                         </div>
                       ) : (
                         <>
-                          <div className="w-full min-h-[41px] bg-white flex xl:justify-center justify-start items-center">
+                          <div className="flex min-h-[41px] w-full items-center justify-start bg-white xl:justify-center">
                             <button
                               type="button"
-                              className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
+                              className="max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] p-[5px] font-normal text-[#808695] hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:max-h-[unset] sm:min-h-[unset] sm:min-w-[unset] sm:max-w-max sm:px-[10px] sm:py-[4px] sm:text-[0.75rem]"
                               onClick={() => {
                                 setIsShowAnswerEdit(true);
                               }}
@@ -555,7 +555,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                             </button>
                             <button
                               type="button"
-                              className="min-w-[21px] max-w-[21px] min-h-[21px] max-h-[21px] sm:min-w-[unset] sm:min-h-[unset] sm:max-h-[unset] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] sm:max-w-max font-normal sm:text-[0.75rem] text-[#808695] mr-[10px] sm:mr-[18px] p-[5px] sm:px-[10px] sm:py-[4px] disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed ml-[1px] xl:ml-[10px]"
+                              className="mr-[10px] ml-[1px] max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] p-[5px] font-normal text-[#808695] hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:mr-[18px] sm:max-h-[unset] sm:min-h-[unset] sm:min-w-[unset] sm:max-w-max sm:px-[10px] sm:py-[4px] sm:text-[0.75rem] xl:ml-[10px]"
                               onClick={() => {
                                 onClickDeleteAnswerHandler();
                               }}
@@ -585,19 +585,19 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
       {!!token && userType === 'admin' && !!!answer_id && isShowAddAnswer && (
         <div className="p-[10px]">
           <form
-            className="px-[20px] md:px-[98px] py-[30px] box-border border-[1px] rounded-[8px] border-[#DCDEE2] w-full"
+            className="box-border w-full rounded-[8px] border-[1px] border-[#DCDEE2] px-[20px] py-[30px] md:px-[98px]"
             onSubmit={(event) => {
               event.preventDefault();
               onSubmitAnswerHandler();
             }}
           >
-            <div className="mb-[28px] text-[#17233D] font-semibold text-[1.25rem] leading-[1.875rem]">
+            <div className="mb-[28px] text-[1.25rem] font-semibold leading-[1.875rem] text-[#17233D]">
               {creator_nickname + '님 '}
               <span className="text-sm font-light"> 문의에 답변</span>
             </div>
             <div className="my-0">
               <input
-                className="w-full border-[1px] min-h-[41px] border-[#DCDEE2] pl-[10px] py-[10px] text-[0.875rem] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
+                className="min-h-[41px] w-full border-[1px] border-[#DCDEE2] py-[10px] pl-[10px] text-[0.875rem] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
                 type="text"
                 value={newAnswerTitle}
                 onChange={onChangeNewAnswerTitle}
@@ -607,7 +607,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
             </div>
             <div className="mt-0 mb-[20px]">
               <textarea
-                className="w-full min-h-[204px] max-h-[204px] border-[1px] border-[#DCDEE2] pl-[10px] py-[10px] text-[0.875rem] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
+                className="max-h-[204px] min-h-[204px] w-full border-[1px] border-[#DCDEE2] py-[10px] pl-[10px] text-[0.875rem] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
                 value={newAnswerDescription}
                 onChange={onChangeNewAnswerDescription}
                 placeholder="내용을 입력하세요"
@@ -616,7 +616,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
             </div>
             <button
               type="submit"
-              className="w-full min-h-[41px] text-[0.875rem] font-semibold bg-[#8DC556] box-border border-[1px] border-[#8DC556] rounded-[4px] text-white my-0 disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed"
+              className="my-0 box-border min-h-[41px] w-full rounded-[4px] border-[1px] border-[#8DC556] bg-[#8DC556] text-[0.875rem] font-semibold text-white hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={isLoadingSubmitAnswer}
             >
               답변 등록

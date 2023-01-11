@@ -56,10 +56,10 @@ const App: React.FC = () => {
   return (
     <>
       <ComponentHeader />
-      <div className="w-full min-h-[50px] h-[50px] max-h-[50px] sm:min-h-[100px] sm:h-[100px] sm:max-h-[100px]">
+      <div className="h-[50px] max-h-[50px] min-h-[50px] w-full sm:h-[100px] sm:max-h-[100px] sm:min-h-[100px]">
         &nbsp;
       </div>
-      <div className="w-full min-h-[calc(100vh-207px)] md:min-h-[calc(100vh-257px)] flex justify-center items-center">
+      <div className="flex min-h-[calc(100vh-207px)] w-full items-center justify-center md:min-h-[calc(100vh-257px)]">
         <Routes>
           <Route path="/" element={<PageMain />} />
           <Route path="/admin" element={<PageAdmin />} />

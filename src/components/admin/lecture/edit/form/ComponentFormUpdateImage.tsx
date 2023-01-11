@@ -73,7 +73,7 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
     <>
       {updateToggle ? (
         <form
-          className="mt-[10px] w-full p-[10px] border-[1px] border-[#C4C4C4]"
+          className="mt-[10px] w-full border-[1px] border-[#C4C4C4] p-[10px]"
           onSubmit={(event) => {
             event.preventDefault();
             onSubmitUpdateImage();
@@ -91,12 +91,12 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
           </div>
           {!!preview && (
             <div className="my-[10px]">
-              <img className="rounded-2xl m-auto" src={preview} />
+              <img className="m-auto rounded-2xl" src={preview} />
             </div>
           )}
           <div className="block sm:flex sm:items-center">
             <input
-              className="w-full m-auto h-[32px] px-[10px] disabled:opacity-50 relative top-[5px]"
+              className="relative top-[5px] m-auto h-[32px] w-full px-[10px] disabled:opacity-50"
               type="file"
               disabled={isLoadingSubmit}
               onChange={(event) => {
@@ -113,9 +113,9 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
                 };
               }}
             />
-            <div className="flex justify-end sm:justify-start items-center mt-[5px] mb-[10px]">
+            <div className="mt-[5px] mb-[10px] flex items-center justify-end sm:justify-start">
               <button
-                className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
+                className="button-modify-cancel-admin mx-[10px] h-[32px] w-[65px]"
                 type="submit"
                 disabled={isLoadingSubmit}
               >
@@ -123,7 +123,7 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
               </button>
               <button
                 type="button"
-                className="w-[65px] h-[32px] button-modify-cancel-admin"
+                className="button-modify-cancel-admin h-[32px] w-[65px]"
                 onClick={onClickUpdateToggle}
                 disabled={isLoadingSubmit}
               >
@@ -133,9 +133,9 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
           </div>
         </form>
       ) : (
-        <div className="mt-[10px] flex items-center p-[10px] w-full border-[1px] border-[#C4C4C4]">
+        <div className="mt-[10px] flex w-full items-center border-[1px] border-[#C4C4C4] p-[10px]">
           <div className="w-full overflow-x-hidden">
-            <div className="text-xs bg-white text-shuttle-gray">
+            <div className="bg-white text-xs text-shuttle-gray">
               {fieldType === 'thumbnail'
                 ? '썸네일 이미지 파일'
                 : fieldType === 'img_description'
@@ -154,7 +154,7 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
               )}
               {fieldType === 'img_description' && !!userField ? (
                 <img
-                  className="rounded-xl mt-[10px] mx-auto"
+                  className="mx-auto mt-[10px] rounded-xl"
                   src={userField}
                   alt="lecture_description_img"
                 />
@@ -164,7 +164,7 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
             </div>
           </div>
           <FontAwesomeIcon
-            className="ml-[10px] button-fa-icon-admin"
+            className="button-fa-icon-admin ml-[10px]"
             icon={faEdit}
             onClick={onClickUpdateToggle}
           />

@@ -130,15 +130,15 @@ const ComponentFormUpdateResource: React.FC<
               <img className="rounded-xl" src={addPreview} />
             </div>
           )}
-          <div className="flex items-center mb-[10px]">
+          <div className="mb-[10px] flex items-center">
             <label
-              className="min-w-max text-[1rem] leading-[1.375rem] m-[10px]"
+              className="m-[10px] min-w-max text-[1rem] leading-[1.375rem]"
               htmlFor="resource"
             >
               이미지 파일
             </label>
             <input
-              className="w-full p-[10px] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full p-[10px] disabled:cursor-not-allowed disabled:opacity-50"
               disabled={isLoadingSubmitAdd}
               type="file"
               onChange={(event) => {
@@ -158,7 +158,7 @@ const ComponentFormUpdateResource: React.FC<
           </div>
           <input
             type="submit"
-            className="cursor-pointer w-full h-[51px] text-[1.5rem] font-semibold leading-[2.0625rem] bg-[#0D5B83] text-white mb-[12px] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mb-[12px] h-[51px] w-full cursor-pointer bg-[#0D5B83] text-[1.5rem] font-semibold leading-[2.0625rem] text-white disabled:cursor-not-allowed disabled:opacity-50"
             value="리소스 추가"
             disabled={!!!addPreview || isLoadingSubmitAdd}
           />
@@ -177,9 +177,9 @@ const ComponentFormUpdateResource: React.FC<
               <img className="rounded-xl" src={preview} />
             </div>
           )}
-          <div className="block max-w-[100vw] sm:flex sm:items-center sm:w-full">
+          <div className="block max-w-[100vw] sm:flex sm:w-full sm:items-center">
             <input
-              className="max-w-full ml-auto mr-0 border-[1px] h-[32px] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="ml-auto mr-0 h-[32px] max-w-full border-[1px] disabled:cursor-not-allowed disabled:opacity-50"
               type="file"
               disabled={isLoadingSubmitUpdateResource}
               onChange={(event) => {
@@ -196,9 +196,9 @@ const ComponentFormUpdateResource: React.FC<
                 };
               }}
             />
-            <div className="flex justify-end sm:justify-start items-center mt-[5px] mb-[10px]">
+            <div className="mt-[5px] mb-[10px] flex items-center justify-end sm:justify-start">
               <button
-                className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
+                className="button-modify-cancel-admin mx-[10px] h-[32px] w-[65px]"
                 type="submit"
                 disabled={isLoadingSubmitUpdateResource}
               >
@@ -206,7 +206,7 @@ const ComponentFormUpdateResource: React.FC<
               </button>
               <button
                 type="button"
-                className="w-[65px] h-[32px] button-modify-cancel-admin"
+                className="button-modify-cancel-admin h-[32px] w-[65px]"
                 onClick={onClickUpdateToggle}
                 disabled={isLoadingSubmitUpdateResource}
               >
@@ -216,7 +216,7 @@ const ComponentFormUpdateResource: React.FC<
           </div>
         </form>
       ) : (
-        <div className="flex items-center w-full p-[10px]">
+        <div className="flex w-full items-center p-[10px]">
           <div className="w-full overflow-x-hidden">
             <div>
               {['info_banner', 'org_carousel'].includes(type) && (
@@ -228,9 +228,9 @@ const ComponentFormUpdateResource: React.FC<
             </div>
           </div>
           <FontAwesomeIcon
-            className={`ml-[15px] mr-[10px] button-fa-icon-admin ${
+            className={`button-fa-icon-admin ml-[15px] mr-[10px] ${
               isLoadingClickDeleteResource
-                ? 'opacity-50 cursor-not-allowed pointer-events-none'
+                ? 'pointer-events-none cursor-not-allowed opacity-50'
                 : ''
             }`}
             icon={faEdit}
@@ -242,7 +242,7 @@ const ComponentFormUpdateResource: React.FC<
               onClick={onClickDeleteResource}
               className={`button-fa-icon-admin ${
                 isLoadingClickDeleteResource
-                  ? 'opacity-50 cursor-not-allowed pointer-events-none'
+                  ? 'pointer-events-none cursor-not-allowed opacity-50'
                   : ''
               }`}
             />

@@ -86,22 +86,22 @@ const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
           }}
         >
           <Select
-            className="w-full text-xs text-gray-200 bg-harp disabled:opacity-50"
+            className="w-full bg-harp text-xs text-gray-200 disabled:opacity-50"
             options={statusOptions}
             onChange={onHandleChange}
             placeholder="수강 상태를 업데이트하세요"
             isDisabled={isLoadingSubmit}
           />
-          <div className="flex justify-end sm:justify-start items-center mt-[5px] mb-[10px]">
+          <div className="mt-[5px] mb-[10px] flex items-center justify-end sm:justify-start">
             <button
-              className="w-[65px] h-[32px] mx-[10px] button-modify-cancel-admin"
+              className="button-modify-cancel-admin mx-[10px] h-[32px] w-[65px]"
               type="submit"
               disabled={isLoadingSubmit}
             >
               수정
             </button>
             <button
-              className="w-[65px] h-[32px] button-modify-cancel-admin relative"
+              className="button-modify-cancel-admin relative h-[32px] w-[65px]"
               onClick={onClickUpdateToggle}
               disabled={isLoadingSubmit}
             >
@@ -110,7 +110,7 @@ const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
           </div>
         </form>
       ) : (
-        <div className="flex items-center w-full">
+        <div className="flex w-full items-center">
           <div className="w-full text-right">
             상태 :
             {status === null
@@ -126,7 +126,7 @@ const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
               : ' 오류'}
           </div>
           <FontAwesomeIcon
-            className="ml-[10px] button-fa-icon-admin"
+            className="button-fa-icon-admin ml-[10px]"
             icon={faEdit}
             onClick={onClickUpdateToggle}
           />

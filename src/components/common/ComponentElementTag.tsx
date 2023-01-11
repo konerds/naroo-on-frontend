@@ -6,7 +6,7 @@ interface IPropsComponentElementTag {
 
 const ComponentElementTag: React.FC<IPropsComponentElementTag> = ({ name }) => {
   return (
-    <div className="rounded-full min-w-max pl-[14px] pr-[14px] py-1 text-xs text-gray-200 bg-harp mr-1">
+    <div className="mr-1 min-w-max rounded-full bg-harp py-1 pl-[14px] pr-[14px] text-xs text-gray-200">
       #{name}
     </div>
   );

@@ -46,10 +46,10 @@ const ComponentElementEditUser: React.FC<IPropsComponentElementEditUser> = ({
     <React.Fragment>
       {!!user.id && (
         <div
-          className={`w-auto sm border-[1px] rounded-[4px] p-[20px] my-[20px] ${
+          className={`my-[20px] w-auto rounded-[4px] border-[1px] p-[20px]${
             user.role === 'admin'
-              ? 'border-[3px] border-red-700'
-              : 'border-black'
+              ? ' border-[3px] border-red-700'
+              : ' border-black'
           }`}
         >
           <>
@@ -88,7 +88,7 @@ const ComponentElementEditUser: React.FC<IPropsComponentElementEditUser> = ({
             disabled={isLoadingDeleteUser}
             className={`${
               user.role === 'admin' ? 'hidden' : 'block'
-            } border-[1px] mx-auto md:mr-0 mt-[10px] rounded-[4px] w-max px-[10px] py-[5px] disabled:opacity-50 hover:bg-black hover:text-white`}
+            } mx-auto mt-[10px] w-max rounded-[4px] border-[1px] px-[10px] py-[5px] hover:bg-black hover:text-white disabled:opacity-50 md:mr-0`}
             onClick={() => {
               !!user.id ? onClickDeleteUser(user.id) : null;
             }}

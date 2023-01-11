@@ -49,7 +49,7 @@ const ComponentFormUnregisterTag: React.FC<
       <FontAwesomeIcon
         className={`button-fa-icon-admin ${
           isLoadingClickUnregisterTag
-            ? 'opacity-50 cursor-not-allowed pointer-events-none'
+            ? 'pointer-events-none cursor-not-allowed opacity-50'
             : ''
         }`}
         icon={faTrash}

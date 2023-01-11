@@ -37,10 +37,10 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
   const [isBackdropShow, setIsBackdropShow] = React.useState<boolean>(false);
   return (
     <div
-      className={`w-full min-h-[444px] max-h-[444px] mx-0 rounded-[8px] ${
+      className={`mx-0 max-h-[444px] min-h-[444px] w-full rounded-[8px]${
         isBackdropShow
-          ? 'lecture-card-container lecture-card-container-hover'
-          : 'lecture-card-container'
+          ? ' lecture-card-container lecture-card-container-hover'
+          : ' lecture-card-container'
       }`}
       onMouseEnter={() => {
         setIsBackdropShow(true);
@@ -57,27 +57,27 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
         }}
       >
         <div
-          className={`rounded-t-[8px] w-full min-h-[261px] max-h-[261px] bg-cover relative ${
+          className={`relative max-h-[261px] min-h-[261px] w-full rounded-t-[8px] bg-cover${
             isBackdropShow
-              ? 'lecture-card-container lecture-card-container-hover'
-              : 'lecture-card-container'
+              ? ' lecture-card-container lecture-card-container-hover'
+              : ' lecture-card-container'
           }`}
           style={{
             backgroundImage: `url(${thumbnail})`,
           }}
         >
           <div
-            className={`rounded-t-[8px] w-full min-h-[261px] max-h-[261px] z-[999] ${
-              isBackdropShow ? 'absolute bg-[#0000004D]' : 'hidden'
+            className={`z-[999] max-h-[261px] min-h-[261px] w-full rounded-t-[8px]${
+              isBackdropShow ? ' absolute bg-[#0000004D]' : ' hidden'
             }`}
           >
-            <div className="flex items-center justify-center min-h-[261px] max-h-[261px]">
+            <div className="flex max-h-[261px] min-h-[261px] items-center justify-center">
               <img src={PlayIcon} />
             </div>
           </div>
         </div>
       </Link>
-      <div className="flex flex-wrap items-center w-full min-h-[183px] max-h-[183px] pt-[12px]">
+      <div className="flex max-h-[183px] min-h-[183px] w-full flex-wrap items-center pt-[12px]">
         {status && (
           <div className="w-full px-[10px] text-[12px] text-[#808695]">
             {status === 'accept'
@@ -89,10 +89,10 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
               : ''}
           </div>
         )}
-        <div className="w-full max-h-[48px] overflow-hidden px-[20px] text-[16px] font-semibold text-[#17233D]">
+        <div className="max-h-[48px] w-full overflow-hidden px-[20px] text-[16px] font-semibold text-[#17233D]">
           {title}
         </div>
-        <div className="w-full px-[20px] font-medium text-[12px] text-[#808695]">
+        <div className="w-full px-[20px] text-[12px] font-medium text-[#808695]">
           {teacherNickname}
         </div>
         {!!tags && isArray(tags) ? (
@@ -105,7 +105,7 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
                 }}
               >
                 <Slider
-                  className="cursor-grab flex w-full md:max-w-[261px] px-[20px] mb-[16px]"
+                  className="mb-[16px] flex w-full cursor-grab px-[20px] md:max-w-[261px]"
                   {...settings}
                 >
                   {tags.map((tag, index) => {
@@ -118,7 +118,7 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
                 </Slider>
               </div>
             ) : (
-              <div className="w-full h-[34px] px-[20px] text-xs text-gray-200">
+              <div className="h-[34px] w-full px-[20px] text-xs text-gray-200">
                 태그가 존재하지 않습니다
               </div>
             )}

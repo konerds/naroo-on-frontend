@@ -59,9 +59,9 @@ const ComponentFormEditTag: React.FC<IPropsComponentFormEditTag> = ({
           onSubmitAddHandler();
         }}
       >
-        <div className="flex mb-[10px]">
+        <div className="mb-[10px] flex">
           <input
-            className="w-full h-[30px] border-[1px] border-[#C4C4C4]"
+            className="h-[30px] w-full border-[1px] border-[#C4C4C4]"
             type="text"
             value={tagName}
             onChange={onChangeTagName}
@@ -69,13 +69,13 @@ const ComponentFormEditTag: React.FC<IPropsComponentFormEditTag> = ({
           <button
             type="submit"
             disabled={isLoadingSubmit}
-            className="ml-[10px] mr-0 w-[100px] h-[30px] rounded-3xl text-xs sm:text-[1rem] font-semibold bg-[#4DBFF0] text-white mb-[12px] disabled:opacity-50 hover:opacity-50"
+            className="ml-[10px] mr-0 mb-[12px] h-[30px] w-[100px] rounded-3xl bg-[#4DBFF0] text-xs font-semibold text-white hover:opacity-50 disabled:opacity-50 sm:text-[1rem]"
           >
             태그 추가
           </button>
         </div>
       </form>
-      <div className="mt-[10px] border-[1px] p-[10px] flex flex-wrap items-center">
+      <div className="mt-[10px] flex flex-wrap items-center border-[1px] p-[10px]">
         {!!tagsData &&
           isArray(tagsData) &&
           tagsData.length > 0 &&
