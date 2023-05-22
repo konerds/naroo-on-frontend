@@ -111,7 +111,7 @@ const PageSignup: React.FC = () => {
             />
           </div>
           <div className="mb-[4px] text-[0.75rem] leading-[1.5rem] text-[#515A6E]">
-            가입 시, 마포청년나루의{' '}
+            가입 시, 나루온의{' '}
             <span className="text-[#007CC8]">이용약관, 개인정보취급방침</span>에
             동의합니다.
           </div>

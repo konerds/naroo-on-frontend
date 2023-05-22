@@ -252,7 +252,7 @@ const ComponentHeader: React.FC = () => {
                   </Link>
                   <a
                     className="hover:opacity-50"
-                    href="mailto:mpnaroo@naver.com"
+                    href="mailto:adr10won@gmail.com"
                     onClick={(event) => {
                       setIsVisibleMenu(false);
                     }}
