@@ -201,7 +201,7 @@ const ComponentHeader: React.FC = () => {
               </button>
             </Link>
             <a
-              href="mailto:mpnaroo@naver.com"
+              href="mailto:adr10won@gmail.com"
               onClick={(event) => {
                 setIsVisibleMenu(false);
               }}

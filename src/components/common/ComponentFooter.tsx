@@ -41,22 +41,22 @@ const ComponentFooter: React.FC = () => {
           <div className="box-border border-t-[1px] border-solid border-[rgba(0,0,0,0.1)]"></div>
           <div className="pt-[5px] text-[0.65rem] font-light text-[#bfbfbf] sm:text-[0.875rem]">
             <FontAwesomeIcon className="text-xs" icon={faHome} /> 서울특별시
-            마포구 토정로 148-22,
+            OO구 OO로 OOO-OO,
             <br className="block sm:hidden" />
-            <span className="ml-5 sm:ml-0"> 2층 (우)04081</span>
+            <span className="ml-5 sm:ml-0"> OO (우)00000</span>
             <br className="block md:hidden" />
             <span className="pl-0 sm:pl-0 md:pl-[20px] lg:pl-[20px] xl:pl-[20px]">
               <FontAwesomeIcon className="text-xs" icon={faPhoneAlt} />{' '}
-              02.6261.1939~1943
+              02.0000.0000
             </span>
             <br className="hidden md:block lg:hidden" />
             <span className="pl-[20px] sm:pl-[20px] md:pl-0 lg:pl-[20px] xl:pl-[20px]">
-              <FontAwesomeIcon className="text-xs" icon={faFax} /> 02.6261.1944
+              <FontAwesomeIcon className="text-xs" icon={faFax} /> 02.0000.0000
             </span>
             <br className="block md:hidden lg:block xl:hidden" />
             <span className="pl-0 sm:pl-0 md:pl-[20px] lg:pl-0 xl:pl-[20px]">
               <FontAwesomeIcon className="text-xs" icon={faEnvelope} />
-              <a href="mailto:mpnaroo@naver.com"> mpnaroo@naver.com</a>
+              <a href="mailto:adr10won@gmail.com"> adr10won@gmail.com</a>
             </span>
           </div>
         </div>
