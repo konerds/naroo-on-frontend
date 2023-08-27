@@ -71,13 +71,13 @@ const ComponentFormUpdateLecture: React.FC<
           }}
         >
           <input
-            className="box-border h-[32px] w-full rounded-[10px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] py-[10px] px-[20px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none disabled:opacity-50"
+            className="box-border h-[32px] w-full rounded-[10px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] px-[20px] py-[10px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none disabled:opacity-50"
             type="text"
             value={updateFieldName}
             onChange={onChangeUpdateFieldName}
             disabled={isLoadingSubmit}
           />
-          <div className="mt-[5px] mb-[10px] flex items-center justify-end sm:justify-start">
+          <div className="mb-[10px] mt-[5px] flex items-center justify-end sm:justify-start">
             <button
               className="button-modify-cancel-admin mx-[10px] h-[32px] w-[65px]"
               type="submit"

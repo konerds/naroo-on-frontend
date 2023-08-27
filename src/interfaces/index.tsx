@@ -119,4 +119,4 @@ export const CONST_ADMIN_MENU = {
 } as const;
 
 export type TYPE_ADMIN_MENU =
-  typeof CONST_ADMIN_MENU[keyof typeof CONST_ADMIN_MENU];
+  (typeof CONST_ADMIN_MENU)[keyof typeof CONST_ADMIN_MENU];

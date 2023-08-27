@@ -9,6 +9,7 @@ import ComponentElementTag from '../components/common/ComponentElementTag';
 import { IInfoMe, ILectureVideoDetail } from '../interfaces';
 import { axiosGetfetcher } from '../hooks/api';
 import ComponentSkeletonCustom from '../components/common/ui/ComponentSkeletonCustom';
+import YouTube from 'react-youtube';
 
 const PagePlayLecture: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -42,11 +43,35 @@ const PagePlayLecture: React.FC = () => {
         ),
       { revalidateOnFocus: false, revalidateIfStale: false },
     );
+  const [isTypeVideoYoutube, setIsTypeVideoYoutube] =
+    React.useState<boolean>(false);
+  const [idVideoYoutube, setIdVideoYoutube] = React.useState('');
   React.useEffect(() => {
     if (!!!token || !!!id) {
       navigate('/', { replace: true });
     }
   }, [token, id]);
+  React.useEffect(() => {
+    if (dataLectureVideo && dataLectureVideo.video_url) {
+      if (dataLectureVideo.video_url.includes('youtube.com')) {
+        setIsTypeVideoYoutube(true);
+      }
+    }
+  }, [dataLectureVideo?.video_url]);
+  React.useEffect(() => {
+    if (isTypeVideoYoutube && dataLectureVideo && dataLectureVideo.video_url) {
+      const url = new URL(dataLectureVideo.video_url);
+      if (url) {
+        const { searchParams } = url;
+        if (searchParams) {
+          const id = searchParams.get('v');
+          if (id) {
+            setIdVideoYoutube(id);
+          }
+        }
+      }
+    }
+  }, [isTypeVideoYoutube]);
   return (
     <div className="min-h-[inherit] w-full bg-gray-500 pt-[5px]">
       {!!token &&
@@ -82,16 +107,32 @@ const PagePlayLecture: React.FC = () => {
                 ) : (
                   <ComponentSkeletonCustom className="w-full-important min-h-[34px]" />
                 )}
-                <div className="flex w-[100vw] pl-[9px] pb-[9px] text-4xl font-medium text-white">
+                <div className="flex w-[100vw] pb-[9px] pl-[9px] text-4xl font-medium text-white">
                   {dataLectureVideo.video_title}
                 </div>
-                <div className="aspect-w-16 aspect-h-9">
-                  <iframe
-                    src={dataLectureVideo.video_url}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
+                <div className="aspect-h-9 aspect-w-16">
+                  {isTypeVideoYoutube ? (
+                    <>
+                      {!!idVideoYoutube && (
+                        <YouTube
+                          className="[&>iframe]:h-full [&>iframe]:w-full"
+                          videoId={idVideoYoutube}
+                          opts={{
+                            playerVars: {
+                              autoplay: 1,
+                            },
+                          }}
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <iframe
+                      src={dataLectureVideo.video_url}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  )}
                 </div>
               </>
             )}

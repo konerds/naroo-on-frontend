@@ -24,7 +24,7 @@ export const CONST_LECTURE_DETAIL_MENU = {
 } as const;
 
 export type LECTURE_DETAIL_MENU =
-  typeof CONST_LECTURE_DETAIL_MENU[keyof typeof CONST_LECTURE_DETAIL_MENU];
+  (typeof CONST_LECTURE_DETAIL_MENU)[keyof typeof CONST_LECTURE_DETAIL_MENU];
 
 const PageDetailLecture: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -384,7 +384,7 @@ const PageDetailLecture: React.FC = () => {
               type="button"
               className={`h-[44px] border-[#8DC556] px-[10px] text-[12px] font-medium leading-[22px] sm:w-[120px] sm:flex-none sm:px-0 sm:text-[16px] ${
                 selectedMenu === CONST_LECTURE_DETAIL_MENU.LECTURE_INTRODUCE
-                  ? 'border-t-[1px] border-l-[1px] border-r-[1px] text-[#8DC556]'
+                  ? 'border-l-[1px] border-r-[1px] border-t-[1px] text-[#8DC556]'
                   : 'border-b-[1px] text-[#808695]'
               }`}
               onClick={() =>
@@ -397,7 +397,7 @@ const PageDetailLecture: React.FC = () => {
               type="button"
               className={`h-[44px] border-[#8DC556] px-[10px] text-[12px] font-medium leading-[22px] sm:w-[120px] sm:flex-none sm:px-0 sm:text-[16px] ${
                 selectedMenu === CONST_LECTURE_DETAIL_MENU.LECTURE_NOTICE
-                  ? 'border-t-[1px] border-l-[1px] border-r-[1px] text-[#8DC556]'
+                  ? 'border-l-[1px] border-r-[1px] border-t-[1px] text-[#8DC556]'
                   : 'border-b-[1px] text-[#808695]'
               }`}
               onClick={() =>
@@ -410,7 +410,7 @@ const PageDetailLecture: React.FC = () => {
               type="button"
               className={`h-[44px] border-[#8DC556] px-[10px] text-[12px] font-medium leading-[22px] sm:w-[120px] sm:flex-none sm:px-0 sm:text-[16px] ${
                 selectedMenu === CONST_LECTURE_DETAIL_MENU.LECTURE_QNA
-                  ? 'border-t-[1px] border-l-[1px] border-r-[1px] text-[#8DC556]'
+                  ? 'border-l-[1px] border-r-[1px] border-t-[1px] text-[#8DC556]'
                   : 'border-b-[1px] text-[#808695]'
               }`}
               onClick={() =>
@@ -423,7 +423,7 @@ const PageDetailLecture: React.FC = () => {
           </div>
           <div className="mx-auto max-w-[90vw] sm:max-w-[500px] md:max-w-[680px] lg:max-w-[864px] xl:max-w-[1152px]">
             {selectedMenu === CONST_LECTURE_DETAIL_MENU.LECTURE_INTRODUCE && (
-              <div className="mx-auto flex min-h-[300px] flex-wrap justify-center pt-[50px] pb-[60px]">
+              <div className="mx-auto flex min-h-[300px] flex-wrap justify-center pb-[60px] pt-[50px]">
                 {!!dataDetailLecture.images &&
                   Array.isArray(dataDetailLecture.images) &&
                   dataDetailLecture.images.length > 0 &&
@@ -447,7 +447,7 @@ const PageDetailLecture: React.FC = () => {
                   !!!errorDetailLecture &&
                   isShowAddNotice && (
                     <form
-                      className="mb-[20px] box-border w-full rounded-[8px] border-[1px] border-[#DCDEE2] p-[10px] sm:py-[68px] sm:px-[14px] md:px-[30px] lg:px-[50px] xl:px-[98px]"
+                      className="mb-[20px] box-border w-full rounded-[8px] border-[1px] border-[#DCDEE2] p-[10px] sm:px-[14px] sm:py-[68px] md:px-[30px] lg:px-[50px] xl:px-[98px]"
                       onSubmit={(event) => {
                         event.preventDefault();
                         onSubmitNoticeHandler();
@@ -466,7 +466,7 @@ const PageDetailLecture: React.FC = () => {
                           disabled={isLoadingSubmitNotice}
                         />
                       </div>
-                      <div className="mt-0 mb-[20px]">
+                      <div className="mb-[20px] mt-0">
                         <textarea
                           className="max-h-[204px] min-h-[204px] w-full border-[1px] border-[#DCDEE2] py-[10px] pl-[10px] text-[16px] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
                           value={noticeDescription}
@@ -614,7 +614,7 @@ const PageDetailLecture: React.FC = () => {
                           disabled={isLoadingSubmitQuestion}
                         />
                       </div>
-                      <div className="mt-0 mb-[20px]">
+                      <div className="mb-[20px] mt-0">
                         <textarea
                           className="max-h-[204px] min-h-[204px] w-full border-[1px] border-[#DCDEE2] py-[10px] pl-[10px] text-[16px] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
                           value={questionDescription}
@@ -633,7 +633,7 @@ const PageDetailLecture: React.FC = () => {
                     </form>
                   )}
                 <>
-                  <div className="box-border w-full rounded-[8px] border-[1px] border-[#DCDEE2] p-[10px] sm:py-[60px] sm:px-[14px] md:px-[30px] lg:px-[50px] xl:px-[98px]">
+                  <div className="box-border w-full rounded-[8px] border-[1px] border-[#DCDEE2] p-[10px] sm:px-[14px] sm:py-[60px] md:px-[30px] lg:px-[50px] xl:px-[98px]">
                     <div className="mb-[20px] flex w-full items-center justify-between">
                       <div className="text-[20px] font-semibold leading-[30px] text-[#17233D]">
                         문의사항

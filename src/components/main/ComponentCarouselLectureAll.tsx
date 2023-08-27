@@ -95,7 +95,7 @@ const ComponentCarouselLectureAll: React.FC = () => {
           ? ` (${dataAllLectures.length})`
           : ''}
       </div>
-      <div className="mt-2 mb-7 text-gray-300">
+      <div className="mb-7 mt-2 text-gray-300">
         완료 혹은 진행중인 전체 강좌를 살펴보세요
       </div>
       {!!dataAllLectures && !!!errorAllLectures && isArray(dataAllLectures) ? (

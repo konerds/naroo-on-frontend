@@ -107,7 +107,7 @@ const ComponentCarouselLectureUser: React.FC = () => {
               ? ` (${dataUserLectures.length})`
               : ''}
           </div>
-          <div className="mt-2 mb-7 text-gray-300">
+          <div className="mb-7 mt-2 text-gray-300">
             내가 신청한 강좌를 복습해보세요
           </div>
           {!!dataUserLectures &&

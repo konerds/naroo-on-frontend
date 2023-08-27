@@ -126,7 +126,7 @@ const PageMain: React.FC = () => {
           ) : (
             <ComponentSkeletonCustom className="block-important w-full-vw-important min-h-[380px]" />
           )}
-          <div className="mx-auto w-full py-[60px] px-[20px] md:max-w-[788px] lg:max-w-[966px] lg:px-0 xl:max-w-[1152px]">
+          <div className="mx-auto w-full px-[20px] py-[60px] md:max-w-[788px] lg:max-w-[966px] lg:px-0 xl:max-w-[1152px]">
             <ComponentCarouselLectureUser />
             <ComponentCarouselLectureAll />
           </div>

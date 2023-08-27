@@ -123,7 +123,7 @@ const ComponentHeader: React.FC = () => {
                     {dataGetMe.nickname.charAt(0)}
                   </button>
                   {isVisibleEllipsis && (
-                    <div className="relative top-[20px] right-[30px] z-[999] min-w-max">
+                    <div className="relative right-[30px] top-[20px] z-[999] min-w-max">
                       <ComponentEllipsisHeader
                         logoutHandler={logoutHandler}
                         setIsVisibleMenu={setIsVisibleMenu}

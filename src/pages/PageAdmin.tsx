@@ -100,7 +100,7 @@ const PageAdmin: React.FC = () => {
     }
   }, [token, dataGetMe, dataGetMe?.role]);
   return (
-    <div className="mt-[20px] mb-auto w-full bg-white">
+    <div className="mb-auto mt-[20px] w-full bg-white">
       {!!dataGetMe && dataGetMe.role === 'admin' && (
         <div className="mx-auto">
           <div className="mx-auto mb-[4vh] max-w-[100vw] text-center text-4xl font-semibold text-gray-400 sm:max-w-[400px] md:max-w-[500px] lg:max-w-[600px] xl:max-w-[750px] 2xl:max-w-[900px]">
@@ -264,7 +264,7 @@ const PageAdmin: React.FC = () => {
             </>
           </div>
           {selectedMenu === CONST_ADMIN_MENU.LECTURE_ADD && (
-            <div className="overflow-w-hidden my-[45px] mx-auto max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:p-[40px] md:max-w-[600px]">
+            <div className="overflow-w-hidden mx-auto my-[45px] max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:p-[40px] md:max-w-[600px]">
               <ComponentFormAddLecture
                 token={token}
                 setSelectedMenu={setSelectedMenu}
@@ -275,7 +275,7 @@ const PageAdmin: React.FC = () => {
           {selectedMenu === CONST_ADMIN_MENU.LECTURE_EDIT &&
             !!dataTags &&
             !!!errorTags && (
-              <div className="my-[45px] mx-auto max-w-[90vw] overflow-x-hidden">
+              <div className="mx-auto my-[45px] max-w-[90vw] overflow-x-hidden">
                 <ComponentContainerEditLecture
                   token={token}
                   setToken={setToken}
@@ -290,7 +290,7 @@ const PageAdmin: React.FC = () => {
             !!!errorUsers &&
             !!dataAllLectures &&
             !!!errorAllLectures && (
-              <div className="overflow-w-hidden my-[45px] mx-auto max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:max-w-[500px] sm:p-[40px]">
+              <div className="overflow-w-hidden mx-auto my-[45px] max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:max-w-[500px] sm:p-[40px]">
                 <ComponentContainerPermissionLecture
                   token={token}
                   studentOptions={dataUsers
@@ -313,7 +313,7 @@ const PageAdmin: React.FC = () => {
               </div>
             )}
           {selectedMenu === CONST_ADMIN_MENU.STUDENT_EDIT && (
-            <div className="overflow-w-hidden my-[45px] mx-auto max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:px-[40px] sm:py-[20px]">
+            <div className="overflow-w-hidden mx-auto my-[45px] max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:px-[40px] sm:py-[20px]">
               <ComponentContainerEditUser
                 token={token}
                 dataUsers={dataUsers}
@@ -322,7 +322,7 @@ const PageAdmin: React.FC = () => {
             </div>
           )}
           {selectedMenu === CONST_ADMIN_MENU.TAG_EDIT && (
-            <div className="overflow-w-hidden my-[45px] mx-auto max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:px-[40px] sm:py-[20px] md:max-w-[700px]">
+            <div className="overflow-w-hidden mx-auto my-[45px] max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:px-[40px] sm:py-[20px] md:max-w-[700px]">
               <ComponentFormEditTag
                 token={token}
                 tagsData={dataTags}
@@ -333,7 +333,7 @@ const PageAdmin: React.FC = () => {
           {selectedMenu === CONST_ADMIN_MENU.RESOURCE_EDIT &&
             !!dataAllResource &&
             !!!errorAllResources && (
-              <div className="overflow-w-hidden my-[45px] mx-auto max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:px-[40px] sm:py-[20px]">
+              <div className="overflow-w-hidden mx-auto my-[45px] max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:px-[40px] sm:py-[20px]">
                 <ComponentContainerEditResource
                   token={token}
                   logoHeaderResourcesData={dataAllResource.filter(

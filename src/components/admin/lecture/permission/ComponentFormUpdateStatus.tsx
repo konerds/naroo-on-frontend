@@ -92,7 +92,7 @@ const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
             placeholder="수강 상태를 업데이트하세요"
             isDisabled={isLoadingSubmit}
           />
-          <div className="mt-[5px] mb-[10px] flex items-center justify-end sm:justify-start">
+          <div className="mb-[10px] mt-[5px] flex items-center justify-end sm:justify-start">
             <button
               className="button-modify-cancel-admin mx-[10px] h-[32px] w-[65px]"
               type="submit"

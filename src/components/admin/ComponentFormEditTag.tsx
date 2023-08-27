@@ -69,7 +69,7 @@ const ComponentFormEditTag: React.FC<IPropsComponentFormEditTag> = ({
           <button
             type="submit"
             disabled={isLoadingSubmit}
-            className="ml-[10px] mr-0 mb-[12px] h-[30px] w-[100px] rounded-3xl bg-[#4DBFF0] text-xs font-semibold text-white hover:opacity-50 disabled:opacity-50 sm:text-[1rem]"
+            className="mb-[12px] ml-[10px] mr-0 h-[30px] w-[100px] rounded-3xl bg-[#4DBFF0] text-xs font-semibold text-white hover:opacity-50 disabled:opacity-50 sm:text-[1rem]"
           >
             태그 추가
           </button>

@@ -178,7 +178,7 @@ const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
         <label htmlFor="title">
           제목
           <input
-            className="box-border h-[41px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] py-[10px] px-[20px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none disabled:opacity-50"
+            className="box-border h-[41px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] px-[20px] py-[10px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none disabled:opacity-50"
             type="text"
             value={title}
             onChange={onChangeTitle}
@@ -231,7 +231,7 @@ const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
         <label>
           강의 설명
           <textarea
-            className="box-border h-[100px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] py-[10px] px-[20px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none disabled:opacity-50"
+            className="box-border h-[100px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] px-[20px] py-[10px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none disabled:opacity-50"
             value={description}
             onChange={onChangeDescription}
             disabled={isLoadingSubmit}
@@ -242,7 +242,7 @@ const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
         <label htmlFor="teacher-name">
           강사 이름
           <input
-            className="box-border h-[41px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] py-[10px] px-[20px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none disabled:opacity-50"
+            className="box-border h-[41px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] px-[20px] py-[10px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none disabled:opacity-50"
             type="text"
             value={teacherName}
             onChange={onChangeTeacherName}
@@ -300,7 +300,7 @@ const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
           <label htmlFor="video_title">강의 영상 제목</label>
         </div>
         <input
-          className="box-border h-[41px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] py-[10px] px-[20px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none disabled:opacity-50"
+          className="box-border h-[41px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] px-[20px] py-[10px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none disabled:opacity-50"
           type="text"
           value={videoTitle}
           onChange={onChangeVideoTitle}
@@ -312,7 +312,7 @@ const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
           <label htmlFor="video_url">강의 영상 URL</label>
         </div>
         <input
-          className="box-border h-[41px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] py-[10px] px-[20px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none disabled:opacity-50"
+          className="box-border h-[41px] w-full rounded-[4px] border-[1px] border-[#DCDEE2] bg-[#F3FBFE] px-[20px] py-[10px] text-[0.875rem] font-medium placeholder-[#DCDEE2] focus:border-[#00A0E9] focus:bg-white focus:outline-none disabled:opacity-50"
           type="text"
           value={videoUrl}
           onChange={onChangeVideoUrl}

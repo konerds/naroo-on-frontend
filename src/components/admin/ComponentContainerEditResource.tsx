@@ -57,7 +57,7 @@ const ComponentContainerEditResource: React.FC<
             return (
               <React.Fragment key={index}>
                 {+index === 0 && (
-                  <div className="mt-[20px] mb-[10px] text-2xl">
+                  <div className="mb-[10px] mt-[20px] text-2xl">
                     푸터 로고 이미지
                   </div>
                 )}
@@ -86,7 +86,7 @@ const ComponentContainerEditResource: React.FC<
             return (
               <React.Fragment key={index}>
                 {+index === 0 && (
-                  <div className="mt-[20px] mb-[10px] text-2xl">
+                  <div className="mb-[10px] mt-[20px] text-2xl">
                     상단 서비스 소개 배너 이미지
                   </div>
                 )}
@@ -108,7 +108,7 @@ const ComponentContainerEditResource: React.FC<
         </>
       ) : (
         <>
-          <div className="mt-[20px] mb-[10px] text-2xl">
+          <div className="mb-[10px] mt-[20px] text-2xl">
             상단 서비스 소개 배너 이미지
           </div>
           <div className="my-[1px] rounded border-2">
@@ -129,7 +129,7 @@ const ComponentContainerEditResource: React.FC<
             return (
               <React.Fragment key={index}>
                 {+index === 0 && (
-                  <div className="mt-[20px] mb-[10px] text-2xl">
+                  <div className="mb-[10px] mt-[20px] text-2xl">
                     하단 기관 슬라이더 이미지
                   </div>
                 )}
@@ -151,7 +151,7 @@ const ComponentContainerEditResource: React.FC<
         </>
       ) : (
         <>
-          <div className="mt-[20px] mb-[10px] text-2xl">
+          <div className="mb-[10px] mt-[20px] text-2xl">
             하단 기관 슬라이더 이미지
           </div>
           <div className="my-[1px] rounded border-2">

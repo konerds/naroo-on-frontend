@@ -22,7 +22,7 @@ body {
   -webkit-box-shadow: 0 0 0 1px #fff;
   box-shadow: 0 0 0 1px #fff;
   content: 'screen: _';
-  @apply fixed z-[2147483647] top-0 left-0 py-[0.3333333em] px-[0.5em] text-[12px] leading-[1] font-sans bg-black text-white;
+  @apply fixed left-0 top-0 z-[2147483647] bg-black px-[0.5em] py-[0.3333333em] font-sans text-[12px] leading-[1] text-white;
 }
 
 @screen xxs {
@@ -138,7 +138,7 @@ body {
 }
 
 .button-modify-cancel-admin {
-  @apply box-border rounded-[10px] border-[1px] border-[#4DBFF0] text-[0.6rem] lg:text-[0.8rem] font-semibold bg-[#4DBFF0] text-white disabled:opacity-50 hover:opacity-50 disabled:cursor-not-allowed;
+  @apply box-border rounded-[10px] border-[1px] border-[#4DBFF0] bg-[#4DBFF0] text-[0.6rem] font-semibold text-white hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 lg:text-[0.8rem];
 }
 
 .w-full-important {

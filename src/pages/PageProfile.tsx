@@ -37,7 +37,7 @@ const PageProfile: React.FC = () => {
   }, [token, dataGetMe, dataGetMe?.role]);
   return (
     <div className="flex min-h-[530px] w-full items-center justify-center">
-      <div className="m-auto box-border min-w-[90vw] max-w-[90vw] rounded-[8px] border-[1px] border-[#DCDEE2] py-[30px] px-[20px] sm:min-w-[70vw] sm:max-w-[70vw] sm:px-[55px] md:min-w-[472.75px] md:max-w-[472.75px] xl:min-w-[554px] xl:max-w-[554px] xl:px-[98px] ">
+      <div className="m-auto box-border min-w-[90vw] max-w-[90vw] rounded-[8px] border-[1px] border-[#DCDEE2] px-[20px] py-[30px] sm:min-w-[70vw] sm:max-w-[70vw] sm:px-[55px] md:min-w-[472.75px] md:max-w-[472.75px] xl:min-w-[554px] xl:max-w-[554px] xl:px-[98px] ">
         <div className="text-[1.5rem] font-semibold">개인 정보 수정</div>
         {!!dataMyInfo && !!!errorMyInfo && (
           <div className="mt-[20px]">

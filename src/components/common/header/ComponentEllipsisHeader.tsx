@@ -14,7 +14,7 @@ const ComponentEllipsisHeader: React.FC<IPropsComponentEllipsisHeader> = ({
   return (
     <div className="absolute right-[-6px] top-[-6px] md:right-[-46px]">
       <div
-        className="max-h-[128px] min-h-[128px] min-w-[210px] max-w-[210px] px-[12px] pt-[21px] pb-[11px]"
+        className="max-h-[128px] min-h-[128px] min-w-[210px] max-w-[210px] px-[12px] pb-[11px] pt-[21px]"
         style={{
           backgroundImage: `url(${ImgEllipsisVector})`,
         }}

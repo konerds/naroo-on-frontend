@@ -15,7 +15,7 @@ const ComponentViewImageExpand: React.FC<IPropsComponentViewImageExpand> = ({
       onClick={() => {
         hideComponent();
       }}
-      className="fixed top-0 left-0 z-[1001] flex h-[100vh] w-[100vw] cursor-pointer flex-col justify-center bg-[#000000bb] align-middle"
+      className="fixed left-0 top-0 z-[1001] flex h-[100vh] w-[100vw] cursor-pointer flex-col justify-center bg-[#000000bb] align-middle"
     >
       <div className="relative flex items-center justify-center">
         <div
@@ -35,7 +35,7 @@ const ComponentViewImageExpand: React.FC<IPropsComponentViewImageExpand> = ({
             }}
             width={40}
             height={40}
-            className="absolute top-[10px] right-[10px] m-auto h-[40px] w-[40px] cursor-pointer fill-[black] object-fill hover:opacity-50"
+            className="absolute right-[10px] top-[10px] m-auto h-[40px] w-[40px] cursor-pointer fill-[black] object-fill hover:opacity-50"
           />
         </div>
       </div>

@@ -87,7 +87,7 @@ const ComponentFormUpdateUser: React.FC<IPropsComponentFormUpdateUser> = ({
               disabled={isLoadingSubmit}
             />
           </div>
-          <div className="mt-[5px] mb-[10px] flex items-center justify-end sm:justify-start">
+          <div className="mb-[10px] mt-[5px] flex items-center justify-end sm:justify-start">
             <button
               className="button-modify-cancel-admin mx-[5px] h-[32px] w-[65px] text-sm sm:mx-[10px]"
               type="submit"

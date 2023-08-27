@@ -103,7 +103,7 @@ const ComponentFormUpdateTag: React.FC<IPropsComponentFormUpdateTag> = ({
             onChange={onChangeUpdateTagName}
             disabled={isLoadingSubmit}
           />
-          <div className="mt-[5px] mb-[10px] flex items-center justify-end sm:justify-start">
+          <div className="mb-[10px] mt-[5px] flex items-center justify-end sm:justify-start">
             <button
               className="disabled:cursor-not-allowed; mx-[5px] box-border h-[24px] w-[40px] rounded-[10px] border-[1px] border-[#4DBFF0] bg-[#4DBFF0] text-[0.5rem] font-semibold text-white hover:opacity-50 disabled:opacity-50 lg:text-[0.8rem]"
               type="submit"

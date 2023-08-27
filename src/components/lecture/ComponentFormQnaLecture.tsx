@@ -389,7 +389,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                 {userType === 'admin' && !!!answer_id && (
                   <button
                     type="button"
-                    className="absolute left-[44px] bottom-[10px] flex max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] items-center justify-center rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] px-[4px] py-[4px] text-[0.75rem] font-normal text-[#808695] hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:left-[90px] sm:bottom-[6px] sm:h-[28px] sm:max-h-[unset] sm:min-h-[unset] sm:w-max sm:min-w-[unset] sm:max-w-[unset] xl:left-[133px] xl:px-[10px]"
+                    className="absolute bottom-[10px] left-[44px] flex max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] items-center justify-center rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] px-[4px] py-[4px] text-[0.75rem] font-normal text-[#808695] hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:bottom-[6px] sm:left-[90px] sm:h-[28px] sm:max-h-[unset] sm:min-h-[unset] sm:w-max sm:min-w-[unset] sm:max-w-[unset] xl:left-[133px] xl:px-[10px]"
                     onClick={() => {
                       setIsShowAddAnswer(!isShowAddAnswer);
                     }}
@@ -519,7 +519,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                           </button>
                           <button
                             type="button"
-                            className="mr-[10px] ml-[1px] max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] p-[5px] font-normal text-[#808695] hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:mr-[18px] sm:max-h-[unset] sm:min-h-[unset] sm:min-w-[unset] sm:max-w-max sm:px-[10px] sm:py-[4px] sm:text-[0.75rem] xl:ml-[10px]"
+                            className="ml-[1px] mr-[10px] max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] p-[5px] font-normal text-[#808695] hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:mr-[18px] sm:max-h-[unset] sm:min-h-[unset] sm:min-w-[unset] sm:max-w-max sm:px-[10px] sm:py-[4px] sm:text-[0.75rem] xl:ml-[10px]"
                             onClick={() => {
                               setIsShowAnswerEdit(false);
                             }}
@@ -555,7 +555,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                             </button>
                             <button
                               type="button"
-                              className="mr-[10px] ml-[1px] max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] p-[5px] font-normal text-[#808695] hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:mr-[18px] sm:max-h-[unset] sm:min-h-[unset] sm:min-w-[unset] sm:max-w-max sm:px-[10px] sm:py-[4px] sm:text-[0.75rem] xl:ml-[10px]"
+                              className="ml-[1px] mr-[10px] max-h-[21px] min-h-[21px] min-w-[21px] max-w-[21px] flex-1 rounded-[4px] border-[1px] border-[#EBEEEF] bg-[#F9F9FA] p-[5px] font-normal text-[#808695] hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:mr-[18px] sm:max-h-[unset] sm:min-h-[unset] sm:min-w-[unset] sm:max-w-max sm:px-[10px] sm:py-[4px] sm:text-[0.75rem] xl:ml-[10px]"
                               onClick={() => {
                                 onClickDeleteAnswerHandler();
                               }}
@@ -605,7 +605,7 @@ const ComponentFormQnaLecture: React.FC<IPropsComponentFormQnaLecture> = ({
                 disabled={isLoadingSubmitAnswer}
               />
             </div>
-            <div className="mt-0 mb-[20px]">
+            <div className="mb-[20px] mt-0">
               <textarea
                 className="max-h-[204px] min-h-[204px] w-full border-[1px] border-[#DCDEE2] py-[10px] pl-[10px] text-[0.875rem] placeholder-[#DCDEE2] focus:border-[#8DC556] focus:outline-none disabled:opacity-50"
                 value={newAnswerDescription}
