@@ -1,73 +1,57 @@
-import * as React from 'react';
+import { FC, useState, useRef, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import useSWR from 'swr';
-import useImmutableSWR from 'swr/immutable';
-import { IInfoMe, IResourceContent } from '../../../interfaces';
 import ComponentEllipsisHeader from './ComponentEllipsisHeader';
-import { axiosGetfetcher } from '../../../hooks/api';
-import ContextToken from '../../../store/ContextToken';
+import { useSWRListLogoHeader, useSWRInfoMe } from '../../../hooks/api';
 import MediaQuery from 'react-responsive';
 import {
   faArrowRightToBracket,
   faUserPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import stateToken from '../../../recoil/state-object-token/stateToken';
 
-const ComponentHeader: React.FC = () => {
+const ComponentHeader: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const tokenCtx = React.useContext(ContextToken);
-  const { token, setToken } = tokenCtx;
-  const [isVisibleEllipsis, setIsVisibleEllipsis] =
-    React.useState<boolean>(false);
-  const [isVisibleMenu, setIsVisibleMenu] = React.useState<boolean>(false);
-  const refElementHeader = React.useRef<HTMLDivElement | null>(null);
-  const refElementEllipsis = React.useRef<HTMLButtonElement | null>(null);
-  const { data: dataGetMe } = useSWR<IInfoMe>(
-    !!token ? `${process.env.REACT_APP_BACK_URL}/user/me` : null,
-    () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/me`, token),
-    { revalidateOnFocus: false, revalidateIfStale: false },
-  );
-  const { data: dataHeaderLogo } = useImmutableSWR<IResourceContent[]>(
-    `${process.env.REACT_APP_BACK_URL}/resource/header_logo`,
-    () =>
-      axiosGetfetcher(
-        `${process.env.REACT_APP_BACK_URL}/resource/header_logo`,
-        token,
-      ),
-    { revalidateOnFocus: false, revalidateIfStale: false },
-  );
-  const handlerOnMousePositionHeader = (event: any) => {
-    if (
-      isVisibleMenu &&
-      (!!!refElementHeader.current ||
-        !refElementHeader.current.contains(event.target))
-    ) {
-      setIsVisibleMenu(false);
-    }
-  };
-  const handlerOnMousePositionEllipsis = (event: any) => {
-    if (
-      isVisibleEllipsis &&
-      (!!!refElementEllipsis.current ||
-        refElementEllipsis.current !== event.target)
-    ) {
-      setIsVisibleEllipsis(false);
-    }
-  };
-  const logoutHandler = () => {
-    setToken(null);
+  const [token, setToken] = useRecoilState(stateToken);
+  const [isVisibleEllipsis, setIsVisibleEllipsis] = useState<boolean>(false);
+  const [isVisibleMenu, setIsVisibleMenu] = useState<boolean>(false);
+  const refElementHeader = useRef<HTMLDivElement | null>(null);
+  const refElementEllipsis = useRef<HTMLButtonElement | null>(null);
+  const { data: dataInfoMe } = useSWRInfoMe();
+  const { data: dataListLogoHeader } = useSWRListLogoHeader();
+  const handlerSignout = () => {
+    setToken('');
     navigate(0);
   };
-  React.useEffect(() => {
-    window.addEventListener('click', handlerOnMousePositionHeader);
-    return () =>
-      window.removeEventListener('click', handlerOnMousePositionHeader);
+  useEffect(() => {
+    const handler = (event: MouseEvent) => {
+      if (
+        event.target instanceof Node &&
+        isVisibleMenu &&
+        (!!!refElementHeader.current ||
+          !refElementHeader.current.contains(event.target))
+      ) {
+        setIsVisibleMenu(false);
+      }
+    };
+    window.addEventListener('click', handler);
+    return () => window.removeEventListener('click', handler);
   }, [isVisibleMenu]);
-  React.useEffect(() => {
-    window.addEventListener('click', handlerOnMousePositionEllipsis);
-    return () =>
-      window.removeEventListener('click', handlerOnMousePositionEllipsis);
+  useEffect(() => {
+    const handler = (event: MouseEvent) => {
+      if (
+        event.target instanceof Node &&
+        isVisibleEllipsis &&
+        (!!!refElementEllipsis.current ||
+          refElementEllipsis.current.contains(event.target))
+      ) {
+        setIsVisibleEllipsis(false);
+      }
+    };
+    window.addEventListener('click', handler);
+    return () => window.removeEventListener('click', handler);
   }, [isVisibleEllipsis]);
   return (
     <div
@@ -84,21 +68,22 @@ const ComponentHeader: React.FC = () => {
                 setIsVisibleMenu(false);
               }}
             >
-              {!!dataHeaderLogo && dataHeaderLogo.length > 0 && (
+              {dataListLogoHeader && dataListLogoHeader.length > 0 ? (
                 <img
                   className="w-[60px] sm:w-[110.24px]"
-                  src={dataHeaderLogo[0].content}
+                  src={dataListLogoHeader[0].content}
                   width="110.24"
                   alt="Logo"
                 />
+              ) : (
+                <></>
               )}
             </Link>
             {!(
-              !!token &&
-              !!dataGetMe &&
-              !!dataGetMe.nickname &&
-              dataGetMe.role === 'admin'
-            ) && (
+              dataInfoMe &&
+              dataInfoMe.nickname &&
+              dataInfoMe.role === 'admin'
+            ) ? (
               <button
                 type="button"
                 className="mx-auto min-w-max rounded-[1px]"
@@ -106,33 +91,36 @@ const ComponentHeader: React.FC = () => {
               >
                 메뉴
               </button>
+            ) : (
+              <></>
             )}
-            {!!token &&
-              !!dataGetMe &&
-              !!dataGetMe.nickname &&
-              dataGetMe.role === 'student' && (
-                <>
-                  <button
-                    ref={refElementEllipsis}
-                    className="ml-0 mr-[30px] flex h-[30px] w-[30px] items-center justify-center rounded-full bg-[#8dc556] text-xs font-semibold text-white sm:h-[40px] sm:w-[40px] sm:text-sm"
-                    onClick={() => {
-                      setIsVisibleMenu(false);
-                      setIsVisibleEllipsis(!isVisibleEllipsis);
-                    }}
-                  >
-                    {dataGetMe.nickname.charAt(0)}
-                  </button>
-                  {isVisibleEllipsis && (
-                    <div className="relative right-[30px] top-[20px] z-[999] min-w-max">
-                      <ComponentEllipsisHeader
-                        logoutHandler={logoutHandler}
-                        setIsVisibleMenu={setIsVisibleMenu}
-                      />
-                    </div>
-                  )}
-                </>
-              )}
-            {(!!!token || (!!token && !!!dataGetMe)) && (
+            {dataInfoMe &&
+            dataInfoMe.nickname &&
+            dataInfoMe.role === 'student' ? (
+              <>
+                <button
+                  ref={refElementEllipsis}
+                  className="ml-0 mr-[30px] flex h-[30px] w-[30px] items-center justify-center rounded-full bg-[#8dc556] text-xs font-semibold text-white sm:h-[40px] sm:w-[40px] sm:text-sm"
+                  onClick={() => {
+                    setIsVisibleMenu(false);
+                    setIsVisibleEllipsis(!isVisibleEllipsis);
+                  }}
+                >
+                  {dataInfoMe.nickname.charAt(0)}
+                </button>
+                {isVisibleEllipsis && (
+                  <div className="relative right-[30px] top-[20px] z-[999] min-w-max">
+                    <ComponentEllipsisHeader
+                      handlerSignout={handlerSignout}
+                      setIsVisibleMenu={setIsVisibleMenu}
+                    />
+                  </div>
+                )}
+              </>
+            ) : (
+              <></>
+            )}
+            {!dataInfoMe ? (
               <div className="mr-[10px]">
                 <Link
                   to="/signin"
@@ -168,18 +156,21 @@ const ComponentHeader: React.FC = () => {
                   </button>
                 </Link>
               </div>
+            ) : (
+              <></>
             )}
-            {!!token &&
-              !!dataGetMe &&
-              !!dataGetMe.nickname &&
-              dataGetMe.role === 'admin' && (
-                <button
-                  className="ml-auto mr-[20px] flex items-center justify-center hover:opacity-50"
-                  onClick={logoutHandler}
-                >
-                  로그아웃
-                </button>
-              )}
+            {dataInfoMe &&
+            dataInfoMe.nickname &&
+            dataInfoMe.role === 'admin' ? (
+              <button
+                className="ml-auto mr-[20px] flex items-center justify-center hover:opacity-50"
+                onClick={handlerSignout}
+              >
+                로그아웃
+              </button>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
         {isVisibleMenu && (
@@ -216,7 +207,7 @@ const ComponentHeader: React.FC = () => {
       <MediaQuery minWidth={768}>
         <div className="hidden md:mx-auto md:flex md:h-[100px] md:max-w-[788px] md:items-center md:justify-between lg:max-w-[966px] xl:max-w-[1152px]">
           <div className="flex items-center justify-between">
-            {!!dataHeaderLogo && dataHeaderLogo.length > 0 && (
+            {dataListLogoHeader && dataListLogoHeader.length > 0 && (
               <Link
                 className="ml-[20px] mr-[45px] hover:opacity-50 lg:ml-0"
                 to="/"
@@ -225,14 +216,14 @@ const ComponentHeader: React.FC = () => {
                 }}
               >
                 <img
-                  src={dataHeaderLogo[0].content}
+                  src={dataListLogoHeader[0].content}
                   width="110.24"
                   alt="Logo"
                 />
               </Link>
             )}
             <div className="flex flex-nowrap">
-              {!(!!token && !!dataGetMe && dataGetMe.role === 'admin') && (
+              {!(!!token && !!dataInfoMe && dataInfoMe.role === 'admin') && (
                 <>
                   <Link
                     to="/"
@@ -265,29 +256,30 @@ const ComponentHeader: React.FC = () => {
               )}
             </div>
           </div>
-          {!!token &&
-            !!dataGetMe &&
-            !!dataGetMe.nickname &&
-            dataGetMe.role === 'student' && (
-              <div
-                className="ml-auto md:mr-[30px] lg:mr-[10px]"
-                onMouseEnter={() => setIsVisibleEllipsis(true)}
-                onMouseLeave={() => setIsVisibleEllipsis(false)}
-              >
-                <button className="flex h-[40px] w-[40px] items-center justify-center rounded-full bg-[#8dc556] font-semibold text-white hover:opacity-50">
-                  {dataGetMe.nickname.charAt(0)}
-                </button>
-                {isVisibleEllipsis && (
-                  <div className="fixed z-[999] min-w-max">
-                    <ComponentEllipsisHeader
-                      logoutHandler={logoutHandler}
-                      setIsVisibleMenu={setIsVisibleMenu}
-                    />
-                  </div>
-                )}
-              </div>
-            )}
-          {!(!!token && !!dataGetMe) && (
+          {dataInfoMe &&
+          dataInfoMe.nickname &&
+          dataInfoMe.role === 'student' ? (
+            <div
+              className="ml-auto md:mr-[30px] lg:mr-[10px]"
+              onMouseEnter={() => setIsVisibleEllipsis(true)}
+              onMouseLeave={() => setIsVisibleEllipsis(false)}
+            >
+              <button className="flex h-[40px] w-[40px] items-center justify-center rounded-full bg-[#8dc556] font-semibold text-white hover:opacity-50">
+                {dataInfoMe.nickname.charAt(0)}
+              </button>
+              {isVisibleEllipsis && (
+                <div className="fixed z-[999] min-w-max">
+                  <ComponentEllipsisHeader
+                    handlerSignout={handlerSignout}
+                    setIsVisibleMenu={setIsVisibleMenu}
+                  />
+                </div>
+              )}
+            </div>
+          ) : (
+            <></>
+          )}
+          {!dataInfoMe ? (
             <div className="ml-auto md:mr-[30px] lg:mr-[10px]">
               <Link
                 className="hover:opacity-50"
@@ -312,15 +304,19 @@ const ComponentHeader: React.FC = () => {
                 </button>
               </Link>
             </div>
+          ) : (
+            <></>
           )}
-          {!!token && !!dataGetMe && dataGetMe.role === 'admin' && (
+          {dataInfoMe && dataInfoMe.role === 'admin' ? (
             <button
               type="button"
               className="ml-auto mr-0 flex items-center justify-center hover:opacity-50"
-              onClick={logoutHandler}
+              onClick={handlerSignout}
             >
               로그아웃
             </button>
+          ) : (
+            <></>
           )}
         </div>
       </MediaQuery>

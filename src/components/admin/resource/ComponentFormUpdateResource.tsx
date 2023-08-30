@@ -1,34 +1,36 @@
-import * as React from 'react';
+import { FC, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { KeyedMutator } from 'swr';
-import { IResources } from '../../../interfaces';
-import { showError } from '../../../hooks/api';
+import { showError, useSWRListResourceAll } from '../../../hooks/api';
 import { useStringInput } from '../../../hooks';
 import { toast } from 'react-toastify';
+import stateToken from '../../../recoil/state-object-token/stateToken';
 
 interface IPropsComponentFormUpdateResource {
   index: number;
-  token: string | null;
   type: string;
   content_id: string;
   content: string;
-  mutate: KeyedMutator<IResources[]>;
 }
 
-const ComponentFormUpdateResource: React.FC<
-  IPropsComponentFormUpdateResource
-> = ({ index, token, type, content_id, content, mutate }) => {
+const ComponentFormUpdateResource: FC<IPropsComponentFormUpdateResource> = ({
+  index,
+  type,
+  content_id,
+  content,
+}) => {
+  const token = useRecoilValue(stateToken);
+  const { mutate: mutateListResourceAll } = useSWRListResourceAll();
   const { value: addPreview, setValue: setAddPreview } = useStringInput('');
   const { value: preview, setValue: setPreview } = useStringInput(content);
-  const [updateToggle, setUpdateToggle] = React.useState<boolean>(false);
-  const [isLoadingSubmitAdd, setIsLoadingSubmitAdd] =
-    React.useState<boolean>(false);
+  const [updateToggle, setUpdateToggle] = useState<boolean>(false);
+  const [isLoadingSubmitAdd, setIsLoadingSubmitAdd] = useState<boolean>(false);
   const [isLoadingSubmitUpdateResource, setIsLoadingSubmitUpdateResource] =
-    React.useState<boolean>(false);
+    useState<boolean>(false);
   const [isLoadingClickDeleteResource, setIsLoadingClickDeleteResource] =
-    React.useState<boolean>(false);
+    useState<boolean>(false);
   const onClickUpdateToggle = () => {
     setUpdateToggle(!updateToggle);
     setPreview(content);
@@ -52,7 +54,7 @@ const ComponentFormUpdateResource: React.FC<
         },
       );
       if (response.status === 201) {
-        await mutate();
+        await mutateListResourceAll();
         toast('성공적으로 리소스가 등록되었습니다', { type: 'success' });
         setAddPreview('');
       }
@@ -84,7 +86,7 @@ const ComponentFormUpdateResource: React.FC<
         },
       );
       if (response.status === 200) {
-        await mutate();
+        await mutateListResourceAll();
         toast('성공적으로 리소스가 업데이트되었습니다', { type: 'success' });
         setUpdateToggle(!updateToggle);
       }
@@ -106,7 +108,7 @@ const ComponentFormUpdateResource: React.FC<
         },
       );
       if (response.status === 200) {
-        await mutate();
+        await mutateListResourceAll();
         toast('성공적으로 리소스가 삭제되었습니다', { type: 'success' });
       }
     } catch (error: any) {

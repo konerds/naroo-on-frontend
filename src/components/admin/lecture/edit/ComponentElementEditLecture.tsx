@@ -1,4 +1,5 @@
-import * as React from 'react';
+import { FC, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -6,83 +7,58 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDateTimePicker,
 } from '@material-ui/pickers';
-import { ILectureInList, ITags } from '../../../../interfaces';
+import { ILectureInList } from '../../../../interfaces';
 import ComponentFormRegisterTags from '../../tag/ComponentFormRegisterTags';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useStringInput } from '../../../../hooks';
 import ComponentFormUpdateImage from './form/ComponentFormUpdateImage';
 import moment from 'moment';
-import { KeyedMutator } from 'swr';
-import { showError } from '../../../../hooks/api';
+import { showError, useSWRListLectureAll } from '../../../../hooks/api';
 import ComponentFormUpdateLecture from './form/ComponentFormUpdateLecture';
 import { toast } from 'react-toastify';
+import stateToken from '../../../../recoil/state-object-token/stateToken';
 
 interface IPropsComponentElementEditLecture {
-  id: string;
-  title: string;
-  images: string[];
-  description: string;
-  thumbnail: string;
-  teacherNickname: string;
-  expired: string | null;
-  tags: ITags[] | [] | null;
-  videoTitle: string;
-  videoUrl: string;
-  token: string | null;
-  setToken: (v: string | null) => void;
-  allTags: ITags[] | [];
-  mutate: KeyedMutator<ILectureInList[]>;
+  lecture: ILectureInList;
 }
 
-const ComponentElementEditLecture: React.FC<
-  IPropsComponentElementEditLecture
-> = ({
-  id,
-  title,
-  images,
-  description,
-  thumbnail,
-  teacherNickname,
-  expired,
-  tags,
-  videoTitle,
-  videoUrl,
-  token,
-  setToken,
-  allTags,
-  mutate,
+const ComponentElementEditLecture: FC<IPropsComponentElementEditLecture> = ({
+  lecture,
 }) => {
+  const { mutate: mutateLectureAll } = useSWRListLectureAll();
+  const {
+    id,
+    title,
+    images,
+    description,
+    thumbnail,
+    teacher_nickname,
+    expired,
+    tags,
+    video_title,
+    video_url,
+  } = lecture;
+  const token = useRecoilValue(stateToken);
   const [isLoadingClickDeleteLecture, setIsLoadingClickDeleteLecture] =
-    React.useState<boolean>(false);
+    useState<boolean>(false);
   const [updateExpiredToggle, setUpdateExpiredToggle] =
-    React.useState<boolean>(false);
-  const [expiredAt, setExpiredAt] = React.useState<Date | null>(
+    useState<boolean>(false);
+  const [expiredAt, setExpiredAt] = useState<Date | null>(
     !!expired ? new Date(expired) : null,
   );
   const [isLoadingSubmitUpdateExpired, setIsLoadingSubmitUpdateExpired] =
-    React.useState<boolean>(false);
+    useState<boolean>(false);
   const [updateTeacherToggle, setUpdateTeacherToggle] =
-    React.useState<boolean>(false);
+    useState<boolean>(false);
   const {
     value: updateTeacherName,
     setValue: setUpdateTeacherName,
     onChange: onChangeUpdateTeacherName,
-  } = useStringInput(teacherNickname);
+  } = useStringInput(teacher_nickname);
   const [isLoadingSubmitUpdateTeacher, setIsLoadingSubmitUpdateTeacher] =
-    React.useState<boolean>(false);
-  const onClickUpdateTeacherToggle = () => {
-    setUpdateTeacherToggle(!updateTeacherToggle);
-    setUpdateTeacherName(teacherNickname);
-  };
-  const onClickUpdateExpiredToggle = () => {
-    setUpdateExpiredToggle(!updateExpiredToggle);
-    setExpiredAt(!!expired ? new Date(expired) : null);
-  };
-  const onHandleExpiredAt = (date: Date | null) => {
-    setExpiredAt(date);
-  };
-  const onClickDeleteLecture = async () => {
+    useState<boolean>(false);
+  const handlerDeleteLecture = async () => {
     try {
       setIsLoadingClickDeleteLecture(true);
       const response = await axios.delete(
@@ -94,7 +70,7 @@ const ComponentElementEditLecture: React.FC<
         },
       );
       if (response.status === 200) {
-        await mutate();
+        await mutateLectureAll();
         toast('성공적으로 강의가 삭제되었습니다', { type: 'success' });
       }
     } catch (error: any) {
@@ -103,7 +79,7 @@ const ComponentElementEditLecture: React.FC<
       setIsLoadingClickDeleteLecture(false);
     }
   };
-  const onSubmitUpdateExpired = async () => {
+  const handlerUpdateExpired = async () => {
     try {
       setIsLoadingSubmitUpdateExpired(true);
       const response = await axios.put(
@@ -118,7 +94,7 @@ const ComponentElementEditLecture: React.FC<
         },
       );
       if (response.status === 200) {
-        await mutate();
+        await mutateLectureAll();
         toast('성공적으로 강의 만료 일시가 업데이트되었습니다', {
           type: 'success',
         });
@@ -130,7 +106,7 @@ const ComponentElementEditLecture: React.FC<
       setIsLoadingSubmitUpdateExpired(false);
     }
   };
-  const onSubmitUpdateTeacher = async () => {
+  const handlerUpdateTeacher = async () => {
     try {
       setIsLoadingSubmitUpdateTeacher(true);
       const response = await axios.put(
@@ -145,7 +121,7 @@ const ComponentElementEditLecture: React.FC<
         },
       );
       if (response.status === 200) {
-        await mutate();
+        await mutateLectureAll();
         toast('성공적으로 강사 정보가 업데이트되었습니다', { type: 'success' });
         setUpdateTeacherToggle(!updateTeacherToggle);
       }
@@ -160,18 +136,16 @@ const ComponentElementEditLecture: React.FC<
       <button
         className="mx-auto flex w-max items-center justify-center rounded-2xl border-[1px] border-black px-[15px] py-[5px] hover:bg-black hover:text-white disabled:opacity-50"
         disabled={isLoadingClickDeleteLecture}
-        onClick={onClickDeleteLecture}
+        onClick={handlerDeleteLecture}
       >
         <div>강의 삭제하기</div>
         <FontAwesomeIcon className="ml-[20px]" icon={faTrash} />
       </button>
       <div className="bg-white text-xs text-shuttle-gray">
         <ComponentFormUpdateImage
-          token={token}
           fieldType="thumbnail"
           lectureId={id}
           userField={thumbnail}
-          mutate={mutate}
           imageIndex={null}
         />
       </div>
@@ -181,7 +155,7 @@ const ComponentElementEditLecture: React.FC<
             className="mt-[10px] block sm:flex sm:items-center"
             onSubmit={(event) => {
               event.preventDefault();
-              onSubmitUpdateExpired();
+              handlerUpdateExpired();
             }}
           >
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -190,7 +164,9 @@ const ComponentElementEditLecture: React.FC<
                 format="yyyy년 MM월 dd일 hh시 mm분 ss초"
                 value={expiredAt}
                 margin="none"
-                onChange={onHandleExpiredAt}
+                onChange={(date: Date | null) => {
+                  setExpiredAt(date);
+                }}
                 disabled={isLoadingSubmitUpdateExpired}
               />
             </MuiPickersUtilsProvider>
@@ -205,7 +181,10 @@ const ComponentElementEditLecture: React.FC<
               <button
                 className="button-modify-cancel-admin h-[32px] w-[65px]"
                 disabled={isLoadingSubmitUpdateExpired}
-                onClick={onClickUpdateExpiredToggle}
+                onClick={(e) => {
+                  setUpdateExpiredToggle(!updateExpiredToggle);
+                  setExpiredAt(!!expired ? new Date(expired) : null);
+                }}
               >
                 취소
               </button>
@@ -220,24 +199,25 @@ const ComponentElementEditLecture: React.FC<
             <FontAwesomeIcon
               className="button-fa-icon-admin ml-[10px]"
               icon={faEdit}
-              onClick={onClickUpdateExpiredToggle}
+              onClick={(e) => {
+                setUpdateExpiredToggle(!updateExpiredToggle);
+                setExpiredAt(!!expired ? new Date(expired) : null);
+              }}
             />
           </div>
         )}
       </div>
       <ComponentFormUpdateLecture
-        token={token}
         fieldType="title"
         lectureId={id}
         userField={title}
-        mutate={mutate}
       />
       {updateTeacherToggle ? (
         <form
           className="mt-[10px] block sm:flex sm:items-center"
           onSubmit={(event) => {
             event.preventDefault();
-            onSubmitUpdateTeacher();
+            handlerUpdateTeacher();
           }}
         >
           <input
@@ -257,7 +237,10 @@ const ComponentElementEditLecture: React.FC<
             </button>
             <button
               className="button-modify-cancel-admin h-[32px] w-[65px]"
-              onClick={onClickUpdateTeacherToggle}
+              onClick={(e) => {
+                setUpdateTeacherToggle(!updateTeacherToggle);
+                setUpdateTeacherName(teacher_nickname);
+              }}
               disabled={isLoadingSubmitUpdateTeacher}
             >
               취소
@@ -267,21 +250,22 @@ const ComponentElementEditLecture: React.FC<
       ) : (
         <div className="mt-[10px] flex items-center">
           <div className="flex w-full items-center rounded-[10px] bg-harp p-[10px] text-xs text-gray-200">
-            {'강사 이름 : ' + teacherNickname}
+            {'강사 이름 : ' + teacher_nickname}
           </div>
           <FontAwesomeIcon
             className="button-fa-icon-admin ml-[10px]"
             icon={faEdit}
-            onClick={onClickUpdateTeacherToggle}
+            onClick={(e) => {
+              setUpdateTeacherToggle(!updateTeacherToggle);
+              setUpdateTeacherName(teacher_nickname);
+            }}
           />
         </div>
       )}
       <ComponentFormUpdateLecture
-        token={token}
         fieldType="description"
         lectureId={id}
         userField={description}
-        mutate={mutate}
       />
       <div className="bg-white text-xs text-shuttle-gray">
         {!!images &&
@@ -290,36 +274,27 @@ const ComponentElementEditLecture: React.FC<
             return (
               <ComponentFormUpdateImage
                 key={index}
-                token={token}
                 fieldType="img_description"
                 lectureId={id}
                 userField={image}
-                mutate={mutate}
                 imageIndex={index + 1}
               />
             );
           })}
       </div>
       <ComponentFormUpdateLecture
-        token={token}
         fieldType="video_title"
         lectureId={id}
-        userField={videoTitle}
-        mutate={mutate}
+        userField={video_title}
       />
       <ComponentFormUpdateLecture
-        token={token}
         fieldType="video_url"
         lectureId={id}
-        userField={videoUrl}
-        mutate={mutate}
+        userField={video_url}
       />
       <ComponentFormRegisterTags
-        token={token}
         lectureId={id}
-        allTags={allTags}
-        tags={tags ? (tags.length > 0 ? tags : []) : []}
-        mutate={mutate}
+        tags={tags && tags.length > 0 ? tags : []}
       />
     </div>
   );

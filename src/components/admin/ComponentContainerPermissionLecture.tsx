@@ -1,48 +1,27 @@
-import * as React from 'react';
+import { FC, useState, useCallback } from 'react';
 import Select from 'react-select';
-import useSWR from 'swr';
 import moment from 'moment';
-import ComponentUpdateStatus from './lecture/permission/ComponentFormUpdateStatus';
-import { ILectureInListAdmin } from '../../interfaces';
-import { axiosGetfetcher } from '../../hooks/api';
+import ComponentFormUpdateStatus from './lecture/permission/ComponentFormUpdateStatus';
+import { useSWRListStatusLecture } from '../../hooks/api';
+import { IObjectOption } from '../../interfaces';
 
 interface IPropsComponentContainerPermissionLecture {
-  token: string | null;
-  studentOptions: { value: string; label: string }[] | [];
-  lectureOptions: { value: string; label: string }[] | [];
+  studentOptions: IObjectOption[] | [];
+  lectureOptions: IObjectOption[] | [];
 }
 
-const ComponentContainerPermissionLecture: React.FC<
+const ComponentContainerPermissionLecture: FC<
   IPropsComponentContainerPermissionLecture
-> = ({ token, studentOptions, lectureOptions }) => {
-  const { data: lectureStatusesData, mutate: lectureStatusesMutate } = useSWR<
-    ILectureInListAdmin[]
-  >(
-    !!token ? `${process.env.REACT_APP_BACK_URL}/lecture/admin/status` : null,
-    () =>
-      axiosGetfetcher(
-        `${process.env.REACT_APP_BACK_URL}/lecture/admin/status`,
-        token,
-      ),
-    { revalidateOnFocus: false, revalidateIfStale: false },
-  );
+> = ({ studentOptions, lectureOptions }) => {
+  const { data: dataListStatusLecture } = useSWRListStatusLecture();
   const filters = [
     { value: 'lecture', label: '강의 별' },
     { value: 'student', label: '학생 별' },
   ];
-  const [selectedFilter, setSelectedFilter] = React.useState<{
-    value: string;
-    label: string;
-  }>();
-  const [lectureFilter, setLectureFilter] = React.useState<{
-    value: string;
-    label: string;
-  }>();
-  const [studentFilter, setStudentFilter] = React.useState<{
-    value: string;
-    label: string;
-  }>();
-  const onHandleFilterChange = React.useCallback(
+  const [selectedFilter, setSelectedFilter] = useState<IObjectOption>();
+  const [lectureFilter, setLectureFilter] = useState<IObjectOption>();
+  const [studentFilter, setStudentFilter] = useState<IObjectOption>();
+  const onHandleFilterChange = useCallback(
     (changedOption: any) => {
       setSelectedFilter(changedOption);
       if (changedOption.value === 'lecture') {
@@ -53,13 +32,13 @@ const ComponentContainerPermissionLecture: React.FC<
     },
     [filters],
   );
-  const onHandleLectureChange = React.useCallback(
+  const onHandleLectureChange = useCallback(
     (changedOption: any) => {
       setLectureFilter(changedOption);
     },
     [lectureOptions],
   );
-  const onHandleUserChange = React.useCallback(
+  const onHandleUserChange = useCallback(
     (changedOption: any) => {
       setStudentFilter(changedOption);
     },
@@ -91,8 +70,8 @@ const ComponentContainerPermissionLecture: React.FC<
       )}
       {selectedFilter &&
         selectedFilter.value === 'lecture' &&
-        lectureStatusesData &&
-        lectureStatusesData.map((lectureStatus, index) => {
+        dataListStatusLecture &&
+        dataListStatusLecture.map((lectureStatus, index) => {
           if (lectureFilter) {
             if (lectureFilter.value === lectureStatus.lecture_id) {
               return (
@@ -104,13 +83,7 @@ const ComponentContainerPermissionLecture: React.FC<
                     {lectureStatus.student_email}
                   </div>
                   <div className="ml-auto mr-0">
-                    <ComponentUpdateStatus
-                      token={token}
-                      studentId={lectureStatus.student_id}
-                      lectureId={lectureStatus.lecture_id}
-                      status={lectureStatus.status}
-                      mutate={lectureStatusesMutate}
-                    />
+                    <ComponentFormUpdateStatus lectureStatus={lectureStatus} />
                   </div>
                 </div>
               );
@@ -119,11 +92,12 @@ const ComponentContainerPermissionLecture: React.FC<
         })}
       {selectedFilter &&
         selectedFilter.value === 'student' &&
-        lectureStatusesData &&
-        lectureStatusesData.map((lectureStatus, index) => {
-          if (studentFilter) {
-            if (studentFilter.value === lectureStatus.student_id) {
-              return (
+        dataListStatusLecture &&
+        dataListStatusLecture.map((lectureStatus, index) => {
+          return (
+            <>
+              {studentFilter &&
+              studentFilter.value === lectureStatus.student_id ? (
                 <div
                   key={index}
                   className="my-[20px] border-[1px] border-black p-[10px]"
@@ -133,39 +107,36 @@ const ComponentContainerPermissionLecture: React.FC<
                     {'강사 이름 : ' + lectureStatus.teacher_nickname}
                   </div>
                   <div className="w-full text-xs">
-                    {!!!lectureStatus.expired && (
-                      <div>강의 만료 일시가 설정되어 있지 않습니다</div>
-                    )}
-                    {!!lectureStatus.expired && (
+                    {lectureStatus.expired ? (
                       <div>
                         {'강의 만료 일시 : ' +
                           moment(lectureStatus.expired).format(
                             'YYYY-MM-DD HH:mm:ss',
                           )}
                       </div>
+                    ) : (
+                      <div>강의 만료 일시가 설정되어 있지 않습니다</div>
                     )}
                   </div>
                   <div className="my-[10px] flex w-full flex-wrap items-center justify-evenly">
-                    {lectureStatus.thumbnail && (
+                    {lectureStatus.thumbnail ? (
                       <img
                         className="w-full rounded-full border-[1px] md:w-[600px]"
                         src={lectureStatus.thumbnail}
                       />
+                    ) : (
+                      <></>
                     )}
                   </div>
                   <div className="ml-auto mr-0">
-                    <ComponentUpdateStatus
-                      token={token}
-                      studentId={lectureStatus.student_id}
-                      lectureId={lectureStatus.lecture_id}
-                      status={lectureStatus.status}
-                      mutate={lectureStatusesMutate}
-                    />
+                    <ComponentFormUpdateStatus lectureStatus={lectureStatus} />
                   </div>
                 </div>
-              );
-            }
-          }
+              ) : (
+                <></>
+              )}
+            </>
+          );
         })}
     </>
   );

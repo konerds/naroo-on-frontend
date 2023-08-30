@@ -1,30 +1,24 @@
-import * as React from 'react';
-import { KeyedMutator } from 'swr';
-import { IUserEdit } from '../../interfaces';
+import { FC } from 'react';
+import { useRecoilValue } from 'recoil';
 import ComponentElementEditUser from './user/ComponentElementEditUser';
+import { useSWRListUserAll } from '../../hooks/api';
+import stateToken from '../../recoil/state-object-token/stateToken';
 
-interface IPropsComponentContainerEditUser {
-  token: string | null;
-  dataUsers: IUserEdit[] | undefined;
-  mutateUsers: KeyedMutator<IUserEdit[]>;
-}
+interface IPropsComponentContainerEditUser {}
 
-const ComponentContainerEditUser: React.FC<
+const ComponentContainerEditUser: FC<
   IPropsComponentContainerEditUser
-> = ({ token, dataUsers, mutateUsers }) => {
+> = ({}) => {
+  const token = useRecoilValue(stateToken);
+  const { data: dataListUserAll } = useSWRListUserAll();
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
       {!!token &&
-        !!dataUsers &&
-        dataUsers
+        !!dataListUserAll &&
+        dataListUserAll
           .sort((a, b) => +a.id - +b.id)
           .map((user, index) => (
-            <ComponentElementEditUser
-              key={index}
-              token={token}
-              user={user}
-              mutate={mutateUsers}
-            />
+            <ComponentElementEditUser key={index} user={user} />
           ))}
     </div>
   );

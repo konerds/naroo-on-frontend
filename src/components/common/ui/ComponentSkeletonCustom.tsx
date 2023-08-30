@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FC } from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
@@ -7,7 +7,7 @@ interface IPropsComponentSkeletonCustom {
   count?: number;
 }
 
-const ComponentSkeletonCustom: React.FC<IPropsComponentSkeletonCustom> = ({
+const ComponentSkeletonCustom: FC<IPropsComponentSkeletonCustom> = ({
   className,
   count,
 }) => {

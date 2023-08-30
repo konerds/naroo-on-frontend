@@ -1,71 +1,55 @@
-import * as React from 'react';
+import { FC, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
-import ComponentFormUpdateUser from '../components/admin/user/ComponentFormUpdateUser';
-import useSWR from 'swr';
-import { IInfoMe, IUserEdit } from '../interfaces';
-import ContextToken from '../store/ContextToken';
-import { axiosGetfetcher } from '../hooks/api';
+import ComponentFormUpdateUser from '../components/profile/ComponentFormUpdateUser';
+import { useSWRInfoMe, useSWRProfileUser } from '../hooks/api';
+import stateToken from '../recoil/state-object-token/stateToken';
 
-const PageProfile: React.FC = () => {
+const PageProfile: FC = () => {
   const navigate = useNavigate();
-  const tokenCtx = React.useContext(ContextToken);
-  const { token } = tokenCtx;
-  const { data: dataGetMe } = useSWR<IInfoMe>(
-    !!token ? `${process.env.REACT_APP_BACK_URL}/user/me` : null,
-    () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/me`, token),
-    {
-      revalidateOnFocus: false,
-      revalidateIfStale: false,
-    },
-  );
-  const {
-    data: dataMyInfo,
-    mutate: mutateMyInfo,
-    error: errorMyInfo,
-  } = useSWR<IUserEdit>(
-    !!token && !!dataGetMe
-      ? `${process.env.REACT_APP_BACK_URL}/user/myinfo`
-      : null,
-    () =>
-      axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/myinfo`, token),
-    { revalidateOnFocus: false, revalidateIfStale: false },
-  );
-  React.useEffect(() => {
-    if (!!!token || (!!token && !!dataGetMe && dataGetMe.role === 'admin')) {
+  const token = useRecoilValue(stateToken);
+  const { data: dataInfoMe } = useSWRInfoMe();
+  const { data: dataProfileUser, error: errorProfileUser } =
+    useSWRProfileUser();
+  useEffect(() => {
+    if (!!!token || (!!token && !!dataInfoMe && dataInfoMe.role === 'admin')) {
       navigate('/', { replace: true });
     }
-  }, [token, dataGetMe, dataGetMe?.role]);
+  }, [token, dataInfoMe, dataInfoMe?.role]);
   return (
     <div className="flex min-h-[530px] w-full items-center justify-center">
       <div className="m-auto box-border min-w-[90vw] max-w-[90vw] rounded-[8px] border-[1px] border-[#DCDEE2] px-[20px] py-[30px] sm:min-w-[70vw] sm:max-w-[70vw] sm:px-[55px] md:min-w-[472.75px] md:max-w-[472.75px] xl:min-w-[554px] xl:max-w-[554px] xl:px-[98px] ">
         <div className="text-[1.5rem] font-semibold">개인 정보 수정</div>
-        {!!dataMyInfo && !!!errorMyInfo && (
+        {dataProfileUser && !errorProfileUser ? (
           <div className="mt-[20px]">
             <div className="space-y-[20px] text-sm sm:text-[1rem]">
-              {!!dataMyInfo.nickname && (
+              {dataProfileUser.nickname ? (
                 <ComponentFormUpdateUser
                   fieldType="nickname"
-                  id={dataMyInfo.id}
-                  userField={dataMyInfo.nickname}
-                  mutate={mutateMyInfo}
+                  id={dataProfileUser.id}
+                  userField={dataProfileUser.nickname}
                 />
+              ) : (
+                <></>
               )}
               <ComponentFormUpdateUser
                 fieldType="password"
-                id={dataMyInfo.id}
+                id={dataProfileUser.id}
                 userField={''}
-                mutate={mutateMyInfo}
               />
-              {!!dataMyInfo.phone && (
+              {dataProfileUser.phone ? (
                 <ComponentFormUpdateUser
                   fieldType="phone"
-                  id={dataMyInfo.id}
-                  userField={dataMyInfo.phone}
-                  mutate={mutateMyInfo}
+                  id={dataProfileUser.id}
+                  userField={dataProfileUser.phone}
                 />
+              ) : (
+                <></>
               )}
             </div>
           </div>
+        ) : (
+          <></>
         )}
       </div>
     </div>

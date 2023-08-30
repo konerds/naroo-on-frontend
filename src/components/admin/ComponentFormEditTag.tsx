@@ -1,30 +1,24 @@
-import * as React from 'react';
+import { FC, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { isArray } from 'lodash';
-import { KeyedMutator } from 'swr';
 import { useStringInput } from '../../hooks';
-import { showError } from '../../hooks/api';
-import { ITags } from '../../interfaces';
+import { showError, useSWRListTagAll } from '../../hooks/api';
 import ComponentFormUpdateTag from './tag/ComponentFormUpdateTag';
 import { toast } from 'react-toastify';
+import stateToken from '../../recoil/state-object-token/stateToken';
 
-interface IPropsComponentFormEditTag {
-  token: string | null;
-  tagsData: ITags[] | undefined;
-  tagsMutate: KeyedMutator<ITags[]>;
-}
+interface IPropsComponentFormEditTag {}
 
-const ComponentFormEditTag: React.FC<IPropsComponentFormEditTag> = ({
-  token,
-  tagsData,
-  tagsMutate,
-}) => {
+const ComponentFormEditTag: FC<IPropsComponentFormEditTag> = ({}) => {
+  const token = useRecoilValue(stateToken);
+  const { data: dataListTagAll, mutate: mutateListTagAll } = useSWRListTagAll();
   const {
     value: tagName,
     setValue: setTagName,
     onChange: onChangeTagName,
   } = useStringInput('');
-  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
   const onSubmitAddHandler = async () => {
     try {
       setIsLoadingSubmit(true);
@@ -40,7 +34,7 @@ const ComponentFormEditTag: React.FC<IPropsComponentFormEditTag> = ({
         },
       );
       if (response.status === 201) {
-        await tagsMutate();
+        await mutateListTagAll();
         toast('성공적으로 태그가 등록되었습니다', { type: 'success' });
         setTagName('');
       }
@@ -76,19 +70,11 @@ const ComponentFormEditTag: React.FC<IPropsComponentFormEditTag> = ({
         </div>
       </form>
       <div className="mt-[10px] flex flex-wrap items-center border-[1px] p-[10px]">
-        {!!tagsData &&
-          isArray(tagsData) &&
-          tagsData.length > 0 &&
-          tagsData.map((tag, index) => {
-            return (
-              <ComponentFormUpdateTag
-                key={index}
-                token={token}
-                id={tag.id}
-                name={tag.name}
-                mutate={tagsMutate}
-              />
-            );
+        {dataListTagAll &&
+          isArray(dataListTagAll) &&
+          dataListTagAll.length > 0 &&
+          dataListTagAll.map((tag, index) => {
+            return <ComponentFormUpdateTag key={index} tag={tag} />;
           })}
       </div>
     </>

@@ -1,36 +1,31 @@
-import * as React from 'react';
+import { FC, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { KeyedMutator } from 'swr';
 import { useStringInput } from '../../../hooks';
-import { showError } from '../../../hooks/api';
-import { ITags } from '../../../interfaces';
+import { showError, useSWRListTagAll } from '../../../hooks/api';
 import ComponentElementTag from '../../common/ComponentElementTag';
 import { toast } from 'react-toastify';
+import stateToken from '../../../recoil/state-object-token/stateToken';
+import { ITags } from '../../../interfaces';
 
 interface IPropsComponentFormUpdateTag {
-  token: string | null;
-  id: string;
-  name: string;
-  mutate: KeyedMutator<ITags[]>;
+  tag: ITags;
 }
 
-const ComponentFormUpdateTag: React.FC<IPropsComponentFormUpdateTag> = ({
-  token,
-  id,
-  name,
-  mutate,
-}) => {
-  const [updateToggle, setUpdateToggle] = React.useState<boolean>(false);
+const ComponentFormUpdateTag: FC<IPropsComponentFormUpdateTag> = ({ tag }) => {
+  const token = useRecoilValue(stateToken);
+  const { id, name } = tag;
+  const { mutate: mutateListTagAll } = useSWRListTagAll();
+  const [updateToggle, setUpdateToggle] = useState<boolean>(false);
   const {
     value: updateTagName,
     setValue: setUpdateTagName,
     onChange: onChangeUpdateTagName,
   } = useStringInput('');
-  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
-  const [isLoadingDeleteTag, setIsLoadingDeleteTag] =
-    React.useState<boolean>(false);
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
+  const [isLoadingDeleteTag, setIsLoadingDeleteTag] = useState<boolean>(false);
   const onClickUpdateToggle = () => {
     setUpdateToggle(!updateToggle);
     setUpdateTagName(name);
@@ -55,7 +50,7 @@ const ComponentFormUpdateTag: React.FC<IPropsComponentFormUpdateTag> = ({
         },
       );
       if (response.status === 200) {
-        await mutate();
+        await mutateListTagAll();
         toast('성공적으로 태그가 업데이트되었습니다', { type: 'success' });
         setUpdateToggle(!updateToggle);
       }
@@ -78,7 +73,7 @@ const ComponentFormUpdateTag: React.FC<IPropsComponentFormUpdateTag> = ({
       );
       if (response.status === 200) {
         toast('성공적으로 태그가 삭제되었습니다', { type: 'success' });
-        await mutate();
+        await mutateListTagAll();
       }
     } catch (error: any) {
       showError(error);

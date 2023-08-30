@@ -1,42 +1,44 @@
-import * as React from 'react';
+import { FC, useState, useMemo, useCallback } from 'react';
+import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Select from 'react-select';
-import { KeyedMutator } from 'swr';
-import { ILectureInList, ITags } from '../../../interfaces';
+import { ITags } from '../../../interfaces';
 import ComponentFormUnregisterTag from './ComponentFormUnregisterTag';
-import { showError } from '../../../hooks/api';
+import {
+  showError,
+  useSWRListLectureAll,
+  useSWRListTagAll,
+} from '../../../hooks/api';
 import { toast } from 'react-toastify';
+import stateToken from '../../../recoil/state-object-token/stateToken';
 
 interface IPropsComponentFormRegisterTags {
-  token: string | null;
   lectureId: string;
-  allTags: ITags[] | undefined;
   tags: ITags[] | [];
-  mutate: KeyedMutator<ILectureInList[]>;
 }
 
-const ComponentFormRegisterTags: React.FC<IPropsComponentFormRegisterTags> = ({
-  token,
+const ComponentFormRegisterTags: FC<IPropsComponentFormRegisterTags> = ({
   lectureId,
-  allTags,
   tags,
-  mutate,
 }) => {
-  const [updateToggle, setUpdateToggle] = React.useState<boolean>(false);
-  const [registerTags, setRegisterTags] = React.useState<ITags[]>(tags);
-  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
-  const tagsOptions = React.useMemo(() => {
+  const token = useRecoilValue(stateToken);
+  const { data: dataListTagAll } = useSWRListTagAll();
+  const { mutate: mutateLectureAll } = useSWRListLectureAll();
+  const [updateToggle, setUpdateToggle] = useState<boolean>(false);
+  const [registerTags, setRegisterTags] = useState<ITags[]>(tags);
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
+  const tagsOptions = useMemo(() => {
     const filteredTags = [];
-    if (!!allTags) {
-      for (const tag of allTags) {
+    if (dataListTagAll) {
+      for (const tag of dataListTagAll) {
         filteredTags.push({ value: tag.id, label: tag.name });
       }
     }
     return filteredTags;
-  }, [allTags]);
-  const onHandleTagsChange = React.useCallback(
+  }, [dataListTagAll]);
+  const onHandleTagsChange = useCallback(
     (changedOption: any) => {
       const filteredTags = [];
       if (changedOption && changedOption.length > 0) {
@@ -71,7 +73,7 @@ const ComponentFormRegisterTags: React.FC<IPropsComponentFormRegisterTags> = ({
         },
       );
       if (response.status === 200) {
-        await mutate();
+        await mutateLectureAll();
         toast('성공적으로 강의에 태그가 설정되었습니다', { type: 'success' });
         setUpdateToggle(!updateToggle);
       }
@@ -133,10 +135,8 @@ const ComponentFormRegisterTags: React.FC<IPropsComponentFormRegisterTags> = ({
                   return (
                     <ComponentFormUnregisterTag
                       key={index}
-                      token={token}
                       lectureId={lectureId}
                       tag={tag}
-                      mutate={mutate}
                     />
                   );
                 })}

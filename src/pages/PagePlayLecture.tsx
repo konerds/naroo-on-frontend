@@ -1,66 +1,47 @@
-import * as React from 'react';
+import { FC, useState, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
-import ContextToken from '../store/ContextToken';
-import useSWR from 'swr';
-import { isArray } from 'lodash';
 import { useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import ComponentElementTag from '../components/common/ComponentElementTag';
-import { IInfoMe, ILectureVideoDetail } from '../interfaces';
-import { axiosGetfetcher } from '../hooks/api';
+import { useSWRInfoMe, useSWRVideoLecture } from '../hooks/api';
 import ComponentSkeletonCustom from '../components/common/ui/ComponentSkeletonCustom';
 import YouTube from 'react-youtube';
+import stateToken from '../recoil/state-object-token/stateToken';
 
-const PagePlayLecture: React.FC = () => {
+const PagePlayLecture: FC = () => {
   const { id } = useParams<{ id: string }>();
-  const settings = {
-    arrows: false,
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    pauseOnHover: true,
-    variableWidth: true,
-  };
   const navigate = useNavigate();
-  const tokenCtx = React.useContext(ContextToken);
-  const { token } = tokenCtx;
-  const { data: dataGetMe } = useSWR<IInfoMe>(
-    !!token ? `${process.env.REACT_APP_BACK_URL}/user/me` : null,
-    () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/me`, token),
-    { revalidateOnFocus: false, revalidateIfStale: false },
-  );
-  const { data: dataLectureVideo, error: errorLectureVideo } =
-    useSWR<ILectureVideoDetail>(
-      !!token && !!dataGetMe
-        ? `${process.env.REACT_APP_BACK_URL}/lecture/video/${id}`
-        : null,
-      () =>
-        axiosGetfetcher(
-          `${process.env.REACT_APP_BACK_URL}/lecture/video/${id}`,
-          token,
-        ),
-      { revalidateOnFocus: false, revalidateIfStale: false },
+  const token = useRecoilValue(stateToken);
+  const { data: dataInfoMe } = useSWRInfoMe();
+  const {
+    data: dataVideoLecture,
+    isValidating: isValidatingVideoLecture,
+    error: errorVideoLecture,
+  } = useSWRVideoLecture(id);
+  const [isLoadingVideoLecture, setIsLoadingVideoLecture] = useState(false);
+  const [isTypeVideoYoutube, setIsTypeVideoYoutube] = useState<boolean>(false);
+  const [idVideoYoutube, setIdVideoYoutube] = useState('');
+  useEffect(() => {
+    setIsLoadingVideoLecture(
+      (!!!dataVideoLecture && !!!errorVideoLecture) || isValidatingVideoLecture,
     );
-  const [isTypeVideoYoutube, setIsTypeVideoYoutube] =
-    React.useState<boolean>(false);
-  const [idVideoYoutube, setIdVideoYoutube] = React.useState('');
-  React.useEffect(() => {
+  }, [dataVideoLecture, isValidatingVideoLecture, errorVideoLecture]);
+  useEffect(() => {
     if (!!!token || !!!id) {
       navigate('/', { replace: true });
     }
   }, [token, id]);
-  React.useEffect(() => {
-    if (dataLectureVideo && dataLectureVideo.video_url) {
-      if (dataLectureVideo.video_url.includes('youtube.com')) {
+  useEffect(() => {
+    if (dataVideoLecture && dataVideoLecture.video_url) {
+      if (dataVideoLecture.video_url.includes('youtube.com')) {
         setIsTypeVideoYoutube(true);
       }
     }
-  }, [dataLectureVideo?.video_url]);
-  React.useEffect(() => {
-    if (isTypeVideoYoutube && dataLectureVideo && dataLectureVideo.video_url) {
-      const url = new URL(dataLectureVideo.video_url);
+  }, [dataVideoLecture?.video_url]);
+  useEffect(() => {
+    if (isTypeVideoYoutube && dataVideoLecture && dataVideoLecture.video_url) {
+      const url = new URL(dataVideoLecture.video_url);
       if (url) {
         const { searchParams } = url;
         if (searchParams) {
@@ -75,22 +56,37 @@ const PagePlayLecture: React.FC = () => {
   return (
     <div className="min-h-[inherit] w-full bg-gray-500 pt-[5px]">
       {!!token &&
-        !!dataGetMe &&
-        !!dataLectureVideo &&
-        !!!errorLectureVideo &&
-        !!dataLectureVideo.video_url &&
-        !!dataLectureVideo.video_title && (
+        !!dataInfoMe &&
+        !!dataVideoLecture &&
+        !!!errorVideoLecture &&
+        !!dataVideoLecture.video_url &&
+        !!dataVideoLecture.video_title && (
           <div className="bg-gray-500">
-            {dataLectureVideo.status === 'accept' && (
+            {dataVideoLecture.status === 'accept' && (
               <>
-                {!!dataLectureVideo.tags && isArray(dataLectureVideo.tags) ? (
+                {isLoadingVideoLecture ? (
+                  <ComponentSkeletonCustom className="w-full-important min-h-[34px]" />
+                ) : (
                   <>
-                    {dataLectureVideo.tags.length > 0 ? (
+                    {!!dataVideoLecture &&
+                    !!!errorVideoLecture &&
+                    dataVideoLecture.tags &&
+                    Array.isArray(dataVideoLecture.tags) &&
+                    dataVideoLecture.tags.length > 0 ? (
                       <Slider
                         className="flex w-full cursor-grab px-[5px]"
-                        {...settings}
+                        {...{
+                          arrows: false,
+                          dots: false,
+                          infinite: false,
+                          speed: 500,
+                          slidesToShow: 1,
+                          slidesToScroll: 1,
+                          pauseOnHover: true,
+                          variableWidth: true,
+                        }}
                       >
-                        {dataLectureVideo.tags.map((tag, index) => {
+                        {dataVideoLecture.tags.map((tag, index) => {
                           return (
                             <div className="max-w-max py-[5px]" key={index}>
                               <ComponentElementTag name={tag.name} />
@@ -104,11 +100,9 @@ const PagePlayLecture: React.FC = () => {
                       </div>
                     )}
                   </>
-                ) : (
-                  <ComponentSkeletonCustom className="w-full-important min-h-[34px]" />
                 )}
                 <div className="flex w-[100vw] pb-[9px] pl-[9px] text-4xl font-medium text-white">
-                  {dataLectureVideo.video_title}
+                  {dataVideoLecture.video_title}
                 </div>
                 <div className="aspect-h-9 aspect-w-16">
                   {isTypeVideoYoutube ? (
@@ -127,7 +121,7 @@ const PagePlayLecture: React.FC = () => {
                     </>
                   ) : (
                     <iframe
-                      src={dataLectureVideo.video_url}
+                      src={dataVideoLecture.video_url}
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
@@ -136,7 +130,7 @@ const PagePlayLecture: React.FC = () => {
                 </div>
               </>
             )}
-            {dataLectureVideo.status !== 'accept' && (
+            {dataVideoLecture.status !== 'accept' && (
               <>
                 <div className="flex items-center p-[10px]">
                   <div className="py-1 text-xs text-white">
@@ -145,7 +139,7 @@ const PagePlayLecture: React.FC = () => {
                 </div>
                 <div className="flex w-[100vw]">
                   <div className="max-h-[69.1vh] min-h-[69.1vh] w-full flex-grow">
-                    <ComponentSkeletonCustom className="w-full-vw-important m-0 min-h-[100%] p-0" />
+                    <ComponentSkeletonCustom className="w-screen-important m-0 min-h-[100%] p-0" />
                   </div>
                 </div>
               </>

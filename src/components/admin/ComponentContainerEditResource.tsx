@@ -1,34 +1,58 @@
-import * as React from 'react';
-import { KeyedMutator } from 'swr';
+import { FC, Fragment, useState, useEffect } from 'react';
 import { IResources } from '../../interfaces';
 import ComponentFormUpdateResource from './resource/ComponentFormUpdateResource';
+import { useSWRListResourceAll } from '../../hooks/api';
 
-interface IPropsComponentContainerEditResource {
-  token: string | null;
-  logoHeaderResourcesData: IResources[];
-  logoFooterResourcesData: IResources[];
-  carouselLectureResourcesData: IResources[];
-  carouselOrgResourcesData: IResources[];
-  allResourcesMutate: KeyedMutator<IResources[]>;
-}
+interface IPropsComponentContainerEditResource {}
 
-const ComponentContainerEditResource: React.FC<
+const ComponentContainerEditResource: FC<
   IPropsComponentContainerEditResource
-> = ({
-  token,
-  logoHeaderResourcesData,
-  logoFooterResourcesData,
-  carouselLectureResourcesData,
-  carouselOrgResourcesData,
-  allResourcesMutate,
-}) => {
+> = ({}) => {
+  const { data: dataListResourceAll, error: errorListResourceAll } =
+    useSWRListResourceAll();
+  const [dataListLogoHeader, setDataListLogoHeader] = useState<IResources[]>(
+    [],
+  );
+  const [dataListLogoFooter, setDataListLogoFooter] = useState<IResources[]>(
+    [],
+  );
+  const [dataListCarouselBanner, setDataListCarouselBanner] = useState<
+    IResources[]
+  >([]);
+  const [dataListCarouselOrg, setDataListCarouselOrg] = useState<IResources[]>(
+    [],
+  );
+  useEffect(() => {
+    if (dataListResourceAll && !errorListResourceAll) {
+      setDataListLogoHeader(
+        dataListResourceAll.filter((resource) => {
+          return resource.type === 'header_logo';
+        }),
+      );
+      setDataListLogoFooter(
+        dataListResourceAll.filter((resource) => {
+          return resource.type === 'footer_logo';
+        }),
+      );
+      setDataListCarouselBanner(
+        dataListResourceAll.filter((resource) => {
+          return resource.type === 'info_banner';
+        }),
+      );
+      setDataListCarouselOrg(
+        dataListResourceAll.filter((resource) => {
+          return resource.type === 'org_carousel';
+        }),
+      );
+    }
+  }, [dataListResourceAll, errorListResourceAll]);
   return (
     <>
-      {logoHeaderResourcesData.length > 0 ? (
+      {dataListLogoHeader.length > 0 ? (
         <>
-          {logoHeaderResourcesData.map((resource, index) => {
+          {dataListLogoHeader.map((resource, index) => {
             return (
-              <React.Fragment key={index}>
+              <Fragment key={index}>
                 {+index === 0 && (
                   <div className="mb-[10px] text-2xl">헤더 로고 이미지</div>
                 )}
@@ -36,26 +60,24 @@ const ComponentContainerEditResource: React.FC<
                   {!!resource.content && (
                     <ComponentFormUpdateResource
                       index={index}
-                      token={token}
                       type={resource.type}
                       content_id={resource.content_id}
                       content={resource.content}
-                      mutate={allResourcesMutate}
                     />
                   )}
                 </div>
-              </React.Fragment>
+              </Fragment>
             );
           })}
         </>
       ) : (
         <></>
       )}
-      {logoFooterResourcesData.length > 0 ? (
+      {dataListLogoFooter.length > 0 ? (
         <>
-          {logoFooterResourcesData.map((resource, index) => {
+          {dataListLogoFooter.map((resource, index) => {
             return (
-              <React.Fragment key={index}>
+              <Fragment key={index}>
                 {+index === 0 && (
                   <div className="mb-[10px] mt-[20px] text-2xl">
                     푸터 로고 이미지
@@ -65,26 +87,24 @@ const ComponentContainerEditResource: React.FC<
                   {!!resource.content && (
                     <ComponentFormUpdateResource
                       index={index}
-                      token={token}
                       type={resource.type}
                       content_id={resource.content_id}
                       content={resource.content}
-                      mutate={allResourcesMutate}
                     />
                   )}
                 </div>
-              </React.Fragment>
+              </Fragment>
             );
           })}
         </>
       ) : (
         <></>
       )}
-      {carouselLectureResourcesData.length > 0 ? (
+      {dataListCarouselBanner.length > 0 ? (
         <>
-          {carouselLectureResourcesData.map((resource, index) => {
+          {dataListCarouselBanner.map((resource, index) => {
             return (
-              <React.Fragment key={index}>
+              <Fragment key={index}>
                 {+index === 0 && (
                   <div className="mb-[10px] mt-[20px] text-2xl">
                     상단 서비스 소개 배너 이미지
@@ -94,15 +114,13 @@ const ComponentContainerEditResource: React.FC<
                   {!!resource.content && (
                     <ComponentFormUpdateResource
                       index={index}
-                      token={token}
                       type={resource.type}
                       content_id={resource.content_id}
                       content={resource.content}
-                      mutate={allResourcesMutate}
                     />
                   )}
                 </div>
-              </React.Fragment>
+              </Fragment>
             );
           })}
         </>
@@ -114,20 +132,18 @@ const ComponentContainerEditResource: React.FC<
           <div className="my-[1px] rounded border-2">
             <ComponentFormUpdateResource
               index={0}
-              token={token}
               type="info_banner"
               content_id="0"
-              content={''}
-              mutate={allResourcesMutate}
+              content=""
             />
           </div>
         </>
       )}
-      {carouselOrgResourcesData.length > 0 ? (
+      {dataListCarouselOrg.length > 0 ? (
         <>
-          {carouselOrgResourcesData.map((resource, index) => {
+          {dataListCarouselOrg.map((resource, index) => {
             return (
-              <React.Fragment key={index}>
+              <Fragment key={index}>
                 {+index === 0 && (
                   <div className="mb-[10px] mt-[20px] text-2xl">
                     하단 기관 슬라이더 이미지
@@ -137,15 +153,13 @@ const ComponentContainerEditResource: React.FC<
                   {!!resource.content && (
                     <ComponentFormUpdateResource
                       index={index}
-                      token={token}
                       type={resource.type}
                       content_id={resource.content_id}
                       content={resource.content}
-                      mutate={allResourcesMutate}
                     />
                   )}
                 </div>
-              </React.Fragment>
+              </Fragment>
             );
           })}
         </>
@@ -157,11 +171,9 @@ const ComponentContainerEditResource: React.FC<
           <div className="my-[1px] rounded border-2">
             <ComponentFormUpdateResource
               index={0}
-              token={token}
               type="org_carousel"
               content_id="0"
-              content={''}
-              mutate={allResourcesMutate}
+              content=""
             />
           </div>
         </>

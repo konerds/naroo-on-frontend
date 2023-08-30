@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FC } from 'react';
 import {
   faEnvelope,
   faFax,
@@ -6,29 +6,20 @@ import {
   faPhoneAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import useSWRImmutable from 'swr/immutable';
-import { axiosGetfetcher } from '../../hooks/api';
-import { IResourceContent } from '../../interfaces';
-
-const ComponentFooter: React.FC = () => {
-  const { data: dataFooterLogo, error: errorFooterLogo } = useSWRImmutable<
-    IResourceContent[]
-  >(
-    `${process.env.REACT_APP_BACK_URL}/resource/footer_logo`,
-    () =>
-      axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/resource/footer_logo`),
-    { revalidateOnFocus: false, revalidateIfStale: false },
-  );
+import { useSWRListLogoFooter } from '../../hooks/api';
+const ComponentFooter: FC = () => {
+  const { data: dataListLogoFooter, error: errorListLogoFooter } =
+    useSWRListLogoFooter();
   return (
     <div className="flex w-full flex-wrap justify-center bg-[#696969]">
       <div className="flex h-[148px] w-full max-w-[100vw] items-center justify-center sm:h-[128px] sm:max-w-[504px] md:max-w-[680px] lg:max-w-[864px] xl:max-w-[1152px]">
         <div className="w-[80px] xs:w-[150px] sm:w-[210px] md:w-[220px] lg:w-[250px] xl:w-[250px]">
-          {!!dataFooterLogo &&
-          !!!errorFooterLogo &&
-          dataFooterLogo.length > 0 ? (
+          {!!dataListLogoFooter &&
+          !!!errorListLogoFooter &&
+          dataListLogoFooter.length > 0 ? (
             <img
               className="mx-auto w-[50px] cursor-pointer xs:mx-0 xs:w-[120px] sm:w-[170px]"
-              src={dataFooterLogo[0].content}
+              src={dataListLogoFooter[0].content}
             />
           ) : (
             ''

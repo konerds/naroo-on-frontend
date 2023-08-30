@@ -1,26 +1,25 @@
-import * as React from 'react';
+import { FC, useState, Fragment } from 'react';
+import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { IUserEdit } from '../../../interfaces';
-import ComponentFormUpdateUser from './ComponentFormUpdateUser';
-import { KeyedMutator } from 'swr';
-import { showError } from '../../../hooks/api';
+import ComponentFormUpdateUserForAdmin from './ComponentFormUpdateUserForAdmin';
+import { showError, useSWRListUserAll } from '../../../hooks/api';
 import { toast } from 'react-toastify';
+import stateToken from '../../../recoil/state-object-token/stateToken';
 
 interface IPropsComponentElementEditUser {
-  token: string;
   user: IUserEdit;
-  mutate: KeyedMutator<IUserEdit[]>;
 }
 
-const ComponentElementEditUser: React.FC<IPropsComponentElementEditUser> = ({
-  token,
+const ComponentElementEditUser: FC<IPropsComponentElementEditUser> = ({
   user,
-  mutate,
 }) => {
+  const token = useRecoilValue(stateToken);
+  const { mutate: mutateListUserAll } = useSWRListUserAll();
   const [isLoadingDeleteUser, setIsLoadingDeleteUser] =
-    React.useState<boolean>(false);
+    useState<boolean>(false);
   const onClickDeleteUser = async (id: string | null) => {
     try {
       setIsLoadingDeleteUser(true);
@@ -33,7 +32,7 @@ const ComponentElementEditUser: React.FC<IPropsComponentElementEditUser> = ({
         },
       );
       if (response.status === 200) {
-        await mutate();
+        await mutateListUserAll();
         toast('성공적으로 사용자가 삭제되었습니다', { type: 'success' });
       }
     } catch (error: any) {
@@ -43,7 +42,7 @@ const ComponentElementEditUser: React.FC<IPropsComponentElementEditUser> = ({
     }
   };
   return (
-    <React.Fragment>
+    <Fragment>
       {!!user.id && (
         <div
           className={`my-[20px] w-auto rounded-[4px] border-[1px] p-[20px]${
@@ -54,33 +53,29 @@ const ComponentElementEditUser: React.FC<IPropsComponentElementEditUser> = ({
         >
           <>
             {!!user.email && (
-              <ComponentFormUpdateUser
+              <ComponentFormUpdateUserForAdmin
                 fieldType="email"
                 id={user.id}
                 userField={user.email}
-                mutate={mutate}
               />
             )}
             {!!user.nickname && (
-              <ComponentFormUpdateUser
+              <ComponentFormUpdateUserForAdmin
                 fieldType="nickname"
                 id={user.id}
                 userField={user.nickname}
-                mutate={mutate}
               />
             )}
-            <ComponentFormUpdateUser
+            <ComponentFormUpdateUserForAdmin
               fieldType="password"
               id={user.id}
-              userField={''}
-              mutate={mutate}
+              userField=""
             />
             {!!user.phone && (
-              <ComponentFormUpdateUser
+              <ComponentFormUpdateUserForAdmin
                 fieldType="phone"
                 id={user.id}
                 userField={user.phone}
-                mutate={mutate}
               />
             )}
           </>
@@ -98,7 +93,7 @@ const ComponentElementEditUser: React.FC<IPropsComponentElementEditUser> = ({
           </button>
         </div>
       )}
-    </React.Fragment>
+    </Fragment>
   );
 };
 

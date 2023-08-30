@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FC } from 'react';
 import { ReactComponent as ImgClose } from '../../../assets/images/Close.svg';
 
 interface IPropsComponentViewImageExpand {
@@ -6,7 +6,7 @@ interface IPropsComponentViewImageExpand {
   hideComponent: () => void;
 }
 
-const ComponentViewImageExpand: React.FC<IPropsComponentViewImageExpand> = ({
+const ComponentViewImageExpand: FC<IPropsComponentViewImageExpand> = ({
   src,
   hideComponent,
 }) => {

@@ -1,25 +1,25 @@
-import * as React from 'react';
+import { FC, useState, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useStringInput } from '../hooks';
 import { toast } from 'react-toastify';
-import ContextToken from '../store/ContextToken';
 import { showError } from '../hooks/api';
 import { ThreeDots } from 'react-loader-spinner';
+import stateToken from '../recoil/state-object-token/stateToken';
 
-const PageSignup: React.FC = () => {
+const PageSignup: FC = () => {
   const navigate = useNavigate();
-  const tokenCtx = React.useContext(ContextToken);
-  const { token, setToken } = tokenCtx;
+  const [token, setToken] = useRecoilState(stateToken);
   const { value: email, onChange: onChangeEmail } = useStringInput('');
   const { value: password, onChange: onChangePassword } = useStringInput('');
   const { value: passwordCheck, onChange: onChangePasswordCheck } =
     useStringInput('');
   const { value: nickname, onChange: onChangeNickname } = useStringInput('');
   const { value: phone, onChange: onChangePhone } = useStringInput('');
-  const [isAgreeEmail, setIsAgreeEmail] = React.useState<boolean>(false);
-  const [isRequesting, setIsRequesting] = React.useState<boolean>(false);
-  const handlerOnSubmit = async () => {
+  const [isAgreeEmail, setIsAgreeEmail] = useState<boolean>(false);
+  const [isRequesting, setIsRequesting] = useState<boolean>(false);
+  const handlerSignUp = async () => {
     try {
       if (password !== passwordCheck) {
         toast('패스워드가 일치하지 않습니다', { type: 'error' });
@@ -48,7 +48,7 @@ const PageSignup: React.FC = () => {
       setIsRequesting(false);
     }
   };
-  React.useEffect(() => {
+  useEffect(() => {
     if (!!token) {
       navigate('/', { replace: true });
     }
@@ -59,7 +59,7 @@ const PageSignup: React.FC = () => {
         <form
           onSubmit={(event) => {
             event.preventDefault();
-            handlerOnSubmit();
+            handlerSignUp();
           }}
         >
           <div className="text-[1.5rem] font-semibold">회원가입</div>

@@ -1,4 +1,5 @@
-import * as React from 'react';
+import { FC, useEffect } from 'react';
+import { RecoilRoot, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   BrowserRouter as Router,
   Routes,
@@ -18,17 +19,18 @@ import PageProfile from './pages/PageProfile';
 import PageInitPassword from './pages/PageInitPassword';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { ContextTokenProvider } from './store/ContextToken';
 import MediaQuery from 'react-responsive';
+import stateIsRemeberToken from './recoil/state-object-token/stateIsRemeberToken';
+import stateToken from './recoil/state-object-token/stateToken';
 
-const AppRouterWrapper: React.FC = () => {
+const AppRouterWrapper: FC = () => {
   return (
     <div
       className={`${
         process.env.NODE_ENV !== 'production' ? 'debug-screens' : ''
       }`}
     >
-      <ContextTokenProvider>
+      <RecoilRoot>
         <Router>
           <App />
         </Router>
@@ -43,16 +45,23 @@ const AppRouterWrapper: React.FC = () => {
         <MediaQuery minWidth={420}>
           <ToastContainer limit={6} autoClose={1500} hideProgressBar={true} />
         </MediaQuery>
-      </ContextTokenProvider>
+      </RecoilRoot>
     </div>
   );
 };
 
-const App: React.FC = () => {
+const App: FC = () => {
   const { pathname } = useLocation();
-  React.useEffect(() => {
+  const isRememberToken = useRecoilValue(stateIsRemeberToken);
+  const setToken = useSetRecoilState(stateToken);
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+  useEffect(() => {
+    if (!isRememberToken) {
+      setToken('');
+    }
+  }, []);
   return (
     <>
       <ComponentHeader />

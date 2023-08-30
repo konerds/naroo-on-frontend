@@ -1,31 +1,41 @@
-import * as React from 'react';
+import { useState, ChangeEvent } from 'react';
+import { IStateToken } from '../interfaces';
 
 export const useStringInput = (initialValue: string) => {
-  const [value, setValue] = React.useState<string>(initialValue);
+  const [value, setValue] = useState<string>(initialValue);
   return {
     value: value,
     setValue: setValue,
-    onChange: (
-      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => {
+    onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const { value } = e.target;
       setValue(value);
     },
   };
 };
 
-export const getSavedToken = (localStorage: Storage) => {
-  const savedTokenInLocalStorage = localStorage.getItem('token');
-  return !!savedTokenInLocalStorage &&
-    savedTokenInLocalStorage !== 'null' &&
-    savedTokenInLocalStorage !== 'undefined'
-    ? savedTokenInLocalStorage
-    : '';
+const getParsedStateTokenInLocal = (localStorage: Storage) => {
+  const rawStateTokenInLocal = localStorage.getItem('stateToken');
+  if (rawStateTokenInLocal) {
+    return JSON.parse(rawStateTokenInLocal) as IStateToken;
+  } else {
+    return undefined;
+  }
 };
 
-export const getSavedIsRememberToken = (localStorage: Storage) => {
-  return !!localStorage.getItem('isRememberToken') &&
-    localStorage.getItem('isRememberToken') === 'true'
-    ? 'true'
-    : 'false';
+export const getTokenSavedInLocal = (localStorage: Storage) => {
+  const parsedStateTokenInLocal = getParsedStateTokenInLocal(localStorage);
+  if (parsedStateTokenInLocal) {
+    return parsedStateTokenInLocal.token;
+  } else {
+    return '';
+  }
+};
+
+export const getIsRememberTokenSavedInLocal = (localStorage: Storage) => {
+  const parsedStateTokenInLocal = getParsedStateTokenInLocal(localStorage);
+  if (parsedStateTokenInLocal) {
+    return parsedStateTokenInLocal.isRememberToken;
+  } else {
+    return '';
+  }
 };

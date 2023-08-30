@@ -1,20 +1,23 @@
-import * as React from 'react';
+import { FC, useState, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { useStringInput } from '../hooks';
-import ContextToken from '../store/ContextToken';
 import { showError } from '../hooks/api';
 import { toast } from 'react-toastify';
 import { ThreeDots } from 'react-loader-spinner';
+import stateToken from '../recoil/state-object-token/stateToken';
+import stateIsRemeberToken from '../recoil/state-object-token/stateIsRemeberToken';
 
-const PageSignin: React.FC = () => {
+const PageSignin: FC = () => {
   const navigate = useNavigate();
-  const tokenCtx = React.useContext(ContextToken);
-  const { token, setToken, isRememberToken, setIsRememberToken } = tokenCtx;
+  const [token, setToken] = useRecoilState(stateToken);
+  const [isRememberToken, setIsRememberToken] =
+    useRecoilState(stateIsRemeberToken);
   const { value: email, onChange: onChangeEmail } = useStringInput('');
   const { value: password, onChange: onChangePassword } = useStringInput('');
-  const [isRequesting, setIsRequesting] = React.useState<boolean>(false);
-  const onSubmitHandler = async () => {
+  const [isRequesting, setIsRequesting] = useState<boolean>(false);
+  const handlerSignIn = async () => {
     try {
       setIsRequesting(true);
       const response = await axios.post(
@@ -34,7 +37,7 @@ const PageSignin: React.FC = () => {
       setIsRequesting(false);
     }
   };
-  React.useEffect(() => {
+  useEffect(() => {
     if (!!token) {
       navigate('/', { replace: true });
     }
@@ -44,7 +47,7 @@ const PageSignin: React.FC = () => {
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          onSubmitHandler();
+          handlerSignIn();
         }}
       >
         <div className="text-[1.5rem] font-semibold text-[#17233D]">로그인</div>
@@ -71,9 +74,9 @@ const PageSignin: React.FC = () => {
           <input
             className="mr-[5px]"
             type="checkbox"
-            checked={isRememberToken === 'true' ? true : false}
+            checked={isRememberToken}
             onChange={(event) =>
-              setIsRememberToken(event.target.checked ? 'true' : 'false')
+              setIsRememberToken(event.target.checked ? true : false)
             }
           />
           자동 로그인

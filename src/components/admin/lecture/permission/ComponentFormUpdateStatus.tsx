@@ -1,32 +1,32 @@
-import * as React from 'react';
+import { FC, useState, useMemo, useCallback } from 'react';
+import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ILectureInListAdmin } from '../../../../interfaces';
 import Select from 'react-select';
-import { KeyedMutator } from 'swr';
-import { showError } from '../../../../hooks/api';
+import { showError, useSWRListStatusLecture } from '../../../../hooks/api';
 import { toast } from 'react-toastify';
+import stateToken from '../../../../recoil/state-object-token/stateToken';
+import { ILectureInListAdmin } from '../../../../interfaces';
 
 interface IPropsComponentFormUpdateStatus {
-  token: string | null;
-  studentId: string;
-  lectureId: string;
-  status: string | null;
-  mutate: KeyedMutator<ILectureInListAdmin[]>;
+  lectureStatus: ILectureInListAdmin;
 }
 
-const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
-  token,
-  studentId,
-  lectureId,
-  status,
-  mutate,
+const ComponentFormUpdateStatus: FC<IPropsComponentFormUpdateStatus> = ({
+  lectureStatus,
 }) => {
-  const [updateToggle, setUpdateToggle] = React.useState<boolean>(false);
-  const [updateStatus, setUpdateStatus] = React.useState<string | null>(status);
-  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
-  const statusOptions = React.useMemo(() => {
+  const token = useRecoilValue(stateToken);
+  const {
+    student_id: studentId,
+    lecture_id: lectureId,
+    status,
+  } = lectureStatus;
+  const { mutate: mutateListStatusLecture } = useSWRListStatusLecture();
+  const [updateToggle, setUpdateToggle] = useState<boolean>(false);
+  const [updateStatus, setUpdateStatus] = useState<string | null>(status);
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
+  const statusOptions = useMemo(() => {
     return [
       { value: null, label: '공개' },
       { value: 'apply', label: '승인 대기' },
@@ -35,17 +35,17 @@ const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
       { value: 'invisible', label: '비공개' },
     ];
   }, []);
-  const onHandleChange = React.useCallback(
+  const handlerCallbackChange = useCallback(
     (changedOption: any) => {
       setUpdateStatus(changedOption.value);
     },
     [statusOptions],
   );
-  const onClickUpdateToggle = () => {
+  const handlerToggleUpdate = () => {
     setUpdateToggle(!updateToggle);
     setUpdateStatus(status);
   };
-  const onSubmitUpdateTag = async () => {
+  const handlerUpdateTag = async () => {
     try {
       setIsLoadingSubmit(true);
       if (updateStatus === status) {
@@ -65,7 +65,7 @@ const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
         },
       );
       if (response.status === 200) {
-        await mutate();
+        await mutateListStatusLecture();
         toast('성공적으로 수강 상태가 업데이트되었습니다', { type: 'success' });
         setUpdateToggle(!updateToggle);
       }
@@ -82,13 +82,13 @@ const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
           className="mt-[10px] block sm:flex sm:items-center"
           onSubmit={(event) => {
             event.preventDefault();
-            onSubmitUpdateTag();
+            handlerUpdateTag();
           }}
         >
           <Select
             className="w-full bg-harp text-xs text-gray-200 disabled:opacity-50"
             options={statusOptions}
-            onChange={onHandleChange}
+            onChange={handlerCallbackChange}
             placeholder="수강 상태를 업데이트하세요"
             isDisabled={isLoadingSubmit}
           />
@@ -102,7 +102,7 @@ const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
             </button>
             <button
               className="button-modify-cancel-admin relative h-[32px] w-[65px]"
-              onClick={onClickUpdateToggle}
+              onClick={handlerToggleUpdate}
               disabled={isLoadingSubmit}
             >
               취소
@@ -128,7 +128,7 @@ const ComponentFormUpdateStatus: React.FC<IPropsComponentFormUpdateStatus> = ({
           <FontAwesomeIcon
             className="button-fa-icon-admin ml-[10px]"
             icon={faEdit}
-            onClick={onClickUpdateToggle}
+            onClick={handlerToggleUpdate}
           />
         </div>
       )}

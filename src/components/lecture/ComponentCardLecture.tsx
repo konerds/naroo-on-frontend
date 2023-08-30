@@ -1,11 +1,9 @@
-import * as React from 'react';
-import { isArray } from 'lodash';
+import { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Slider, { Settings } from 'react-slick';
+import Slider from 'react-slick';
 import { ITags } from '../../interfaces';
 import ComponentElementTag from '../common/ComponentElementTag';
 import PlayIcon from '../../assets/images/Play.svg';
-import ComponentSkeletonCustom from '../common/ui/ComponentSkeletonCustom';
 
 interface IPropsComponentCardLecture {
   id: string;
@@ -16,7 +14,7 @@ interface IPropsComponentCardLecture {
   tags: ITags[] | [] | null;
 }
 
-const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
+const ComponentCardLecture: FC<IPropsComponentCardLecture> = ({
   id,
   title,
   thumbnail,
@@ -24,17 +22,7 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
   status,
   tags,
 }) => {
-  const settings: Settings | Readonly<Settings> = {
-    arrows: false,
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    pauseOnHover: true,
-    variableWidth: true,
-  };
-  const [isBackdropShow, setIsBackdropShow] = React.useState<boolean>(false);
+  const [isBackdropShow, setIsBackdropShow] = useState<boolean>(false);
   return (
     <div
       className={`mx-0 max-h-[444px] min-h-[444px] w-full rounded-[8px]${
@@ -95,36 +83,39 @@ const ComponentCardLecture: React.FC<IPropsComponentCardLecture> = ({
         <div className="w-full px-[20px] text-[12px] font-medium text-[#808695]">
           {teacherNickname}
         </div>
-        {!!tags && isArray(tags) ? (
-          <>
-            {tags.length > 0 ? (
-              <div
-                className="max-w-full"
-                onMouseDown={(event) => {
-                  event.stopPropagation();
-                }}
-              >
-                <Slider
-                  className="mb-[16px] flex w-full cursor-grab px-[20px] md:max-w-[261px]"
-                  {...settings}
-                >
-                  {tags.map((tag, index) => {
-                    return (
-                      <div className="max-w-max py-[5px]" key={index}>
-                        <ComponentElementTag name={tag.name} />
-                      </div>
-                    );
-                  })}
-                </Slider>
-              </div>
-            ) : (
-              <div className="h-[34px] w-full px-[20px] text-xs text-gray-200">
-                태그가 존재하지 않습니다
-              </div>
-            )}
-          </>
+        {!!tags && tags.length > 0 ? (
+          <div
+            className="max-w-full"
+            onMouseDown={(event) => {
+              event.stopPropagation();
+            }}
+          >
+            <Slider
+              className="mb-[16px] flex w-full cursor-grab px-[20px] md:max-w-[261px]"
+              {...{
+                arrows: false,
+                dots: false,
+                infinite: false,
+                speed: 500,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                pauseOnHover: true,
+                variableWidth: true,
+              }}
+            >
+              {tags.map((tag, index) => {
+                return (
+                  <div className="max-w-max py-[5px]" key={index}>
+                    <ComponentElementTag name={tag.name} />
+                  </div>
+                );
+              })}
+            </Slider>
+          </div>
         ) : (
-          <ComponentSkeletonCustom className="w-full-important min-h-[34px]" />
+          <div className="h-[34px] w-full px-[20px] text-xs text-gray-200">
+            태그가 존재하지 않습니다
+          </div>
         )}
       </div>
     </div>

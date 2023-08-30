@@ -1,14 +1,14 @@
-import * as React from 'react';
+import { Dispatch, SetStateAction, FC } from 'react';
 import { Link } from 'react-router-dom';
 import ImgEllipsisVector from '../../../assets/images/EllipsisVector.png';
 
 interface IPropsComponentEllipsisHeader {
-  logoutHandler: () => void;
-  setIsVisibleMenu: React.Dispatch<React.SetStateAction<boolean>>;
+  handlerSignout: () => void;
+  setIsVisibleMenu: Dispatch<SetStateAction<boolean>>;
 }
 
-const ComponentEllipsisHeader: React.FC<IPropsComponentEllipsisHeader> = ({
-  logoutHandler,
+const ComponentEllipsisHeader: FC<IPropsComponentEllipsisHeader> = ({
+  handlerSignout,
   setIsVisibleMenu,
 }) => {
   return (
@@ -39,7 +39,7 @@ const ComponentEllipsisHeader: React.FC<IPropsComponentEllipsisHeader> = ({
           className="block py-[10px] pl-[26px] text-[1.125rem] font-medium text-[#515A6E] hover:opacity-50"
           onClick={() => {
             setIsVisibleMenu(false);
-            logoutHandler();
+            handlerSignout();
           }}
         >
           로그아웃

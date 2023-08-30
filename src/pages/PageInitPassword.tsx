@@ -1,17 +1,17 @@
-import * as React from 'react';
+import { FC, useState, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useStringInput } from '../hooks';
 import { toast } from 'react-toastify';
 import { showError } from '../hooks/api';
-import ContextToken from '../store/ContextToken';
 import { ThreeDots } from 'react-loader-spinner';
+import stateToken from '../recoil/state-object-token/stateToken';
 
-const PageInitPassword: React.FC = () => {
+const PageInitPassword: FC = () => {
   const navigate = useNavigate();
-  const tokenCtx = React.useContext(ContextToken);
-  const { token } = tokenCtx;
-  const [isRequesting, setIsRequesting] = React.useState<boolean>(false);
+  const token = useRecoilValue(stateToken);
+  const [isRequesting, setIsRequesting] = useState<boolean>(false);
   const { value: email, onChange: onChangeEmail } = useStringInput('');
   const { value: nickname, onChange: onChangeNickname } = useStringInput('');
   const { value: phone, onChange: onChangePhone } = useStringInput('');
@@ -46,7 +46,7 @@ const PageInitPassword: React.FC = () => {
       setIsRequesting(false);
     }
   };
-  React.useEffect(() => {
+  useEffect(() => {
     if (!!token) {
       navigate('/', { replace: true });
     }

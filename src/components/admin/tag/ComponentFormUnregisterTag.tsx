@@ -1,25 +1,27 @@
-import * as React from 'react';
+import { FC, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { ILectureInList, ITags } from '../../../interfaces';
+import { ITags } from '../../../interfaces';
 import ComponentElementTag from '../../common/ComponentElementTag';
-import { KeyedMutator } from 'swr';
-import { showError } from '../../../hooks/api';
+import { showError, useSWRListLectureAll } from '../../../hooks/api';
 import { toast } from 'react-toastify';
+import stateToken from '../../../recoil/state-object-token/stateToken';
 
 interface IPropsComponentFormUnregisterTag {
-  token: string | null;
   lectureId: string;
   tag: ITags;
-  mutate: KeyedMutator<ILectureInList[]>;
 }
 
-const ComponentFormUnregisterTag: React.FC<
-  IPropsComponentFormUnregisterTag
-> = ({ token, lectureId, tag, mutate }) => {
+const ComponentFormUnregisterTag: FC<IPropsComponentFormUnregisterTag> = ({
+  lectureId,
+  tag,
+}) => {
+  const token = useRecoilValue(stateToken);
+  const { mutate: mutateLectureAll } = useSWRListLectureAll();
   const [isLoadingClickUnregisterTag, setIsLoadingClickUnregisterTag] =
-    React.useState<boolean>(false);
+    useState<boolean>(false);
   const onClickUnregisterTag = async (tagId: string) => {
     try {
       setIsLoadingClickUnregisterTag(true);
@@ -35,7 +37,7 @@ const ComponentFormUnregisterTag: React.FC<
         toast('성공적으로 강의에 설정된 태그가 해제되었습니다', {
           type: 'success',
         });
-        await mutate();
+        await mutateLectureAll();
       }
     } catch (error: any) {
       showError(error);

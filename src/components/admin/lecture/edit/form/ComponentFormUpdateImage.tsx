@@ -1,39 +1,37 @@
-import * as React from 'react';
+import { FC, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
-import { KeyedMutator } from 'swr';
 import { useStringInput } from '../../../../../hooks';
-import { showError } from '../../../../../hooks/api';
-import { ILectureInList } from '../../../../../interfaces';
+import { showError, useSWRListLectureAll } from '../../../../../hooks/api';
 import { toast } from 'react-toastify';
+import stateToken from '../../../../../recoil/state-object-token/stateToken';
 
 interface IPropsComponentFormUpdateImage {
-  token: string | null;
   fieldType: string;
   lectureId: string;
   userField: string;
-  mutate: KeyedMutator<ILectureInList[]>;
   imageIndex: number | null;
 }
 
-const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
-  token,
+const ComponentFormUpdateImage: FC<IPropsComponentFormUpdateImage> = ({
   fieldType,
   lectureId,
   userField,
-  mutate,
   imageIndex,
 }) => {
+  const token = useRecoilValue(stateToken);
+  const { mutate: mutateLectureAll } = useSWRListLectureAll();
   const { value: preview, setValue: setPreview } = useStringInput(userField);
-  const [updateToggle, setUpdateToggle] = React.useState<boolean>(false);
-  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
-  const onClickUpdateToggle = () => {
+  const [updateToggle, setUpdateToggle] = useState<boolean>(false);
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
+  const handlerToggleUpdate = () => {
     setUpdateToggle(!updateToggle);
     setPreview(userField);
   };
-  const onSubmitUpdateImage = async () => {
+  const handlerUpdateImage = async () => {
     try {
       setIsLoadingSubmit(true);
       if (!!!preview || preview === userField) {
@@ -59,7 +57,7 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
       );
 
       if (response.status === 200) {
-        await mutate();
+        await mutateLectureAll();
         toast('성공적으로 이미지가 업데이트되었습니다', { type: 'success' });
         setUpdateToggle(!updateToggle);
       }
@@ -76,7 +74,7 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
           className="mt-[10px] w-full border-[1px] border-[#C4C4C4] p-[10px]"
           onSubmit={(event) => {
             event.preventDefault();
-            onSubmitUpdateImage();
+            handlerUpdateImage();
           }}
         >
           <div>
@@ -124,7 +122,7 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
               <button
                 type="button"
                 className="button-modify-cancel-admin h-[32px] w-[65px]"
-                onClick={onClickUpdateToggle}
+                onClick={handlerToggleUpdate}
                 disabled={isLoadingSubmit}
               >
                 취소
@@ -166,7 +164,7 @@ const ComponentFormUpdateImage: React.FC<IPropsComponentFormUpdateImage> = ({
           <FontAwesomeIcon
             className="button-fa-icon-admin ml-[10px]"
             icon={faEdit}
-            onClick={onClickUpdateToggle}
+            onClick={handlerToggleUpdate}
           />
         </div>
       )}

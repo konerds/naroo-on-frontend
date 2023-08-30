@@ -1,107 +1,50 @@
-import * as React from 'react';
+import { FC, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useSWR from 'swr';
 import ComponentFormAddLecture from '../components/admin/ComponentFormAddLecture';
 import ComponentContainerEditLecture from '../components/admin/ComponentContainerEditLecture';
 import ComponentContainerPermissionLecture from '../components/admin/ComponentContainerPermissionLecture';
 import ComponentContainerEditResource from '../components/admin/ComponentContainerEditResource';
 import ComponentFormEditTag from '../components/admin/ComponentFormEditTag';
 import ComponentContainerEditUser from '../components/admin/ComponentContainerEditUser';
-import { axiosGetfetcher } from '../hooks/api';
 import {
-  CONST_ADMIN_MENU,
-  IInfoMe,
-  ILectureInList,
-  IResources,
-  ITags,
-  IUserEdit,
-  TYPE_ADMIN_MENU,
-} from '../interfaces';
-import ContextToken from '../store/ContextToken';
+  useSWRListUserAll,
+  useSWRListLectureAll,
+  useSWRInfoMe,
+} from '../hooks/api';
+import { CONST_ADMIN_MENU, TYPE_ADMIN_MENU } from '../interfaces';
 
-const PageAdmin: React.FC = () => {
+const PageAdmin: FC = () => {
+  const { data: dataListLectureAll, error: errorLectureAll } =
+    useSWRListLectureAll();
   const navigate = useNavigate();
-  const tokenCtx = React.useContext(ContextToken);
-  const { token, setToken } = tokenCtx;
-  const { data: dataGetMe } = useSWR<IInfoMe>(
-    !!token ? `${process.env.REACT_APP_BACK_URL}/user/me` : null,
-    () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/me`, token),
-    { revalidateOnFocus: false, revalidateIfStale: false },
-  );
-  const {
-    data: dataUsers,
-    mutate: mutateUsers,
-    error: errorUsers,
-  } = useSWR<IUserEdit[]>(
-    !!token && !!dataGetMe && dataGetMe.role === 'admin'
-      ? `${process.env.REACT_APP_BACK_URL}/user/admin/user`
-      : null,
-    () =>
-      axiosGetfetcher(
-        `${process.env.REACT_APP_BACK_URL}/user/admin/user`,
-        token,
-      ),
-    { revalidateOnFocus: false, revalidateIfStale: false },
-  );
-  const {
-    data: dataTags,
-    mutate: mutateTags,
-    error: errorTags,
-  } = useSWR<ITags[]>(
-    !!token && !!dataGetMe && dataGetMe.role === 'admin'
-      ? `${process.env.REACT_APP_BACK_URL}/lecture/admin/tag`
-      : null,
-    () =>
-      axiosGetfetcher(
-        `${process.env.REACT_APP_BACK_URL}/lecture/admin/tag`,
-        token,
-      ),
-    { revalidateOnFocus: false, revalidateIfStale: false },
-  );
-  const {
-    data: dataAllLectures,
-    mutate: mutateAllLectures,
-    error: errorAllLectures,
-  } = useSWR<ILectureInList[]>(
-    `${process.env.REACT_APP_BACK_URL}/lecture/all`,
-    () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/lecture/all`),
-    { revalidateOnFocus: false, revalidateIfStale: false },
-  );
-  const {
-    data: dataAllResource,
-    mutate: mutateAllResources,
-    error: errorAllResources,
-  } = useSWR<IResources[]>(
-    `${process.env.REACT_APP_BACK_URL}/resource`,
-    () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/resource`, token),
-    { revalidateOnFocus: false, revalidateIfStale: false },
-  );
-  const [selectedMenu, setSelectedMenu] = React.useState<TYPE_ADMIN_MENU>(
+  const { data: dataInfoMe } = useSWRInfoMe();
+  const { data: dataListUserAll, error: errorListUserAll } =
+    useSWRListUserAll();
+  const [selectedMenu, setSelectedMenu] = useState<TYPE_ADMIN_MENU>(
     CONST_ADMIN_MENU.LECTURE_ADD,
   );
-  const [isVisibleMenu, setIsVisibleMenu] = React.useState<boolean>(false);
-  const refMenuElement = React.useRef<HTMLButtonElement | null>(null);
-  const handlerOnMousePositionMenu = (event: any) => {
-    if (
-      isVisibleMenu &&
-      (!!!refMenuElement.current || refMenuElement.current !== event.target)
-    ) {
-      setIsVisibleMenu(false);
-    }
-  };
-  React.useEffect(() => {
-    window.addEventListener('click', handlerOnMousePositionMenu);
-    return () =>
-      window.removeEventListener('click', handlerOnMousePositionMenu);
+  const [isVisibleMenu, setIsVisibleMenu] = useState<boolean>(false);
+  const refMenuElement = useRef<HTMLButtonElement | null>(null);
+  useEffect(() => {
+    const handler = (event: any) => {
+      if (
+        isVisibleMenu &&
+        (!!!refMenuElement.current || refMenuElement.current !== event.target)
+      ) {
+        setIsVisibleMenu(false);
+      }
+    };
+    window.addEventListener('click', handler);
+    return () => window.removeEventListener('click', handler);
   }, [isVisibleMenu]);
-  React.useEffect(() => {
-    if (!(!!token && !!dataGetMe && dataGetMe.role === 'admin')) {
+  useEffect(() => {
+    if (!(dataInfoMe && dataInfoMe.role === 'admin')) {
       navigate('/', { replace: true });
     }
-  }, [token, dataGetMe, dataGetMe?.role]);
+  }, [dataInfoMe, dataInfoMe?.role]);
   return (
     <div className="mb-auto mt-[20px] w-full bg-white">
-      {!!dataGetMe && dataGetMe.role === 'admin' && (
+      {!!dataInfoMe && dataInfoMe.role === 'admin' && (
         <div className="mx-auto">
           <div className="mx-auto mb-[4vh] max-w-[100vw] text-center text-4xl font-semibold text-gray-400 sm:max-w-[400px] md:max-w-[500px] lg:max-w-[600px] xl:max-w-[750px] 2xl:max-w-[900px]">
             관리자 페이지
@@ -265,101 +208,57 @@ const PageAdmin: React.FC = () => {
           </div>
           {selectedMenu === CONST_ADMIN_MENU.LECTURE_ADD && (
             <div className="overflow-w-hidden mx-auto my-[45px] max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:p-[40px] md:max-w-[600px]">
-              <ComponentFormAddLecture
-                token={token}
-                setSelectedMenu={setSelectedMenu}
-                allLecturesMutate={mutateAllLectures}
-              />
+              <ComponentFormAddLecture setSelectedMenu={setSelectedMenu} />
             </div>
           )}
-          {selectedMenu === CONST_ADMIN_MENU.LECTURE_EDIT &&
-            !!dataTags &&
-            !!!errorTags && (
-              <div className="mx-auto my-[45px] max-w-[90vw] overflow-x-hidden">
-                <ComponentContainerEditLecture
-                  token={token}
-                  setToken={setToken}
-                  allLecturesData={dataAllLectures}
-                  allLecturesMutate={mutateAllLectures}
-                  allTags={dataTags}
-                />
-              </div>
-            )}
+          {selectedMenu === CONST_ADMIN_MENU.LECTURE_EDIT && (
+            <div className="mx-auto my-[45px] max-w-[90vw] overflow-x-hidden">
+              <ComponentContainerEditLecture />
+            </div>
+          )}
           {selectedMenu === CONST_ADMIN_MENU.LECTURE_PERMISSION &&
-            !!dataUsers &&
-            !!!errorUsers &&
-            !!dataAllLectures &&
-            !!!errorAllLectures && (
-              <div className="overflow-w-hidden mx-auto my-[45px] max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:max-w-[500px] sm:p-[40px]">
-                <ComponentContainerPermissionLecture
-                  token={token}
-                  studentOptions={dataUsers
-                    .filter((user) => {
-                      return user.role !== 'admin';
-                    })
-                    .map((user) => {
-                      return {
-                        value: user.id,
-                        label: user.nickname,
-                      };
-                    })}
-                  lectureOptions={dataAllLectures.map((lecture) => {
+          dataListUserAll &&
+          !errorListUserAll &&
+          dataListLectureAll &&
+          !errorLectureAll ? (
+            <div className="overflow-w-hidden mx-auto my-[45px] max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:max-w-[500px] sm:p-[40px]">
+              <ComponentContainerPermissionLecture
+                studentOptions={dataListUserAll
+                  .filter((user) => {
+                    return user.role !== 'admin';
+                  })
+                  .map((user) => {
                     return {
-                      value: lecture.id,
-                      label: `[${lecture.teacher_nickname}] ${lecture.title}`,
+                      value: user.id,
+                      label: user.nickname,
                     };
                   })}
-                />
-              </div>
-            )}
+                lectureOptions={dataListLectureAll.map((lecture) => {
+                  return {
+                    value: lecture.id,
+                    label: `[${lecture.teacher_nickname}] ${lecture.title}`,
+                  };
+                })}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
           {selectedMenu === CONST_ADMIN_MENU.STUDENT_EDIT && (
             <div className="overflow-w-hidden mx-auto my-[45px] max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:px-[40px] sm:py-[20px]">
-              <ComponentContainerEditUser
-                token={token}
-                dataUsers={dataUsers}
-                mutateUsers={mutateUsers}
-              />
+              <ComponentContainerEditUser />
             </div>
           )}
           {selectedMenu === CONST_ADMIN_MENU.TAG_EDIT && (
             <div className="overflow-w-hidden mx-auto my-[45px] max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:px-[40px] sm:py-[20px] md:max-w-[700px]">
-              <ComponentFormEditTag
-                token={token}
-                tagsData={dataTags}
-                tagsMutate={mutateTags}
-              />
+              <ComponentFormEditTag />
             </div>
           )}
-          {selectedMenu === CONST_ADMIN_MENU.RESOURCE_EDIT &&
-            !!dataAllResource &&
-            !!!errorAllResources && (
-              <div className="overflow-w-hidden mx-auto my-[45px] max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:px-[40px] sm:py-[20px]">
-                <ComponentContainerEditResource
-                  token={token}
-                  logoHeaderResourcesData={dataAllResource.filter(
-                    (resource) => {
-                      return resource.type === 'header_logo';
-                    },
-                  )}
-                  logoFooterResourcesData={dataAllResource.filter(
-                    (resource) => {
-                      return resource.type === 'footer_logo';
-                    },
-                  )}
-                  carouselLectureResourcesData={dataAllResource.filter(
-                    (resource) => {
-                      return resource.type === 'info_banner';
-                    },
-                  )}
-                  carouselOrgResourcesData={dataAllResource.filter(
-                    (resource) => {
-                      return resource.type === 'org_carousel';
-                    },
-                  )}
-                  allResourcesMutate={mutateAllResources}
-                />
-              </div>
-            )}
+          {selectedMenu === CONST_ADMIN_MENU.RESOURCE_EDIT && (
+            <div className="overflow-w-hidden mx-auto my-[45px] max-w-[90vw] rounded-2xl border-[1px] p-[10px] sm:px-[40px] sm:py-[20px]">
+              <ComponentContainerEditResource />
+            </div>
+          )}
         </div>
       )}
     </div>

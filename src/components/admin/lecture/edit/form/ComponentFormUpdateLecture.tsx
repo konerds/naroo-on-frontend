@@ -1,36 +1,38 @@
-import * as React from 'react';
+import { FC, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { KeyedMutator } from 'swr';
 import { useStringInput } from '../../../../../hooks';
-import { ILectureInList } from '../../../../../interfaces';
-import { showError } from '../../../../../hooks/api';
+import { showError, useSWRListLectureAll } from '../../../../../hooks/api';
 import { toast } from 'react-toastify';
+import stateToken from '../../../../../recoil/state-object-token/stateToken';
 
 interface IPropsComponentFormUpdateLecture {
-  token: string | null;
   fieldType: string;
   lectureId: string;
   userField: string;
-  mutate: KeyedMutator<ILectureInList[]>;
 }
 
-const ComponentFormUpdateLecture: React.FC<
-  IPropsComponentFormUpdateLecture
-> = ({ token, fieldType, lectureId, userField, mutate }) => {
-  const [updateToggle, setUpdateToggle] = React.useState<boolean>(false);
+const ComponentFormUpdateLecture: FC<IPropsComponentFormUpdateLecture> = ({
+  fieldType,
+  lectureId,
+  userField,
+}) => {
+  const token = useRecoilValue(stateToken);
+  const { mutate: mutateLectureAll } = useSWRListLectureAll();
+  const [updateToggle, setUpdateToggle] = useState<boolean>(false);
   const {
     value: updateFieldName,
     setValue: setUpdateFieldName,
     onChange: onChangeUpdateFieldName,
   } = useStringInput('');
-  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
-  const onClickUpdateToggle = () => {
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
+  const handlerClickToggleUpdate = () => {
     setUpdateToggle(!updateToggle);
     setUpdateFieldName(userField);
   };
-  const onSubmitUpdateField = async () => {
+  const handlerUpdateField = async () => {
     try {
       setIsLoadingSubmit(true);
       if (!updateFieldName || updateFieldName === userField) {
@@ -50,7 +52,7 @@ const ComponentFormUpdateLecture: React.FC<
         },
       );
       if (response.status === 200) {
-        await mutate();
+        await mutateLectureAll();
         toast('성공적으로 강의 정보가 업데이트되었습니다', { type: 'success' });
         setUpdateToggle(!updateToggle);
       }
@@ -67,7 +69,7 @@ const ComponentFormUpdateLecture: React.FC<
           className="mt-[10px] block sm:flex sm:items-center"
           onSubmit={(event) => {
             event.preventDefault();
-            onSubmitUpdateField();
+            handlerUpdateField();
           }}
         >
           <input
@@ -87,7 +89,7 @@ const ComponentFormUpdateLecture: React.FC<
             </button>
             <button
               className="button-modify-cancel-admin h-[32px] w-[65px]"
-              onClick={onClickUpdateToggle}
+              onClick={handlerClickToggleUpdate}
               disabled={isLoadingSubmit}
             >
               취소
@@ -116,7 +118,7 @@ const ComponentFormUpdateLecture: React.FC<
           <FontAwesomeIcon
             className="button-fa-icon-admin ml-[10px]"
             icon={faEdit}
-            onClick={onClickUpdateToggle}
+            onClick={handlerClickToggleUpdate}
           />
         </div>
       )}

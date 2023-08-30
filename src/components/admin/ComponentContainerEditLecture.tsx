@@ -1,43 +1,21 @@
-import * as React from 'react';
-import { KeyedMutator } from 'swr';
-import { ILectureInList, ITags } from '../../interfaces';
+import { FC } from 'react';
 import ComponentElementEditLecture from './lecture/edit/ComponentElementEditLecture';
+import { useSWRListLectureAll } from '../../hooks/api';
 
-interface IPropsComponentContainerEditLecture {
-  token: string | null;
-  setToken: (v: string | null) => void;
-  allLecturesData: ILectureInList[] | undefined;
-  allLecturesMutate: KeyedMutator<ILectureInList[]>;
-  allTags: ITags[] | [];
-}
+interface IPropsComponentContainerEditLecture {}
 
-const ComponentContainerEditLecture: React.FC<
+const ComponentContainerEditLecture: FC<
   IPropsComponentContainerEditLecture
-> = ({ token, setToken, allLecturesData, allLecturesMutate, allTags }) => {
+> = ({}) => {
+  const { data: dataListLectureAll } = useSWRListLectureAll();
   return (
     <div className="flex items-center justify-center">
       <div>
-        {allLecturesData && (
+        {dataListLectureAll && (
           <div className="grid grid-flow-row gap-y-10 md:grid-cols-1 md:gap-3 lg:grid-cols-1 lg:gap-6 xl:grid-cols-2 xl:gap-6 2xl:grid-cols-2 2xl:gap-6">
-            {allLecturesData.map((lecture, index) => {
+            {dataListLectureAll.map((lecture, index) => {
               return (
-                <ComponentElementEditLecture
-                  key={index}
-                  id={lecture.id}
-                  title={lecture.title}
-                  images={lecture.images}
-                  description={lecture.description}
-                  thumbnail={lecture.thumbnail}
-                  teacherNickname={lecture.teacher_nickname}
-                  expired={lecture.expired}
-                  tags={lecture.tags}
-                  videoTitle={lecture.video_title}
-                  videoUrl={lecture.video_url}
-                  token={token}
-                  setToken={setToken}
-                  allTags={allTags}
-                  mutate={allLecturesMutate}
-                />
+                <ComponentElementEditLecture key={index} lecture={lecture} />
               );
             })}
           </div>

@@ -1,35 +1,30 @@
-import * as React from 'react';
+import { FC, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { useStringInput } from '../../../hooks';
-import { IUserEdit } from '../../../interfaces';
 import { ReactComponent as ImgEdit } from '../../../assets/images/Edit.svg';
-import ContextToken from '../../../store/ContextToken';
-import { showError } from '../../../hooks/api';
-import { KeyedMutator } from 'swr';
+import { showError, useSWRListUserAll } from '../../../hooks/api';
 import { toast } from 'react-toastify';
+import stateToken from '../../../recoil/state-object-token/stateToken';
 
-interface IPropsComponentFormUpdateUser {
+interface IPropsComponentFormUpdateUserForAdmin {
   fieldType: string;
   id: string;
   userField: string;
-  mutate: KeyedMutator<IUserEdit> | KeyedMutator<IUserEdit[]>;
 }
 
-const ComponentFormUpdateUser: React.FC<IPropsComponentFormUpdateUser> = ({
-  fieldType,
-  id,
-  userField,
-  mutate,
-}) => {
-  const tokenCtx = React.useContext(ContextToken);
-  const { token } = tokenCtx;
-  const [updateToggle, setUpdateToggle] = React.useState<boolean>(false);
+const ComponentFormUpdateUserForAdmin: FC<
+  IPropsComponentFormUpdateUserForAdmin
+> = ({ fieldType, id, userField }) => {
+  const token = useRecoilValue(stateToken);
+  const { mutate: mutateListUserAll } = useSWRListUserAll();
+  const [updateToggle, setUpdateToggle] = useState<boolean>(false);
   const {
     value: updateFieldName,
     setValue: setUpdateFieldName,
     onChange: onChangeUpdateFieldName,
   } = useStringInput('');
-  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
   const onClickUpdateToggle = () => {
     setUpdateToggle(!updateToggle);
     setUpdateFieldName(userField);
@@ -55,7 +50,7 @@ const ComponentFormUpdateUser: React.FC<IPropsComponentFormUpdateUser> = ({
       );
 
       if (response.status === 200) {
-        await mutate();
+        await mutateListUserAll();
         toast('성공적으로 사용자 정보가 업데이트되었습니다', {
           type: 'success',
         });
@@ -136,4 +131,4 @@ const ComponentFormUpdateUser: React.FC<IPropsComponentFormUpdateUser> = ({
   );
 };
 
-export default ComponentFormUpdateUser;
+export default ComponentFormUpdateUserForAdmin;

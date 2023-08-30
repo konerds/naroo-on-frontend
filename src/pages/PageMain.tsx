@@ -1,24 +1,26 @@
-import * as React from 'react';
+import { FC, useState, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import { useParams, useLocation } from 'react-router';
-import { axiosGetfetcher, showError } from '../hooks/api';
+import {
+  showError,
+  useSWRInfoMe,
+  useSWRIsVerify,
+  useSWRListBannerPrimary,
+} from '../hooks/api';
 import ComponentCarouselLectureAll from '../components/main/ComponentCarouselLectureAll';
 import ComponentOrgCarousel from '../components/main/ComponentCarouselOrg';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
-import { IInfoMe, IResourceContent, IUserVerify } from '../interfaces';
-import { isArray } from 'lodash';
-import useSWR from 'swr';
-import useSWRImmutable from 'swr/immutable';
-import ContextToken from '../store/ContextToken';
-import { ReactComponent as ImgPrevArrow } from '../assets/images/PrevArrow.svg';
-import { ReactComponent as ImgNextArrow } from '../assets/images/NextArrow.svg';
-import Slider, { CustomArrowProps, Settings } from 'react-slick';
+import { ReactComponent as ArrowPrev } from '../assets/images/PrevArrow.svg';
+import { ReactComponent as ArrowNext } from '../assets/images/NextArrow.svg';
+import Slider, { CustomArrowProps } from 'react-slick';
 import ComponentSkeletonCustom from '../components/common/ui/ComponentSkeletonCustom';
 import ComponentCarouselLectureUser from '../components/main/ComponentCarouselLectureUser';
+import stateToken from '../recoil/state-object-token/stateToken';
 
 const ComponentArrowPrev = (props: CustomArrowProps) => {
   return (
-    <ImgPrevArrow
+    <ArrowPrev
       className={props.className}
       style={{
         ...props.style,
@@ -35,7 +37,7 @@ const ComponentArrowPrev = (props: CustomArrowProps) => {
 
 const ComponentArrowNext = (props: CustomArrowProps) => {
   return (
-    <ImgNextArrow
+    <ArrowNext
       className={props.className}
       style={{
         ...props.style,
@@ -50,81 +52,87 @@ const ComponentArrowNext = (props: CustomArrowProps) => {
   );
 };
 
-const settings: Settings | Readonly<Settings> = {
-  arrows: true,
-  dots: true,
-  adaptiveHeight: true,
-  infinite: true,
-  speed: 500,
-  pauseOnHover: true,
-  autoplay: true,
-  autoplaySpeed: 5000,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  prevArrow: <ComponentArrowPrev />,
-  nextArrow: <ComponentArrowNext />,
-};
-
-const PageMain: React.FC = () => {
+const PageMain: FC = () => {
+  const { pathname } = useLocation();
   const { requestToken } = useParams();
   const navigate = useNavigate();
-  const tokenCtx = React.useContext(ContextToken);
-  const { token } = tokenCtx;
-  const location = useLocation();
-  const { pathname: currentPathname } = location;
-  const { data: dataGetMe } = useSWR<IInfoMe>(
-    !!token ? `${process.env.REACT_APP_BACK_URL}/user/me` : null,
-    () => axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/user/me`, token),
-    { revalidateOnFocus: false, revalidateIfStale: false },
+  const token = useRecoilValue(stateToken);
+  const { data: dataInfoMe } = useSWRInfoMe();
+  const {
+    data: dataListBannerPrimary,
+    isValidating: isValidatingListBannerPrimary,
+    error: errorListBannerPrimary,
+  } = useSWRListBannerPrimary();
+  const [isLoadingListBannerPrimary, setIsLoadingListBannerPrimary] =
+    useState(false);
+  useEffect(() => {
+    setIsLoadingListBannerPrimary(
+      (!!!dataListBannerPrimary && !!!errorListBannerPrimary) ||
+        isValidatingListBannerPrimary,
+    );
+  }, [
+    dataListBannerPrimary,
+    isValidatingListBannerPrimary,
+    errorListBannerPrimary,
+  ]);
+  const { data: dataIsVerify, error: errorIsVerify } = useSWRIsVerify(
+    pathname,
+    requestToken,
   );
-  const { data: infoBanner } = useSWRImmutable<IResourceContent[]>(
-    `${process.env.REACT_APP_BACK_URL}/resource/info_banner`,
-    () =>
-      axiosGetfetcher(`${process.env.REACT_APP_BACK_URL}/resource/info_banner`),
-    { revalidateOnFocus: false, revalidateIfStale: false },
-  );
-  const { data: dataVerify, error: errorVerify } = useSWR<IUserVerify>(
-    currentPathname.includes('/verify') && !!requestToken
-      ? `${process.env.REACT_APP_BACK_URL}/user/verify?requestToken=${requestToken}`
-      : null,
-    () =>
-      axiosGetfetcher(
-        `${process.env.REACT_APP_BACK_URL}/user/verify?requestToken=${requestToken}`,
-      ),
-    { revalidateOnFocus: false, revalidateIfStale: false },
-  );
-  React.useEffect(() => {
-    if (!!token && !!dataGetMe && dataGetMe.role === 'admin') {
+  useEffect(() => {
+    if (!!token && !!dataInfoMe && dataInfoMe.role === 'admin') {
       navigate('/admin', { replace: true });
     }
-  }, [token, dataGetMe?.role]);
-  React.useEffect(() => {
-    if (!!errorVerify) {
-      showError(errorVerify);
+  }, [token, dataInfoMe?.role]);
+  useEffect(() => {
+    if (!!errorIsVerify) {
+      showError(errorIsVerify);
     }
-    if (!!dataVerify && !!dataVerify.token) {
+    if (!!dataIsVerify && !!dataIsVerify.token) {
       toast('이메일 인증이 완료되었습니다', { type: 'success' });
       navigate('/signin', { replace: true });
     }
-  }, [dataVerify?.token, errorVerify]);
+  }, [dataIsVerify?.token, errorIsVerify]);
   return (
     <div className="mx-auto min-h-screen max-w-full bg-white">
-      {!(!!token && !!dataGetMe && dataGetMe.role === 'admin') && (
+      {!(!!token && !!dataInfoMe && dataInfoMe.role === 'admin') && (
         <>
-          {!!infoBanner && isArray(infoBanner) && infoBanner.length > 0 ? (
-            <Slider {...settings} className="bg-white text-center">
-              {infoBanner.map((element, index) => {
-                return (
-                  <img
-                    key={index}
-                    className="pointer-cursor max-h-[380px] w-[100vw] object-cover"
-                    src={element.content}
-                  />
-                );
-              })}
-            </Slider>
+          {isLoadingListBannerPrimary ? (
+            <ComponentSkeletonCustom className="block-important w-screen-important min-h-[380px]" />
           ) : (
-            <ComponentSkeletonCustom className="block-important w-full-vw-important min-h-[380px]" />
+            <>
+              {!!dataListBannerPrimary &&
+                !!!errorListBannerPrimary &&
+                dataListBannerPrimary.length > 0 && (
+                  <Slider
+                    {...{
+                      arrows: true,
+                      dots: true,
+                      adaptiveHeight: true,
+                      infinite: true,
+                      speed: 500,
+                      pauseOnHover: true,
+                      autoplay: true,
+                      autoplaySpeed: 5000,
+                      slidesToShow: 1,
+                      slidesToScroll: 1,
+                      prevArrow: <ComponentArrowPrev />,
+                      nextArrow: <ComponentArrowNext />,
+                    }}
+                    className="bg-white text-center"
+                  >
+                    {dataListBannerPrimary.map((element, index) => {
+                      return (
+                        <img
+                          key={index}
+                          className="pointer-cursor max-h-[380px] w-[100vw] object-cover"
+                          src={element.content}
+                        />
+                      );
+                    })}
+                  </Slider>
+                )}
+            </>
           )}
           <div className="mx-auto w-full px-[20px] py-[60px] md:max-w-[788px] lg:max-w-[966px] lg:px-0 xl:max-w-[1152px]">
             <ComponentCarouselLectureUser />

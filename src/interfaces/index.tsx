@@ -1,3 +1,8 @@
+export interface IStateToken {
+  token: string;
+  isRememberToken: boolean;
+}
+
 export interface IResourceContent {
   content: string;
 }
@@ -120,3 +125,13 @@ export const CONST_ADMIN_MENU = {
 
 export type TYPE_ADMIN_MENU =
   (typeof CONST_ADMIN_MENU)[keyof typeof CONST_ADMIN_MENU];
+
+export interface IObjectOption {
+  value: string;
+  label: string;
+}
+
+export interface IObjectOptionMultiple {
+  value: string | ArrayBuffer | null | undefined;
+  label: string | ArrayBuffer | null | undefined;
+}

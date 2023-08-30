@@ -1,4 +1,13 @@
-import * as React from 'react';
+import {
+  FC,
+  Dispatch,
+  SetStateAction,
+  useState,
+  useCallback,
+  useRef,
+  ChangeEvent,
+} from 'react';
+import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { useStringInput } from '../../hooks';
 import CreatableSelect from 'react-select/creatable';
@@ -10,14 +19,14 @@ import {
 } from '@material-ui/pickers';
 import {
   CONST_ADMIN_MENU,
-  ILectureInList,
+  IObjectOptionMultiple,
   TYPE_ADMIN_MENU,
 } from '../../interfaces';
 import { ReactComponent as ImgPrevArrow } from '../../assets/images/PrevArrow.svg';
 import { ReactComponent as ImgNextArrow } from '../../assets/images/NextArrow.svg';
 import Slider, { CustomArrowProps } from 'react-slick';
-import { KeyedMutator } from 'swr';
-import { showError } from '../../hooks/api';
+import { showError, useSWRListLectureAll } from '../../hooks/api';
+import stateToken from '../../recoil/state-object-token/stateToken';
 
 const ComponentArrowPrev = (props: CustomArrowProps) => {
   return (
@@ -63,39 +72,34 @@ const settings = {
 };
 
 interface IPropsComponentFormAddLecture {
-  token: string | null;
-  setSelectedMenu: React.Dispatch<React.SetStateAction<TYPE_ADMIN_MENU>>;
-  allLecturesMutate: KeyedMutator<ILectureInList[]>;
+  setSelectedMenu: Dispatch<SetStateAction<TYPE_ADMIN_MENU>>;
 }
 
-const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
-  token,
+const ComponentFormAddLecture: FC<IPropsComponentFormAddLecture> = ({
   setSelectedMenu,
-  allLecturesMutate,
 }) => {
+  const token = useRecoilValue(stateToken);
+  const { mutate: mutateLectureAll } = useSWRListLectureAll();
   const { value: title, onChange: onChangeTitle } = useStringInput('');
-  const [thumbnail, setThumbnail] = React.useState<any>(null);
+  const [thumbnail, setThumbnail] = useState<any>(null);
   const { value: description, onChange: onChangeDescription } =
     useStringInput('');
-  const [expiredAt, setExpiredAt] = React.useState<Date | null>(new Date());
+  const [expiredAt, setExpiredAt] = useState<Date | null>(new Date());
   const onHandleExpiredAt = (date: Date | null) => {
     setExpiredAt(date);
   };
   const { value: teacherName, onChange: onChangeTeacherName } =
     useStringInput('');
-  const [lectureImageOptions, setLectureImageOptions] = React.useState<
-    {
-      value: string | ArrayBuffer | null | undefined;
-      label: string | ArrayBuffer | null | undefined;
-    }[]
+  const [lectureImageOptions, setLectureImageOptions] = useState<
+    IObjectOptionMultiple[]
   >([]);
-  const onHandleImagesChange = React.useCallback(
+  const onHandleImagesChange = useCallback(
     (changedOptions: any) => {
       setLectureImageOptions(changedOptions);
     },
     [lectureImageOptions],
   );
-  const onHandleImagesCreate = React.useCallback(
+  const onHandleImagesCreate = useCallback(
     (changedOptions: any) => {
       setLectureImageOptions([
         ...lectureImageOptions,
@@ -104,13 +108,13 @@ const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
     },
     [lectureImageOptions],
   );
-  const inputFileRef = React.useRef<any>(null);
+  const inputFileRef = useRef<any>(null);
   const onMenuOpenSelectImages = () => {
     if (!!inputFileRef.current) {
       inputFileRef.current.click();
     }
   };
-  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (!!!event.target.files || !!!event.target.files[0]) {
       return;
     }
@@ -130,7 +134,7 @@ const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
   const { value: videoTitle, onChange: onChangeVideoTitle } =
     useStringInput('');
   const { value: videoUrl, onChange: onChangeVideoUrl } = useStringInput('');
-  const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
   const onSubmitHandler = async () => {
     try {
       setIsLoadingSubmit(true);
@@ -157,7 +161,7 @@ const ComponentFormAddLecture: React.FC<IPropsComponentFormAddLecture> = ({
         },
       );
       if (response.status === 201) {
-        await allLecturesMutate();
+        await mutateLectureAll();
         setSelectedMenu(CONST_ADMIN_MENU.LECTURE_EDIT);
       }
     } catch (error: any) {
