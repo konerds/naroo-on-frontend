@@ -28,7 +28,7 @@
 
 ### ※ This is just for practice, not an actual web service!!!
 
-> [Link](https://naroo-on-frontend-dot-macro-market-370703.du.r.appspot.com)
+> [Link](https://naroo-on-frontend.pages.dev)
 
 ### Developer, Engineer Manual (in Korean)
 
