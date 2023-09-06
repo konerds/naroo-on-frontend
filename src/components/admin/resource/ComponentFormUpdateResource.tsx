@@ -1,10 +1,9 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { showError, useSWRListResourceAll } from '../../../hooks/api';
-import { useStringInput } from '../../../hooks';
 import { toast } from 'react-toastify';
 import stateToken from '../../../recoil/state-object-token/stateToken';
 
@@ -23,40 +22,51 @@ const ComponentFormUpdateResource: FC<IPropsComponentFormUpdateResource> = ({
 }) => {
   const token = useRecoilValue(stateToken);
   const { mutate: mutateListResourceAll } = useSWRListResourceAll();
-  const { value: addPreview, setValue: setAddPreview } = useStringInput('');
-  const { value: preview, setValue: setPreview } = useStringInput(content);
+  const [objectContentNew, setObjectContentNew] = useState<{
+    preview: string;
+    file: any;
+  }>();
+  const [objectContent, setObjectContent] = useState<{
+    preview: string;
+    file: any;
+  }>();
   const [updateToggle, setUpdateToggle] = useState<boolean>(false);
   const [isLoadingSubmitAdd, setIsLoadingSubmitAdd] = useState<boolean>(false);
   const [isLoadingSubmitUpdateResource, setIsLoadingSubmitUpdateResource] =
     useState<boolean>(false);
   const [isLoadingClickDeleteResource, setIsLoadingClickDeleteResource] =
     useState<boolean>(false);
+  useEffect(() => {
+    if (!!content) {
+      setObjectContent({ preview: content, file: content });
+    }
+  }, [content]);
   const onClickUpdateToggle = () => {
     setUpdateToggle(!updateToggle);
-    setPreview(content);
+    setObjectContent({ preview: content, file: content });
   };
   const onSubmitAddHandler = async () => {
     try {
       setIsLoadingSubmitAdd(true);
-      if (!!!addPreview) {
+      if (!(!!objectContentNew && !!objectContentNew.file)) {
         return;
       }
       const response = await axios.post(
         `${process.env.REACT_APP_BACK_URL}/resource`,
         {
           type,
-          content: addPreview,
+          content: objectContentNew.file,
         },
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
           },
         },
       );
       if (response.status === 201) {
         await mutateListResourceAll();
         toast('성공적으로 리소스가 등록되었습니다', { type: 'success' });
-        setAddPreview('');
       }
     } catch (error: any) {
       showError(error);
@@ -67,9 +77,12 @@ const ComponentFormUpdateResource: FC<IPropsComponentFormUpdateResource> = ({
   const onSubmitUpdateResource = async () => {
     try {
       setIsLoadingSubmitUpdateResource(true);
-      if (!!!preview || preview === content) {
+      if (
+        !!!objectContent ||
+        (!!objectContent && objectContent.file === content)
+      ) {
         setUpdateToggle(!updateToggle);
-        setPreview(content);
+        setObjectContent({ preview: content, file: content });
         return;
       }
       const response = await axios.put(
@@ -77,11 +90,12 @@ const ComponentFormUpdateResource: FC<IPropsComponentFormUpdateResource> = ({
         {
           type,
           content_id,
-          content: preview,
+          content: objectContent.file,
         },
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
           },
         },
       );
@@ -127,9 +141,9 @@ const ComponentFormUpdateResource: FC<IPropsComponentFormUpdateResource> = ({
             onSubmitAddHandler();
           }}
         >
-          {!!addPreview && (
+          {!!objectContentNew && !!objectContentNew.preview && (
             <div className="mb-[15px]">
-              <img className="rounded-xl" src={addPreview} />
+              <img className="rounded-xl" src={objectContentNew.preview} />
             </div>
           )}
           <div className="mb-[10px] flex items-center">
@@ -144,15 +158,18 @@ const ComponentFormUpdateResource: FC<IPropsComponentFormUpdateResource> = ({
               disabled={isLoadingSubmitAdd}
               type="file"
               onChange={(event) => {
-                if (!!!event.target.files || !!!event.target.files[0]) {
+                if (!(!!event.target.files && !!event.target.files[0])) {
                   return;
                 }
-                const imageFile = event.target.files[0];
+                const fileImage = event.target.files[0];
                 const fileReader = new FileReader();
-                fileReader.readAsDataURL(imageFile);
+                fileReader.readAsDataURL(fileImage);
                 fileReader.onload = (readerEvent) => {
                   if (!!readerEvent.target) {
-                    setAddPreview(readerEvent.target.result as string);
+                    setObjectContentNew({
+                      preview: readerEvent.target.result as string,
+                      file: fileImage,
+                    });
                   }
                 };
               }}
@@ -162,7 +179,7 @@ const ComponentFormUpdateResource: FC<IPropsComponentFormUpdateResource> = ({
             type="submit"
             className="mb-[12px] h-[51px] w-full cursor-pointer bg-[#0D5B83] text-[1.5rem] font-semibold leading-[2.0625rem] text-white disabled:cursor-not-allowed disabled:opacity-50"
             value="리소스 추가"
-            disabled={!!!addPreview || isLoadingSubmitAdd}
+            disabled={!!!objectContentNew || isLoadingSubmitAdd}
           />
         </form>
       )}
@@ -174,9 +191,9 @@ const ComponentFormUpdateResource: FC<IPropsComponentFormUpdateResource> = ({
             onSubmitUpdateResource();
           }}
         >
-          {!!preview && (
+          {!!objectContent && !!objectContent.preview && (
             <div className="mb-[29px]">
-              <img className="rounded-xl" src={preview} />
+              <img className="rounded-xl" src={objectContent.preview} />
             </div>
           )}
           <div className="block max-w-[100vw] sm:flex sm:w-full sm:items-center">
@@ -188,12 +205,15 @@ const ComponentFormUpdateResource: FC<IPropsComponentFormUpdateResource> = ({
                 if (!!!event.target.files || !!!event.target.files[0]) {
                   return;
                 }
-                const imageFile = event.target.files[0];
+                const fileImage = event.target.files[0];
                 const fileReader = new FileReader();
-                fileReader.readAsDataURL(imageFile);
+                fileReader.readAsDataURL(fileImage);
                 fileReader.onload = (readerEvent) => {
                   if (!!readerEvent.target) {
-                    setPreview(readerEvent.target.result as string);
+                    setObjectContent({
+                      preview: readerEvent.target.result as string,
+                      file: fileImage,
+                    });
                   }
                 };
               }}
@@ -224,8 +244,12 @@ const ComponentFormUpdateResource: FC<IPropsComponentFormUpdateResource> = ({
               {['info_banner', 'org_carousel'].includes(type) && (
                 <>{`#${(+index + 1).toString()}`}</>
               )}
-              {!!preview && (
-                <img className="rounded-xl" src={preview} alt="resource_img" />
+              {!!objectContent && !!objectContent.preview && (
+                <img
+                  className="rounded-xl"
+                  src={objectContent.preview}
+                  alt="resource_img"
+                />
               )}
             </div>
           </div>

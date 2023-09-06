@@ -64,7 +64,7 @@ const ComponentCarouselOrg: FC = () => {
         이미 다양한 기관들이 나루온과 함께하고 있어요
       </div>
       {isLoadingListContentResource ? (
-        <ComponentSkeletonCustom className="min-h-[300px] w-[100vw]" />
+        <ComponentSkeletonCustom className="min-h-[80px] w-[100vw]" />
       ) : (
         <>
           {!!dataListContentResource &&

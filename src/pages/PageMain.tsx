@@ -119,13 +119,13 @@ const PageMain: FC = () => {
                       prevArrow: <ComponentArrowPrev />,
                       nextArrow: <ComponentArrowNext />,
                     }}
-                    className="bg-white text-center"
+                    className="min-h-[380px] bg-white text-center"
                   >
                     {dataListBannerPrimary.map((element, index) => {
                       return (
                         <img
                           key={index}
-                          className="pointer-cursor max-h-[380px] w-[100vw] object-cover"
+                          className="pointer-cursor max-h-[380px] min-h-[380px] w-[100vw] object-cover"
                           src={element.content}
                         />
                       );

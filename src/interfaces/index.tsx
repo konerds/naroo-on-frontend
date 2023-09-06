@@ -132,6 +132,9 @@ export interface IObjectOption {
 }
 
 export interface IObjectOptionMultiple {
-  value: string | ArrayBuffer | null | undefined;
-  label: string | ArrayBuffer | null | undefined;
+  value: {
+    preview: string | ArrayBuffer | null | undefined;
+    file: any;
+  };
+  label: string;
 }

@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
@@ -24,19 +24,27 @@ const ComponentFormUpdateImage: FC<IPropsComponentFormUpdateImage> = ({
 }) => {
   const token = useRecoilValue(stateToken);
   const { mutate: mutateLectureAll } = useSWRListLectureAll();
-  const { value: preview, setValue: setPreview } = useStringInput(userField);
+  const [objectImage, setObjectImage] = useState<{
+    preview: string;
+    file: any;
+  }>();
   const [updateToggle, setUpdateToggle] = useState<boolean>(false);
   const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
+  useEffect(() => {
+    if (userField) {
+      setObjectImage({ preview: userField, file: userField });
+    }
+  }, [userField]);
   const handlerToggleUpdate = () => {
     setUpdateToggle(!updateToggle);
-    setPreview(userField);
+    setObjectImage({ preview: userField, file: userField });
   };
   const handlerUpdateImage = async () => {
     try {
       setIsLoadingSubmit(true);
-      if (!!!preview || preview === userField) {
+      if (!!!objectImage || (!!objectImage && objectImage.file === userField)) {
         setUpdateToggle(!updateToggle);
-        setPreview(userField);
+        setObjectImage({ preview: userField, file: userField });
         return;
       }
       const response = await axios.put(
@@ -44,14 +52,15 @@ const ComponentFormUpdateImage: FC<IPropsComponentFormUpdateImage> = ({
         fieldType === 'img_description' && imageIndex !== null
           ? {
               [`${fieldType}_index`]: (imageIndex - 1).toString(),
-              [fieldType]: preview,
+              [fieldType]: objectImage.file,
             }
           : fieldType === 'thumbnail'
-          ? { [fieldType]: preview }
+          ? { [fieldType]: objectImage.file }
           : {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
           },
         },
       );
@@ -87,9 +96,9 @@ const ComponentFormUpdateImage: FC<IPropsComponentFormUpdateImage> = ({
               이미지 {imageIndex ? '#' + imageIndex + ' ' : ''}파일
             </label>
           </div>
-          {!!preview && (
+          {!!objectImage && !!objectImage.preview && (
             <div className="my-[10px]">
-              <img className="m-auto rounded-2xl" src={preview} />
+              <img className="m-auto rounded-2xl" src={objectImage.preview} />
             </div>
           )}
           <div className="block sm:flex sm:items-center">
@@ -98,15 +107,18 @@ const ComponentFormUpdateImage: FC<IPropsComponentFormUpdateImage> = ({
               type="file"
               disabled={isLoadingSubmit}
               onChange={(event) => {
-                if (!!!event.target.files || !!!event.target.files[0]) {
+                if (!(!!event.target.files && !!event.target.files[0])) {
                   return;
                 }
-                const imageFile = event.target.files[0];
+                const fileImage = event.target.files[0];
                 const fileReader = new FileReader();
-                fileReader.readAsDataURL(imageFile);
+                fileReader.readAsDataURL(fileImage);
                 fileReader.onload = (readerEvent) => {
                   if (!!readerEvent.target) {
-                    setPreview(readerEvent.target.result as string);
+                    setObjectImage({
+                      file: fileImage,
+                      preview: readerEvent.target.result as string,
+                    });
                   }
                 };
               }}

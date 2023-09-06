@@ -60,17 +60,6 @@ const ComponentArrowNext = (props: CustomArrowProps) => {
   );
 };
 
-const settings = {
-  dots: false,
-  infinite: false,
-  speed: 500,
-  slidesToShow: 4,
-  slidesToScroll: 1,
-  pauseOnHover: true,
-  prevArrow: <ComponentArrowPrev />,
-  nextArrow: <ComponentArrowNext />,
-};
-
 interface IPropsComponentFormAddLecture {
   setSelectedMenu: Dispatch<SetStateAction<TYPE_ADMIN_MENU>>;
 }
@@ -81,7 +70,7 @@ const ComponentFormAddLecture: FC<IPropsComponentFormAddLecture> = ({
   const token = useRecoilValue(stateToken);
   const { mutate: mutateLectureAll } = useSWRListLectureAll();
   const { value: title, onChange: onChangeTitle } = useStringInput('');
-  const [thumbnail, setThumbnail] = useState<any>(null);
+  const [thumbnail, setThumbnail] = useState<{ preview: any; file: any }>();
   const { value: description, onChange: onChangeDescription } =
     useStringInput('');
   const [expiredAt, setExpiredAt] = useState<Date | null>(new Date());
@@ -90,46 +79,30 @@ const ComponentFormAddLecture: FC<IPropsComponentFormAddLecture> = ({
   };
   const { value: teacherName, onChange: onChangeTeacherName } =
     useStringInput('');
-  const [lectureImageOptions, setLectureImageOptions] = useState<
-    IObjectOptionMultiple[]
-  >([]);
+  const [
+    listOptionImageLectureDescription,
+    setListOptionImageLectureDescription,
+  ] = useState<IObjectOptionMultiple[]>([]);
   const onHandleImagesChange = useCallback(
     (changedOptions: any) => {
-      setLectureImageOptions(changedOptions);
+      setListOptionImageLectureDescription(changedOptions);
     },
-    [lectureImageOptions],
+    [listOptionImageLectureDescription],
   );
   const onHandleImagesCreate = useCallback(
     (changedOptions: any) => {
-      setLectureImageOptions([
-        ...lectureImageOptions,
+      setListOptionImageLectureDescription([
+        ...listOptionImageLectureDescription,
         { value: changedOptions, label: changedOptions },
       ]);
     },
-    [lectureImageOptions],
+    [listOptionImageLectureDescription],
   );
-  const inputFileRef = useRef<any>(null);
+  const inputFileRef = useRef<HTMLInputElement>(null);
   const onMenuOpenSelectImages = () => {
     if (!!inputFileRef.current) {
       inputFileRef.current.click();
     }
-  };
-  const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (!!!event.target.files || !!!event.target.files[0]) {
-      return;
-    }
-    const imageFile = event.target.files[0];
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(imageFile);
-    fileReader.onload = (readerEvent) => {
-      setLectureImageOptions([
-        ...lectureImageOptions,
-        {
-          value: readerEvent.target?.result,
-          label: `이미지 #${(lectureImageOptions.length + 1).toString()}`,
-        },
-      ]);
-    };
   };
   const { value: videoTitle, onChange: onChangeVideoTitle } =
     useStringInput('');
@@ -138,15 +111,20 @@ const ComponentFormAddLecture: FC<IPropsComponentFormAddLecture> = ({
   const onSubmitHandler = async () => {
     try {
       setIsLoadingSubmit(true);
+      if (!(!!thumbnail && !!thumbnail.file && expiredAt)) {
+        return;
+      }
       const images = [];
-      for (const image of lectureImageOptions) {
-        images.push(image.value);
+      for (const image of listOptionImageLectureDescription) {
+        if (!!image.value && !!image.value.file) {
+          images.push(image.value.file);
+        }
       }
       const response = await axios.post(
         `${process.env.REACT_APP_BACK_URL}/lecture/create`,
         {
           title,
-          thumbnail,
+          thumbnail: thumbnail.file,
           expiredAt,
           description,
           teacherName,
@@ -157,6 +135,7 @@ const ComponentFormAddLecture: FC<IPropsComponentFormAddLecture> = ({
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
           },
         },
       );
@@ -205,9 +184,9 @@ const ComponentFormAddLecture: FC<IPropsComponentFormAddLecture> = ({
           </MuiPickersUtilsProvider>
         </label>
       </div>
-      {thumbnail && (
+      {!!thumbnail && !!thumbnail.preview && (
         <div className="mb-[29px]">
-          <img className="rounded-xl" src={thumbnail} />
+          <img className="rounded-xl" src={thumbnail.preview} />
         </div>
       )}
       <div className="mb-[29px]">
@@ -216,16 +195,23 @@ const ComponentFormAddLecture: FC<IPropsComponentFormAddLecture> = ({
           <input
             className="w-full border-[1px] border-[#C4C4C4] p-[20px] disabled:opacity-50"
             type="file"
+            accept="image/*"
             disabled={isLoadingSubmit}
             onChange={(event) => {
-              if (!event.target.files || !event.target.files[0]) {
+              if (!(!!event.target.files && !!event.target.files[0])) {
                 return;
               }
-              const imageFile = event.target.files[0];
+              const fileImageThumbnail = event.target.files[0];
               const fileReader = new FileReader();
-              fileReader.readAsDataURL(imageFile);
+              fileReader.readAsDataURL(fileImageThumbnail);
               fileReader.onload = (readerEvent) => {
-                setThumbnail(readerEvent.target?.result);
+                if (!!readerEvent.target) {
+                  const previewThumbnail = readerEvent.target.result;
+                  setThumbnail({
+                    preview: previewThumbnail,
+                    file: fileImageThumbnail,
+                  });
+                }
               };
             }}
           />
@@ -260,35 +246,73 @@ const ComponentFormAddLecture: FC<IPropsComponentFormAddLecture> = ({
           <input
             className="hidden"
             type="file"
+            accept="image/*"
             ref={inputFileRef}
-            onChange={(event) => {
-              onFileChange(event);
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              if (!(event.target.files && event.target.files[0])) {
+                return;
+              }
+              const fileImageLectureDescription = event.target.files[0];
+              const fileReader = new FileReader();
+              fileReader.readAsDataURL(fileImageLectureDescription);
+              fileReader.onload = (readerEvent) => {
+                if (!!readerEvent.target) {
+                  setListOptionImageLectureDescription([
+                    ...listOptionImageLectureDescription,
+                    {
+                      value: {
+                        preview: readerEvent.target.result,
+                        file: fileImageLectureDescription,
+                      },
+                      label: `이미지 #${(
+                        listOptionImageLectureDescription.length + 1
+                      ).toString()}`,
+                    },
+                  ]);
+                }
+              };
             }}
             disabled={isLoadingSubmit}
           />
         </label>
-        <Slider {...settings}>
-          {lectureImageOptions &&
-            lectureImageOptions.length > 0 &&
-            lectureImageOptions.map((lectureImageOption, index) => {
-              if (lectureImageOption.value) {
-                return (
-                  <div key={index} className="pr-[4px]">
-                    <img
-                      className="mb-[15px] w-auto rounded-xl"
-                      src={lectureImageOption.value.toString()}
-                    />
-                  </div>
-                );
-              }
-            })}
+        <Slider
+          {...{
+            dots: false,
+            infinite: false,
+            speed: 500,
+            slidesToShow: 4,
+            slidesToScroll: 1,
+            pauseOnHover: true,
+            prevArrow: <ComponentArrowPrev />,
+            nextArrow: <ComponentArrowNext />,
+          }}
+        >
+          {listOptionImageLectureDescription &&
+            listOptionImageLectureDescription.length > 0 &&
+            listOptionImageLectureDescription.map(
+              (lectureImageOption, index) => {
+                if (
+                  !!lectureImageOption.value &&
+                  !!lectureImageOption.value.preview
+                ) {
+                  return (
+                    <div key={index} className="pr-[4px]">
+                      <img
+                        className="mb-[15px] w-auto rounded-xl"
+                        src={lectureImageOption.value.preview.toString()}
+                      />
+                    </div>
+                  );
+                }
+              },
+            )}
         </Slider>
         <CreatableSelect
           isMulti
           isClearable
           components={{ DropdownIndicator: null }}
-          options={lectureImageOptions}
-          value={lectureImageOptions}
+          options={listOptionImageLectureDescription}
+          value={listOptionImageLectureDescription}
           onChange={onHandleImagesChange}
           onCreateOption={onHandleImagesCreate}
           onMenuOpen={onMenuOpenSelectImages}
