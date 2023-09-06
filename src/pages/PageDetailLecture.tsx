@@ -262,7 +262,7 @@ const PageDetailLecture: FC = () => {
                   </div>
                 </MediaQuery>
                 <MediaQuery minWidth={1024}>
-                  <div className="hidden lg:mx-auto lg:flex lg:max-h-[431.79px] lg:min-h-[431.79px] lg:w-full lg:max-w-[864px] lg:items-center lg:justify-center xl:max-h-[506px] xl:min-h-[506px] xl:max-w-[1152px]">
+                  <div className="hidden lg:mx-auto lg:flex lg:max-h-[431.79px] lg:min-h-[431.79px] lg:w-[864px] lg:max-w-[864px] lg:items-center lg:justify-center xl:max-h-[506px] xl:min-h-[506px] xl:w-[1152px] xl:max-w-[1152px]">
                     <img
                       onClick={() => {
                         setIsShowImgThumbnail(true);

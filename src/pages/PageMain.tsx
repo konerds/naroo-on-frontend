@@ -134,7 +134,7 @@ const PageMain: FC = () => {
                 )}
             </>
           )}
-          <div className="mx-auto w-full px-[20px] py-[60px] md:max-w-[788px] lg:max-w-[966px] lg:px-0 xl:max-w-[1152px]">
+          <div className="mx-auto w-screen px-[20px] py-[60px] md:w-[788px] md:max-w-[788px] lg:w-[966px] lg:max-w-[966px] lg:px-0 xl:w-[1152px] xl:max-w-[1152px]">
             <ComponentCarouselLectureUser />
             <ComponentCarouselLectureAll />
           </div>

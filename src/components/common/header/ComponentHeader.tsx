@@ -205,7 +205,7 @@ const ComponentHeader: FC = () => {
         )}
       </MediaQuery>
       <MediaQuery minWidth={768}>
-        <div className="hidden md:mx-auto md:flex md:h-[100px] md:max-w-[788px] md:items-center md:justify-between lg:max-w-[966px] xl:max-w-[1152px]">
+        <div className="hidden md:mx-auto md:flex md:h-[100px] md:w-[788px] md:max-w-[788px] md:items-center md:justify-between lg:w-[966px] lg:max-w-[966px] xl:w-[1152px] xl:max-w-[1152px]">
           <div className="flex items-center justify-between">
             {dataListLogoHeader && dataListLogoHeader.length > 0 && (
               <Link

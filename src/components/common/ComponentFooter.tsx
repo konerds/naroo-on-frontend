@@ -12,7 +12,7 @@ const ComponentFooter: FC = () => {
     useSWRListLogoFooter();
   return (
     <div className="flex w-full flex-wrap justify-center bg-[#696969]">
-      <div className="flex h-[148px] w-full max-w-[100vw] items-center justify-center sm:h-[128px] sm:max-w-[504px] md:max-w-[680px] lg:max-w-[864px] xl:max-w-[1152px]">
+      <div className="max-w-screen flex h-[148px] w-screen items-center justify-center sm:h-[128px] sm:w-[504px] sm:max-w-[504px] md:w-[680px] md:max-w-[680px] lg:w-[864px] lg:max-w-[864px] xl:w-[1152px] xl:max-w-[1152px]">
         <div className="w-[80px] xs:w-[150px] sm:w-[210px] md:w-[220px] lg:w-[250px] xl:w-[250px]">
           {!!dataListLogoFooter &&
           !!!errorListLogoFooter &&

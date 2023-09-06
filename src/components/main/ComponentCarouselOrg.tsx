@@ -59,7 +59,7 @@ const ComponentCarouselOrg: FC = () => {
     errorListContentResource,
   ]);
   return (
-    <div className="mx-auto w-full px-[30px] py-[36px] md:max-w-[788px] lg:max-w-[966px] lg:px-[10px] xl:max-w-[1152px]">
+    <div className="max-w-screen md:w-788px mx-auto w-screen px-[30px] py-[36px] md:max-w-[788px] lg:w-[966px] lg:max-w-[966px] lg:px-[10px] xl:w-[1152px] xl:max-w-[1152px]">
       <div className="mb-[28px] text-center text-[1.1875rem] font-semibold text-[#515A6E] sm:text-[1.5rem]">
         이미 다양한 기관들이 나루온과 함께하고 있어요
       </div>
