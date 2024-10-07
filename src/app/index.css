@@ -1,0 +1,228 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'pretendard-medium';
+  src: url('../shared/assets/fonts/pretendard-medium.eot');
+  src:
+    url('../shared/assets/fonts/pretendard-medium.eot?#iefix')
+      format('embedded-opentype'),
+    url('../shared/assets/fonts/pretendard-medium.woff2') format('woff2'),
+    url('../shared/assets/fonts/pretendard-medium.woff') format('woff'),
+    url('../shared/assets/fonts/pretendard-medium.ttf') format('truetype');
+  font-display: block;
+}
+
+*,
+body,
+:root {
+  color-scheme: only light !important;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  word-break: keep-all;
+  letter-spacing: 0;
+  font-family:
+    pretendard-medium,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    'Noto Sans',
+    sans-serif,
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-stroke: 0.45px;
+  -webkit-text-stroke: 0.45px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  @apply max-w-[100vw] overflow-x-hidden;
+}
+
+.scroll-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scroll-none::-webkit-scrollbar {
+  @apply hidden !important;
+}
+
+*:disabled {
+  @apply cursor-not-allowed !important;
+}
+
+button {
+  @apply cursor-pointer !important;
+}
+
+.debug-screens::before {
+  -webkit-box-shadow: 0 0 0 1px #fff;
+  box-shadow: 0 0 0 1px #fff;
+  content: 'screen: _';
+  @apply fixed left-0 top-0 z-[2147483647] bg-black px-[0.5em] py-[0.3333333em] font-sans text-[12px] leading-[1] text-white;
+}
+
+@screen xxs {
+  .debug-screens::before {
+    content: 'screen: xxs';
+  }
+}
+
+@screen xs {
+  .debug-screens::before {
+    content: 'screen: xs';
+  }
+}
+
+@screen sm {
+  .debug-screens::before {
+    content: 'screen: sm';
+  }
+}
+
+@screen md {
+  .debug-screens::before {
+    content: 'screen: md';
+  }
+}
+
+@screen lg {
+  .debug-screens::before {
+    content: 'screen: lg';
+  }
+}
+
+@screen xl {
+  .debug-screens::before {
+    content: 'screen: xl';
+  }
+}
+
+@screen 2xl {
+  .debug-screens::before {
+    content: 'screen: 2xl';
+  }
+}
+
+.slick-track {
+  min-width: 100vw !important;
+}
+
+.slick-arrow {
+  opacity: 0.4 !important;
+  -o-transition: all 0.25s ease-in-out !important;
+  transition: all 0.25s ease-in-out !important;
+  -moz-transition: all 0.25s ease-in-out !important;
+  -webkit-transition: all 0.25s ease-in-out !important;
+}
+
+.slick-disabled {
+  @apply cursor-not-allowed !important;
+}
+
+.slick-arrow:not(.slick-disabled):hover {
+  @apply opacity-100 !important;
+}
+
+.header-container {
+  -webkit-box-shadow:
+    0px 4px 10px rgba(0, 0, 0, 0.04),
+    0px 1px 1px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0px 4px 10px rgba(0, 0, 0, 0.04),
+    0px 1px 1px rgba(0, 0, 0, 0.08);
+}
+
+.lecture-card-container {
+  -webkit-box-shadow: inset 0px 0px 4px -2px rgba(0, 0, 0, 0.9);
+  box-shadow: inset 0px 0px 4px -2px rgba(0, 0, 0, 0.9);
+}
+
+.lecture-card-container-hover {
+  -webkit-box-shadow: inset 0px 0px 8px -4px rgba(0, 0, 0, 0.9);
+  box-shadow: inset 0px 0px 8px -4px rgba(0, 0, 0, 0.9);
+}
+
+.lecture-detail-thumbnail-container {
+  -webkit-box-shadow:
+    0px 2px 10px -2px rgba(0, 0, 0, 0.1),
+    0px 6px 16px -2px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0px 2px 10px -2px rgba(0, 0, 0, 0.1),
+    0px 6px 16px -2px rgba(0, 0, 0, 0.08);
+}
+
+.Toastify__toast-container {
+  @apply w-screen !important;
+}
+
+@media (min-width: 420px) {
+  .Toastify__toast-container {
+    width: 70vw !important;
+  }
+}
+
+@media (min-width: 640px) {
+  .Toastify__toast-container {
+    width: 600px !important;
+  }
+}
+
+.Toastify__toast-body {
+  font-family:
+    pretendard-medium,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    'Noto Sans',
+    sans-serif,
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    'Noto Color Emoji';
+}
+
+.button-fa-icon-admin {
+  @apply cursor-pointer text-xl text-black hover:text-[#4DBFF0];
+}
+
+.button-modify-cancel-admin {
+  @apply box-border rounded-[10px] border-[1px] border-[#4DBFF0] bg-[#4DBFF0] text-[0.6rem] font-semibold text-white hover:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 lg:text-[0.8rem];
+}
+
+.w-full-important {
+  @apply w-full !important;
+}
+
+.w-screen-important {
+  @apply w-screen !important;
+}
+
+.block-important {
+  @apply block !important;
+}
